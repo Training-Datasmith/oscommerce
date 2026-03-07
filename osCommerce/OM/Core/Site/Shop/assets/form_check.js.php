@@ -1,12 +1,13 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\OSCOM;
+
 ?>
 <script type="text/javascript">
 var form = "";
@@ -102,7 +103,7 @@ function check_form(form_name) {
 
 <?php
   if (ACCOUNT_GENDER > 0) {
-    echo '  check_radio("gender", "' . OSCOM::getDef('field_customer_gender_error') . '");' . "\n";
+      echo '  check_radio("gender", "' . OSCOM::getDef('field_customer_gender_error') . '");' . "\n";
   }
 ?>
 
@@ -112,7 +113,7 @@ function check_form(form_name) {
 
 <?php
   if (ACCOUNT_COMPANY > 0) {
-    echo '  check_input("company", ' . ACCOUNT_COMPANY . ', "' . sprintf(OSCOM::getDef('field_customer_company_error'), ACCOUNT_COMPANY) . '");' . "\n";
+      echo '  check_input("company", ' . ACCOUNT_COMPANY . ', "' . sprintf(OSCOM::getDef('field_customer_company_error'), ACCOUNT_COMPANY) . '");' . "\n";
   }
 ?>
 
@@ -120,19 +121,19 @@ function check_form(form_name) {
 
 <?php
   if (ACCOUNT_SUBURB > 0) {
-    echo '  check_input("suburb", ' . ACCOUNT_SUBURB . ', "' . sprintf(OSCOM::getDef('field_customer_suburb_error'), ACCOUNT_SUBURB) . '");' . "\n";
+      echo '  check_input("suburb", ' . ACCOUNT_SUBURB . ', "' . sprintf(OSCOM::getDef('field_customer_suburb_error'), ACCOUNT_SUBURB) . '");' . "\n";
   }
 
-  if (ACCOUNT_POST_CODE > 0) {
+if (ACCOUNT_POST_CODE > 0) {
     echo '  check_input("postcode", ' . ACCOUNT_POST_CODE . ', "' . sprintf(OSCOM::getDef('field_customer_post_code_error'), ACCOUNT_POST_CODE) . '");' . "\n";
-  }
+}
 ?>
 
   check_input("city", <?php echo ACCOUNT_CITY; ?>, "<?php echo sprintf(OSCOM::getDef('field_customer_city_error'), ACCOUNT_CITY); ?>");
 
 <?php
   if (ACCOUNT_STATE > 0) {
-    echo '  check_input("state", ' . ACCOUNT_STATE . ', "' . sprintf(OSCOM::getDef('field_customer_state_error'), ACCOUNT_STATE) . '");' . "\n";
+      echo '  check_input("state", ' . ACCOUNT_STATE . ', "' . sprintf(OSCOM::getDef('field_customer_state_error'), ACCOUNT_STATE) . '");' . "\n";
   }
 ?>
 
@@ -140,12 +141,12 @@ function check_form(form_name) {
 
 <?php
   if (ACCOUNT_TELEPHONE > 0) {
-    echo '  check_input("telephone", ' . ACCOUNT_TELEPHONE . ', "' . sprintf(OSCOM::getDef('field_customer_telephone_number_error'), ACCOUNT_TELEPHONE) . '");' . "\n";
+      echo '  check_input("telephone", ' . ACCOUNT_TELEPHONE . ', "' . sprintf(OSCOM::getDef('field_customer_telephone_number_error'), ACCOUNT_TELEPHONE) . '");' . "\n";
   }
 
-  if (ACCOUNT_FAX > 0) {
+if (ACCOUNT_FAX > 0) {
     echo '  check_input("fax", ' . ACCOUNT_FAX . ', "' . sprintf(OSCOM::getDef('field_customer_fax_number_error'), ACCOUNT_FAX) . '");' . "\n";
-  }
+}
 ?>
 
   check_password("password", "confirmation", <?php echo ACCOUNT_PASSWORD; ?>, "<?php echo sprintf(OSCOM::getDef('field_customer_password_error'), ACCOUNT_PASSWORD); ?>", "<?php echo OSCOM::getDef('field_customer_password_mismatch_with_confirmation'); ?>");

@@ -12,20 +12,20 @@
   as published by the Free Software Foundation.
 */
 
-  $writeable = true;
+$writeable = true;
 
-  if ( !is_writeable($_SESSION['fm_directory']) ) {
+if (!is_writeable($_SESSION['fm_directory'])) {
     $writeable = false;
 
     $osC_MessageStack->add($osC_Template->getModule(), sprintf($osC_Language->get('ms_error_directory_not_writable'), $_SESSION['fm_directory']), 'warning');
-  }
+}
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -51,10 +51,10 @@
   <p align="center">
 
 <?php
-  if ( $writeable === true ) {
-    echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />';
+  if ($writeable === true) {
+      echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />';
   } else {
-    echo '<input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />';
+      echo '<input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />';
   }
 ?>
 

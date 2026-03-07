@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
   $Id: $
 
@@ -13,38 +15,38 @@
 */
 
 // HPDL  require('includes/applications/images/classes/images.php');
-  require('includes/classes/image.php');
+require('includes/classes/image.php');
 
-  class osC_Application_Images extends osC_Template_Admin {
+class osC_Application_Images extends osC_Template_Admin
+{
+    /* Protected variables */
 
-/* Protected variables */
+    protected $_module = 'images';
+    protected $_page_title;
+    protected $_page_contents = 'main.php';
 
-    protected $_module = 'images',
-              $_page_title,
-              $_page_contents = 'main.php';
+    /* Class constructor */
 
-/* Class constructor */
+    public function __construct()
+    {
+        global $osC_Language;
 
-    function __construct() {
-      global $osC_Language;
+        $this->_page_title = $osC_Language->get('heading_title');
 
-      $this->_page_title = $osC_Language->get('heading_title');
+        if (!isset($_GET['action'])) {
+            $_GET['action'] = '';
+        }
 
-      if ( !isset($_GET['action']) ) {
-        $_GET['action'] = '';
-      }
+        if (!isset($_GET['module'])) {
+            $_GET['module'] = '';
+        }
 
-      if ( !isset($_GET['module']) ) {
-        $_GET['module'] = '';
-      }
+        if (!empty($_GET['module']) && !file_exists('includes/modules/image/' . $_GET['module'] . '.php')) {
+            $_GET['module'] = '';
+        }
 
-      if ( !empty($_GET['module']) && !file_exists('includes/modules/image/' . $_GET['module'] . '.php') ) {
-        $_GET['module'] = '';
-      }
-
-      if ( empty($_GET['module']) ) {
-        $this->_page_contents = 'listing.php';
-      }
+        if (empty($_GET['module'])) {
+            $this->_page_contents = 'listing.php';
+        }
     }
-  }
-?>
+}

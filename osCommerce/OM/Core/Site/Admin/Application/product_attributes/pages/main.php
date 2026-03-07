@@ -12,16 +12,16 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_DirectoryListing = new osC_DirectoryListing('includes/modules/product_attributes');
-  $osC_DirectoryListing->setIncludeDirectories(false);
-  $files = $osC_DirectoryListing->getFiles();
+$osC_DirectoryListing = new osC_DirectoryListing('includes/modules/product_attributes');
+$osC_DirectoryListing->setIncludeDirectories(false);
+$files = $osC_DirectoryListing->getFiles();
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -40,36 +40,36 @@
   <tbody>
 
 <?php
-  $installed_modules = array();
+  $installed_modules = [];
 
-  foreach ( $files as $file ) {
+foreach ($files as $file) {
     include('includes/modules/product_attributes/' . $file['name']);
 
     $class = substr($file['name'], 0, strrpos($file['name'], '.'));
 
-    if ( class_exists('osC_ProductAttributes_' . $class) ) {
-      $module = 'osC_ProductAttributes_' . $class;
-      $module = new $module();
-?>
+    if (class_exists('osC_ProductAttributes_' . $class)) {
+        $module = 'osC_ProductAttributes_' . $class;
+        $module = new $module();
+        ?>
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
       <td><?php echo $module->getTitle(); ?></td>
       <td align="right">
 
 <?php
-    if ( $module->isInstalled() ) {
-      echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&module=' . $module->getCode() . '&action=uninstall'), osc_icon('uninstall.png'));
-    } else {
-      echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&module=' . $module->getCode() . '&action=install'), osc_icon('install.png'));
-    }
-?>
+            if ($module->isInstalled()) {
+                echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&module=' . $module->getCode() . '&action=uninstall'), osc_icon('uninstall.png'));
+            } else {
+                echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&module=' . $module->getCode() . '&action=install'), osc_icon('install.png'));
+            }
+        ?>
 
       </td>
     </tr>
 
 <?php
     }
-  }
+}
 ?>
 
   </tbody>

@@ -1,22 +1,25 @@
 <?php
+
+declare(strict_types=1);
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  namespace osCommerce\OM\Core\Site\Admin\Application\ZoneGroups\Model;
+namespace osCommerce\OM\Core\Site\Admin\Application\ZoneGroups\Model;
 
-  use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\OSCOM;
 
-  class hasTaxRates {
-    public static function execute($tax_zone_id) {
-      $data = array('tax_zone_id' => $tax_zone_id);
+class hasTaxRates
+{
+    public static function execute($tax_zone_id)
+    {
+        $data = ['tax_zone_id' => $tax_zone_id];
 
-      $result = OSCOM::callDB('Admin\ZoneGroups\GetTotalTaxRates', $data);
+        $result = OSCOM::callDB('Admin\ZoneGroups\GetTotalTaxRates', $data);
 
-      return $result > 0;
+        return $result > 0;
     }
-  }
-?>
+}

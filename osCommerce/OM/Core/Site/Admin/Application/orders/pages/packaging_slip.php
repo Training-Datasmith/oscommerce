@@ -12,7 +12,7 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_Order = new osC_Order($_GET['oID']);
+$osC_Order = new osC_Order($_GET['oID']);
 ?>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -83,19 +83,19 @@
       <tbody>
 <?php
     foreach ($osC_Order->getProducts() as $product) {
-      echo '        <tr>' . "\n" .
-           '          <td valign="top" align="right">' . $product['quantity'] . '&nbsp;x</td>' . "\n" .
-           '          <td valign="top">' . $product['name'];
+        echo '        <tr>' . "\n" .
+             '          <td valign="top" align="right">' . $product['quantity'] . '&nbsp;x</td>' . "\n" .
+             '          <td valign="top">' . $product['name'];
 
-      if (isset($product['attributes']) && (sizeof($product['attributes']) > 0)) {
-        foreach ($product['attributes'] as $attribute) {
-          echo '<br /><nobr>&nbsp;&nbsp;&nbsp;' . $attribute['option'] . ': ' . $attribute['value'] . '</nobr>';
+        if (isset($product['attributes']) && (sizeof($product['attributes']) > 0)) {
+            foreach ($product['attributes'] as $attribute) {
+                echo '<br /><nobr>&nbsp;&nbsp;&nbsp;' . $attribute['option'] . ': ' . $attribute['value'] . '</nobr>';
+            }
         }
-      }
 
-      echo '          </td>' . "\n" .
-           '          <td valign="top">' . $product['model'] . '</td>' . "\n";
-           '        </tr>' . "\n";
+        echo '          </td>' . "\n" .
+             '          <td valign="top">' . $product['model'] . '</td>' . "\n";
+        '        </tr>' . "\n";
     }
 ?>
       </tbody>

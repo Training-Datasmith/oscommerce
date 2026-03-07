@@ -17,7 +17,7 @@
 
 <?php
   if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -29,23 +29,23 @@
 
 <?php
   $Qspecials = $osC_Database->query('select s.specials_id, pd.products_name from :table_specials s, :table_products_description pd where s.specials_id in (":specials_id") and s.products_id = pd.products_id and pd.language_id = :language_id order by pd.products_name');
-  $Qspecials->bindTable(':table_specials', TABLE_SPECIALS);
-  $Qspecials->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
-  $Qspecials->bindRaw(':specials_id', implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))));
-  $Qspecials->bindInt(':language_id', $osC_Language->getID());
-  $Qspecials->execute();
+$Qspecials->bindTable(':table_specials', TABLE_SPECIALS);
+$Qspecials->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
+$Qspecials->bindRaw(':specials_id', implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))));
+$Qspecials->bindInt(':language_id', $osC_Language->getID());
+$Qspecials->execute();
 
-  $names_string = '';
+$names_string = '';
 
-  while ( $Qspecials->next() ) {
+while ($Qspecials->next()) {
     $names_string .= osc_draw_hidden_field('batch[]', $Qspecials->valueInt('specials_id')) . '<b>' . $Qspecials->valueProtected('products_name') . '</b>, ';
-  }
+}
 
-  if ( !empty($names_string) ) {
+if (!empty($names_string)) {
     $names_string = substr($names_string, 0, -2);
-  }
+}
 
-  echo '<p>' . $names_string . '</p>';
+echo '<p>' . $names_string . '</p>';
 ?>
 
   <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_delete') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>

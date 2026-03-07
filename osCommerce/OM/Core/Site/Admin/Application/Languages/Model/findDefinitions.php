@@ -1,22 +1,25 @@
 <?php
+
+declare(strict_types=1);
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  namespace osCommerce\OM\Core\Site\Admin\Application\Languages\Model;
+namespace osCommerce\OM\Core\Site\Admin\Application\Languages\Model;
 
-  use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\OSCOM;
 
-  class findDefinitions {
-    public static function execute($language_id, $group, $search) {
-      $data = array('id' => $language_id,
-                    'group' => $group,
-                    'keywords' => $search);
+class findDefinitions
+{
+    public static function execute($language_id, $group, $search)
+    {
+        $data = ['id' => $language_id,
+                      'group' => $group,
+                      'keywords' => $search];
 
-      return OSCOM::callDB('Admin\Languages\FindDefinitions', $data);
+        return OSCOM::callDB('Admin\Languages\FindDefinitions', $data);
     }
-  }
-?>
+}

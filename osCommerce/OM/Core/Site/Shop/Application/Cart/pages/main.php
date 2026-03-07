@@ -1,20 +1,21 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
+
 ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
 <?php
-  if ( $OSCOM_MessageStack->exists('Cart') ) {
-    echo $OSCOM_MessageStack->get('Cart');
+  if ($OSCOM_MessageStack->exists('Cart')) {
+      echo $OSCOM_MessageStack->get('Cart');
   }
 ?>
 
@@ -29,38 +30,38 @@
 <?php
     $_cart_date_added = null;
 
-    foreach ( $OSCOM_ShoppingCart->getProducts() as $products ) {
-      if ( $products['date_added'] != $_cart_date_added ) {
+foreach ($OSCOM_ShoppingCart->getProducts() as $products) {
+    if ($products['date_added'] != $_cart_date_added) {
         $_cart_date_added = $products['date_added'];
-?>
+        ?>
 
       <tr>
         <td colspan="4"><?php echo sprintf(OSCOM::getDef('date_added_to_shopping_cart'), $products['date_added']); ?></td>
       </tr>
 
 <?php
-      }
-?>
+    }
+    ?>
 
       <tr>
-        <td valign="top" width="60"><?php echo HTML::button(array('href' => OSCOM::getLink(null, null, 'Delete=' . $products['item_id'], 'SSL'), 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))); ?></td>
+        <td valign="top" width="60"><?php echo HTML::button(['href' => OSCOM::getLink(null, null, 'Delete=' . $products['item_id'], 'SSL'), 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete')]); ?></td>
         <td valign="top">
 
 <?php
-      echo HTML::link(OSCOM::getLink(null, 'Products', $products['keyword']), '<b>' . $products['name'] . '</b>');
+          echo HTML::link(OSCOM::getLink(null, 'Products', $products['keyword']), '<b>' . $products['name'] . '</b>');
 
-      if ( (STOCK_CHECK == '1') && ($OSCOM_ShoppingCart->isInStock($products['item_id']) === false) ) {
+    if ((STOCK_CHECK == '1') && ($OSCOM_ShoppingCart->isInStock($products['item_id']) === false)) {
         echo '<span class="markProductOutOfStock">' . STOCK_MARK_PRODUCT_OUT_OF_STOCK . '</span>';
-      }
+    }
 
-// HPDL      echo '&nbsp;(Top Category)';
+    // HPDL      echo '&nbsp;(Top Category)';
 
-      if ( $OSCOM_ShoppingCart->isVariant($products['item_id']) ) {
-        foreach ( $OSCOM_ShoppingCart->getVariant($products['item_id']) as $variant) {
-          echo '<br />- ' . $variant['group_title'] . ': ' . HTML::outputProtected($variant['value_title']);
+    if ($OSCOM_ShoppingCart->isVariant($products['item_id'])) {
+        foreach ($OSCOM_ShoppingCart->getVariant($products['item_id']) as $variant) {
+            echo '<br />- ' . $variant['group_title'] . ': ' . HTML::outputProtected($variant['value_title']);
         }
-      }
-?>
+    }
+    ?>
 
         </td>
         <td valign="top"><?php echo HTML::inputField('products[' . $products['item_id'] . ']', $products['quantity'], 'size="4"'); ?> <a href="#" onclick="document.shopping_cart.submit(); return false;">update</a></td>
@@ -68,7 +69,7 @@
       </tr>
 
 <?php
-    }
+}
 ?>
 
     </table>
@@ -82,11 +83,11 @@
 // HPDL
 //    if ($osC_OrderTotal->hasActive()) {
 //      foreach ($osC_OrderTotal->getResult() as $module) {
-      foreach ( $OSCOM_ShoppingCart->getOrderTotals() as $module ) {
-        echo '    <tr>' . "\n" .
-             '      <td align="right">' . $module['title'] . '</td>' . "\n" .
-             '      <td align="right">' . $module['text'] . '</td>' . "\n" .
-             '    </tr>';
+      foreach ($OSCOM_ShoppingCart->getOrderTotals() as $module) {
+          echo '    <tr>' . "\n" .
+               '      <td align="right">' . $module['title'] . '</td>' . "\n" .
+               '      <td align="right">' . $module['text'] . '</td>' . "\n" .
+               '    </tr>';
       }
 //    }
 ?>
@@ -94,12 +95,12 @@
   </table>
 
 <?php
-    if ( (STOCK_CHECK == '1') && ($OSCOM_ShoppingCart->hasStock() === false) ) {
-      if ( STOCK_ALLOW_CHECKOUT == '1' ) {
-        echo '<p class="stockWarning" align="center">' . sprintf(OSCOM::getDef('products_out_of_stock_checkout_possible'), STOCK_MARK_PRODUCT_OUT_OF_STOCK) . '</p>';
-      } else {
-        echo '<p class="stockWarning" align="center">' . sprintf(OSCOM::getDef('products_out_of_stock_checkout_not_possible'), STOCK_MARK_PRODUCT_OUT_OF_STOCK) . '</p>';
-      }
+    if ((STOCK_CHECK == '1') && ($OSCOM_ShoppingCart->hasStock() === false)) {
+        if (STOCK_ALLOW_CHECKOUT == '1') {
+            echo '<p class="stockWarning" align="center">' . sprintf(OSCOM::getDef('products_out_of_stock_checkout_possible'), STOCK_MARK_PRODUCT_OUT_OF_STOCK) . '</p>';
+        } else {
+            echo '<p class="stockWarning" align="center">' . sprintf(OSCOM::getDef('products_out_of_stock_checkout_not_possible'), STOCK_MARK_PRODUCT_OUT_OF_STOCK) . '</p>';
+        }
     }
 ?>
 
@@ -109,12 +110,12 @@
   <form name="checkout" action="<?php echo OSCOM::getLink(null, 'Checkout', null, 'SSL'); ?>" method="post">
 
   <div style="float: right;">
-    <?php echo HTML::button(array('icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_checkout'))); ?>
+    <?php echo HTML::button(['icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_checkout')]); ?>
   </div>
 
 <?php
-  if ( !$OSCOM_Customer->isLoggedOn() && $OSCOM_Application->requireCustomerAccount() ) {
-?>
+  if (!$OSCOM_Customer->isLoggedOn() && $OSCOM_Application->requireCustomerAccount()) {
+      ?>
 
   <div class="content">
     <?php echo 'E-Mail Address: ' . HTML::inputField('email', $OSCOM_Customer->getEMailAddress()) . ' or ' . HTML::link(OSCOM::getLink(null, 'Account', 'LogIn', 'SSL'), 'Sign-In') . ' to process this order'; ?>

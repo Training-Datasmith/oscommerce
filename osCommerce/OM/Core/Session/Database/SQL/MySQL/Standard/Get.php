@@ -1,35 +1,38 @@
 <?php
+
+declare(strict_types=1);
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  namespace osCommerce\OM\Core\Session\Database\SQL\MySQL\Standard;
+namespace osCommerce\OM\Core\Session\Database\SQL\MySQL\Standard;
 
-  use osCommerce\OM\Core\Registry;
+use osCommerce\OM\Core\Registry;
 
-  class Get {
-    public static function execute($data) {
-      $OSCOM_PDO = Registry::get('PDO');
+class Get
+{
+    public static function execute($data)
+    {
+        $OSCOM_PDO = Registry::get('PDO');
 
-      $sql_query = 'select value from :table_sessions where id = :id';
+        $sql_query = 'select value from :table_sessions where id = :id';
 
-      if ( isset($data['expiry']) ) {
-        $sql_query .= ' and expiry >= :expiry';
-      }
+        if (isset($data['expiry'])) {
+            $sql_query .= ' and expiry >= :expiry';
+        }
 
-      $Qsession = $OSCOM_PDO->prepare($sql_query);
-      $Qsession->bindValue(':id', $data['id']);
+        $Qsession = $OSCOM_PDO->prepare($sql_query);
+        $Qsession->bindValue(':id', $data['id']);
 
-      if ( isset($data['expiry']) ) {
-        $Qsession->bindInt(':expiry', $data['expiry']);
-      }
+        if (isset($data['expiry'])) {
+            $Qsession->bindInt(':expiry', $data['expiry']);
+        }
 
-      $Qsession->execute();
+        $Qsession->execute();
 
-      return $Qsession->fetch();
+        return $Qsession->fetch();
     }
-  }
-?>
+}

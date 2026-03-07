@@ -1,20 +1,21 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
+
 ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
 <?php
-  if ( $OSCOM_MessageStack->exists('PasswordForgotten') ) {
-    echo $OSCOM_MessageStack->get('PasswordForgotten');
+  if ($OSCOM_MessageStack->exists('PasswordForgotten')) {
+      echo $OSCOM_MessageStack->get('PasswordForgotten');
   }
 ?>
 
@@ -33,9 +34,9 @@
 </div>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo HTML::button(array('icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue'))); ?></span>
+  <span style="float: right;"><?php echo HTML::button(['icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue')]); ?></span>
 
-  <?php echo HTML::button(array('href' => OSCOM::getLink(null, null, null, 'SSL'), 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))); ?>
+  <?php echo HTML::button(['href' => OSCOM::getLink(null, null, null, 'SSL'), 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back')]); ?>
 </div>
 
 </form>

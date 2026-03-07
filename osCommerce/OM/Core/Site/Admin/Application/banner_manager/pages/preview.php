@@ -12,14 +12,14 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(osC_BannerManager_Admin::getData($_GET['bID']));
+$osC_ObjectInfo = new osC_ObjectInfo(osC_BannerManager_Admin::getData($_GET['bID']));
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -27,10 +27,10 @@
 <div class="infoBoxContent">
 
 <?php
-  if ( !osc_empty($osC_ObjectInfo->get('banners_html_text')) ) {
-    echo $osC_ObjectInfo->get('banners_html_text');
+  if (!osc_empty($osC_ObjectInfo->get('banners_html_text'))) {
+      echo $osC_ObjectInfo->get('banners_html_text');
   } else {
-    echo osc_image('../images/' . $osC_ObjectInfo->get('banners_image'), $osC_ObjectInfo->get('banners_title'));
+      echo osc_image('../images/' . $osC_ObjectInfo->get('banners_image'), $osC_ObjectInfo->get('banners_title'));
   }
 ?>
 

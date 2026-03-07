@@ -1,13 +1,14 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\OSCOM;
-  use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
+
 ?>
 
 <script language="javascript" type="text/javascript">
@@ -148,19 +149,19 @@
       </tr>
     </table>
 
-    <p align="right"><?php echo HTML::button(array('priority' => 'primary', 'icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue'))) . ' ' . HTML::button(array('href' => OSCOM::getLink(null, OSCOM::getDefaultSiteApplication()), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+    <p align="right"><?php echo HTML::button(['priority' => 'primary', 'icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue')]) . ' ' . HTML::button(['href' => OSCOM::getLink(null, OSCOM::getDefaultSiteApplication()), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel')]); ?></p>
 
 <?php
-  foreach ( $_POST as $key => $value ) {
-    if ( ($key != 'x') && ($key != 'y') ) {
-      if ( is_array($value) ) {
-        for ( $i=0, $n=count($value); $i<$n; $i++ ) {
-          echo HTML::hiddenField($key . '[]', $value[$i]);
-        }
-      } else {
-        echo HTML::hiddenField($key, $value);
+  foreach ($_POST as $key => $value) {
+      if (($key != 'x') && ($key != 'y')) {
+          if (is_array($value)) {
+              for ($i = 0, $n = count($value); $i < $n; $i++) {
+                  echo HTML::hiddenField($key . '[]', $value[$i]);
+              }
+          } else {
+              echo HTML::hiddenField($key, $value);
+          }
       }
-    }
   }
 ?>
 

@@ -17,7 +17,7 @@
 
 <?php
   if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -33,8 +33,8 @@
       <td width="60%">
 
 <?php
-  foreach ( $osC_Language->getAll() as $l ) {
-    echo $osC_Language->showImage($l['code']) . '&nbsp;' .  osc_draw_input_field('entry_name[' . $l['id'] . ']') . '<br />';
+  foreach ($osC_Language->getAll() as $l) {
+      echo $osC_Language->showImage($l['code']) . '&nbsp;' .  osc_draw_input_field('entry_name[' . $l['id'] . ']') . '<br />';
   }
 ?>
 

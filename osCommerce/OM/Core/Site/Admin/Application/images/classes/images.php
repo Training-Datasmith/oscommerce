@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
   $Id: $
 
@@ -13,4 +15,3 @@
 */
 
 /* HPDL - PLACEHOLDER; must split from admin/includes/classes/image.php */
-?>

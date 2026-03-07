@@ -16,8 +16,8 @@
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -25,10 +25,10 @@
 
 <?php
   $Qstatuses = $osC_Database->query('select orders_status_id, orders_status_name from :table_orders_status where language_id = :language_id order by orders_status_name');
-  $Qstatuses->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
-  $Qstatuses->bindInt(':language_id', $osC_Language->getID());
-  $Qstatuses->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
-  $Qstatuses->execute();
+$Qstatuses->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
+$Qstatuses->bindInt(':language_id', $osC_Language->getID());
+$Qstatuses->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
+$Qstatuses->execute();
 ?>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -57,22 +57,22 @@
   <tbody>
 
 <?php
-  while ( $Qstatuses->next() ) {
-    $status_name = $Qstatuses->value('orders_status_name');
+  while ($Qstatuses->next()) {
+      $status_name = $Qstatuses->value('orders_status_name');
 
-    if ( $Qstatuses->valueInt('orders_status_id') == DEFAULT_ORDERS_STATUS_ID ) {
-      $status_name .= ' (' . $osC_Language->get('default_entry') . ')';
-    }
-?>
+      if ($Qstatuses->valueInt('orders_status_id') == DEFAULT_ORDERS_STATUS_ID) {
+          $status_name .= ' (' . $osC_Language->get('default_entry') . ')';
+      }
+      ?>
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
       <td onclick="document.getElementById('batch<?php echo $Qstatuses->valueInt('orders_status_id'); ?>').checked = !document.getElementById('batch<?php echo $Qstatuses->valueInt('orders_status_id'); ?>').checked;"><?php echo $status_name; ?></td>
       <td align="right">
 
 <?php
-    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&osID=' . $Qstatuses->valueInt('orders_status_id') . '&action=save'), osc_icon('edit.png')) . '&nbsp;' .
-         osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&osID=' . $Qstatuses->valueInt('orders_status_id') . '&action=delete'), osc_icon('trash.png'));
-?>
+          echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&osID=' . $Qstatuses->valueInt('orders_status_id') . '&action=save'), osc_icon('edit.png')) . '&nbsp;' .
+               osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&osID=' . $Qstatuses->valueInt('orders_status_id') . '&action=delete'), osc_icon('trash.png'));
+      ?>
 
       </td>
       <td align="center"><?php echo osc_draw_checkbox_field('batch[]', $Qstatuses->valueInt('orders_status_id'), null, 'id="batch' . $Qstatuses->valueInt('orders_status_id') . '"'); ?></td>

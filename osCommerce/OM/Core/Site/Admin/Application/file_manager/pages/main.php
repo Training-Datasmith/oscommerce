@@ -12,40 +12,40 @@
   as published by the Free Software Foundation.
 */
 
-  $goto_array = array(array('id' => '',
-                            'text' => $osC_Language->get('top_level')));
+$goto_array = [['id' => '',
+                          'text' => $osC_Language->get('top_level')]];
 
-  if ( $_SESSION['fm_directory'] != OSC_ADMIN_FILE_MANAGER_ROOT_PATH ) {
-    $path_array = explode('/', substr($_SESSION['fm_directory'], strlen(OSC_ADMIN_FILE_MANAGER_ROOT_PATH)+1));
+if ($_SESSION['fm_directory'] != OSC_ADMIN_FILE_MANAGER_ROOT_PATH) {
+    $path_array = explode('/', substr($_SESSION['fm_directory'], strlen(OSC_ADMIN_FILE_MANAGER_ROOT_PATH) + 1));
 
-    foreach ( $path_array as $value ) {
-      if ( sizeof($goto_array) < 2 ) {
-        $goto_array[] = array('id' => $value,
-                              'text' => $value);
-      } else {
-        $parent = end($goto_array);
-        $goto_array[] = array('id' => $parent['id'] . '/' . $value,
-                              'text' => $parent['id'] . '/' . $value);
-      }
+    foreach ($path_array as $value) {
+        if (sizeof($goto_array) < 2) {
+            $goto_array[] = ['id' => $value,
+                                  'text' => $value];
+        } else {
+            $parent = end($goto_array);
+            $goto_array[] = ['id' => $parent['id'] . '/' . $value,
+                                  'text' => $parent['id'] . '/' . $value];
+        }
     }
-  }
+}
 
-  $osC_DirectoryListing = new osC_DirectoryListing($_SESSION['fm_directory']);
-  $osC_DirectoryListing->setStats(true);
+$osC_DirectoryListing = new osC_DirectoryListing($_SESSION['fm_directory']);
+$osC_DirectoryListing->setStats(true);
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
 <div style="float: right;">
   <form name="file_manager" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT); ?>" method="get"><?php echo osc_draw_hidden_field($osC_Template->getModule()); ?>
 
-  <?php echo $osC_Language->get('operation_heading_directory') . ' ' . osc_draw_pull_down_menu('goto', $goto_array, substr($_SESSION['fm_directory'], strlen(OSC_ADMIN_FILE_MANAGER_ROOT_PATH)+1), 'onchange="this.form.submit();"'); ?>
+  <?php echo $osC_Language->get('operation_heading_directory') . ' ' . osc_draw_pull_down_menu('goto', $goto_array, substr($_SESSION['fm_directory'], strlen(OSC_ADMIN_FILE_MANAGER_ROOT_PATH) + 1), 'onchange="this.form.submit();"'); ?>
 
   <?php echo '<input type="button" value="' . $osC_Language->get('button_upload') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=upload') . '\';" class="infoBoxButton" />&nbsp;<input type="button" value="' . $osC_Language->get('button_new_file') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=save') . '\';" class="infoBoxButton" />&nbsp;<input type="button" value="' . $osC_Language->get('button_new_folder') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=saveDirectory') . '\';" class="infoBoxButton" />'; ?>
 
@@ -73,28 +73,28 @@
   <tbody>
 
 <?php
-  if ( $_SESSION['fm_directory'] != OSC_ADMIN_FILE_MANAGER_ROOT_PATH ) {
-?>
+  if ($_SESSION['fm_directory'] != OSC_ADMIN_FILE_MANAGER_ROOT_PATH) {
+      ?>
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
-      <td colspan="8"><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&goto=' . $goto_array[sizeof($goto_array)-2]['id']), osc_icon('2uparrow.png') . '&nbsp;' . $osC_Language->get('parent_level')); ?></td>
+      <td colspan="8"><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&goto=' . $goto_array[sizeof($goto_array) - 2]['id']), osc_icon('2uparrow.png') . '&nbsp;' . $osC_Language->get('parent_level')); ?></td>
     </tr>
 
 <?php
   }
 
-  foreach ( $osC_DirectoryListing->getFiles() as $file ) {
+foreach ($osC_DirectoryListing->getFiles() as $file) {
     $file_owner = posix_getpwuid($file['user_id']);
     $group_owner = posix_getgrgid($file['group_id']);
 
-    if ( $file['is_directory'] === true ) {
-      $entry_icon = osc_icon('folder_red.png');
-      $entry_url = osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&directory=' . $file['name']);
+    if ($file['is_directory'] === true) {
+        $entry_icon = osc_icon('folder_red.png');
+        $entry_url = osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&directory=' . $file['name']);
     } else {
-      $entry_icon = osc_icon('file.png');
-      $entry_url = osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&entry=' . $file['name'] . '&action=save');
+        $entry_icon = osc_icon('file.png');
+        $entry_url = osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&entry=' . $file['name'] . '&action=save');
     }
-?>
+    ?>
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
       <td><?php echo osc_link_object($entry_url, $entry_icon . '&nbsp;' . $file['name']); ?></td>
@@ -107,22 +107,22 @@
       <td align="right">
 
 <?php
-    if ( $file['is_directory'] === false ) {
-      echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&entry=' . $file['name'] . '&action=save'), osc_icon('edit.png')) . '&nbsp;' .
-           osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&entry=' . $file['name'] . '&action=download'), osc_icon('save.png')) . '&nbsp;';
-    } else {
-      echo osc_image('images/pixel_trans.gif') . '&nbsp;' .
-           osc_image('images/pixel_trans.gif') . '&nbsp;';
-    }
+        if ($file['is_directory'] === false) {
+            echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&entry=' . $file['name'] . '&action=save'), osc_icon('edit.png')) . '&nbsp;' .
+                 osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&entry=' . $file['name'] . '&action=download'), osc_icon('save.png')) . '&nbsp;';
+        } else {
+            echo osc_image('images/pixel_trans.gif') . '&nbsp;' .
+                 osc_image('images/pixel_trans.gif') . '&nbsp;';
+        }
 
     echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&entry=' . $file['name'] . '&action=delete'), osc_icon('trash.png'));
-?>
+    ?>
 
       </td>
     </tr>
 
 <?php
-  }
+}
 ?>
 
   </tbody>

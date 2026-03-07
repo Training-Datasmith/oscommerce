@@ -1,32 +1,35 @@
 <?php
+
+declare(strict_types=1);
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  namespace osCommerce\OM\Core\Site\Admin\Application\CoreUpdate\Model;
+namespace osCommerce\OM\Core\Site\Admin\Application\CoreUpdate\Model;
 
-  use \GlobIterator;
+use GlobIterator;
 
-  use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\OSCOM;
 
 /**
  * @since v3.0.2
  */
 
-  class getLogs {
-    public static function execute() {
-      $result = array();
+class getLogs
+{
+    public static function execute()
+    {
+        $result = [];
 
-      $it = new GlobIterator(OSCOM::BASE_DIRECTORY . 'Work/Logs/update-*.txt');
+        $it = new GlobIterator(OSCOM::BASE_DIRECTORY . 'Work/Logs/update-*.txt');
 
-      foreach ( $it as $f ) {
-        $result[] = $f->getFilename();
-      }
+        foreach ($it as $f) {
+            $result[] = $f->getFilename();
+        }
 
-      return $result;
+        return $result;
     }
-  }
-?>
+}

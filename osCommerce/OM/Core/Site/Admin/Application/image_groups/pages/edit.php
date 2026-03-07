@@ -12,14 +12,14 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(osC_ImageGroups_Admin::getData($_GET['gID']));
+$osC_ObjectInfo = new osC_ObjectInfo(osC_ImageGroups_Admin::getData($_GET['gID']));
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -35,20 +35,20 @@
       <td width="60%">
 
 <?php
-  $status_name = array();
+  $status_name = [];
 
-  $Qgd = $osC_Database->query('select language_id, title from :table_products_images_groups where id = :id');
-  $Qgd->bindTable(':table_products_images_groups', TABLE_PRODUCTS_IMAGES_GROUPS);
-  $Qgd->bindInt(':id', $osC_ObjectInfo->get('id'));
-  $Qgd->execute();
+$Qgd = $osC_Database->query('select language_id, title from :table_products_images_groups where id = :id');
+$Qgd->bindTable(':table_products_images_groups', TABLE_PRODUCTS_IMAGES_GROUPS);
+$Qgd->bindInt(':id', $osC_ObjectInfo->get('id'));
+$Qgd->execute();
 
-  while ( $Qgd->next() ) {
+while ($Qgd->next()) {
     $status_name[$Qgd->valueInt('language_id')] = $Qgd->value('title');
-  }
+}
 
-  foreach ( $osC_Language->getAll() as $l ) {
+foreach ($osC_Language->getAll() as $l) {
     echo $osC_Language->showImage($l['code']) . '&nbsp;' . osc_draw_input_field('title[' . $l['id'] . ']', (isset($status_name[$l['id']]) ? $status_name[$l['id']] : '')) . '<br />';
-  }
+}
 ?>
 
       </td>
@@ -71,8 +71,8 @@
     </tr>
 
 <?php
-  if ( $osC_ObjectInfo->get('id') != DEFAULT_IMAGE_GROUP_ID ) {
-?>
+  if ($osC_ObjectInfo->get('id') != DEFAULT_IMAGE_GROUP_ID) {
+      ?>
 
     <tr>
       <td width="40%"><?php echo '<b>' . $osC_Language->get('field_set_as_default') . '</b>'; ?></td>

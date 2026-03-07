@@ -1,20 +1,21 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
+
 ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
 <?php
-  if ( $OSCOM_MessageStack->exists('Search') ) {
-    echo $OSCOM_MessageStack->get('Search');
+  if ($OSCOM_MessageStack->exists('Search')) {
+      echo $OSCOM_MessageStack->get('Search');
   }
 ?>
 
@@ -33,7 +34,7 @@
 </div>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo HTML::button(array('icon' => 'search', 'title' => OSCOM::getDef('button_search'))); ?></span>
+  <span style="float: right;"><?php echo HTML::button(['icon' => 'search', 'title' => OSCOM::getDef('button_search')]); ?></span>
 
   <?php echo HTML::link('javascript:popupWindow(\'' . OSCOM::getLink(null, null, 'Help') . '\');', OSCOM::getDef('search_help_tips')); ?>
 </div>
@@ -48,37 +49,37 @@
 <?php
   echo HTML::label(OSCOM::getDef('field_search_categories'), 'category');
 
-  $OSCOM_CategoryTree->setSpacerString('&nbsp;', 2);
+$OSCOM_CategoryTree->setSpacerString('&nbsp;', 2);
 
-  $categories_array = array(array('id' => '',
-                                  'text' => OSCOM::getDef('filter_all_categories')));
+$categories_array = [['id' => '',
+                                'text' => OSCOM::getDef('filter_all_categories')]];
 
-  foreach ( $OSCOM_CategoryTree->buildBranchArray(0) as $category ) {
-    $categories_array[] = array('id' => $category['id'],
-                                'text' => $category['title']);
-  }
+foreach ($OSCOM_CategoryTree->buildBranchArray(0) as $category) {
+    $categories_array[] = ['id' => $category['id'],
+                                'text' => $category['title']];
+}
 
-  echo HTML::selectMenu('category', $categories_array);
+echo HTML::selectMenu('category', $categories_array);
 ?>
 
       </li>
-      <li><?php echo HTML::checkboxField('recursive', array(array('id' => '1', 'text' => OSCOM::getDef('field_search_recursive'))), true); ?></li>
+      <li><?php echo HTML::checkboxField('recursive', [['id' => '1', 'text' => OSCOM::getDef('field_search_recursive')]], true); ?></li>
       <li>
 
 <?php
   echo HTML::label(OSCOM::getDef('field_search_manufacturers'), 'manufacturer');
 
-  $manufacturers_array = array(array('id' => '', 'text' => OSCOM::getDef('filter_all_manufacturers')));
+$manufacturers_array = [['id' => '', 'text' => OSCOM::getDef('filter_all_manufacturers')]];
 
-  $Qmanufacturers = $OSCOM_PDO->query('select manufacturers_id, manufacturers_name from :table_manufacturers order by manufacturers_name');
-  $Qmanufacturers->execute();
+$Qmanufacturers = $OSCOM_PDO->query('select manufacturers_id, manufacturers_name from :table_manufacturers order by manufacturers_name');
+$Qmanufacturers->execute();
 
-  while ( $Qmanufacturers->fetch() ) {
-    $manufacturers_array[] = array('id' => $Qmanufacturers->valueInt('manufacturers_id'),
-                                   'text' => $Qmanufacturers->value('manufacturers_name'));
-  }
+while ($Qmanufacturers->fetch()) {
+    $manufacturers_array[] = ['id' => $Qmanufacturers->valueInt('manufacturers_id'),
+                                   'text' => $Qmanufacturers->value('manufacturers_name')];
+}
 
-  echo HTML::selectMenu('manufacturer', $manufacturers_array);
+echo HTML::selectMenu('manufacturer', $manufacturers_array);
 ?>
 
       </li>

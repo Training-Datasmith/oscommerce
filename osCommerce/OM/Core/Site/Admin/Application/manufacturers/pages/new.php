@@ -17,7 +17,7 @@
 
 <?php
   if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -35,9 +35,9 @@
 <?php
   echo $osC_Language->get('field_url');
 
-  foreach ( $osC_Language->getAll() as $l ) {
+foreach ($osC_Language->getAll() as $l) {
     echo '<br />' . $osC_Language->showImage($l['code']) . '&nbsp;' . osc_draw_input_field('manufacturers_url[' . $l['id'] . ']');
-  }
+}
 ?>
 
   </p>

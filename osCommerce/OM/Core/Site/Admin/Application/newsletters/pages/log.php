@@ -12,16 +12,16 @@
   as published by the Free Software Foundation.
 */
 
-  if ( !isset($_GET['lpage']) || ( isset($_GET['lpage']) && !is_numeric($_GET['lpage']) ) ) {
+if (!isset($_GET['lpage']) || (isset($_GET['lpage']) && !is_numeric($_GET['lpage']))) {
     $_GET['lpage'] = 1;
-  }
+}
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -29,10 +29,10 @@
 
 <?php
   $Qlog = $osC_Database->query('select email_address, date_sent from :table_newsletters_log where newsletters_id = :newsletters_id order by date_sent desc');
-  $Qlog->bindTable(':table_newsletters_log', TABLE_NEWSLETTERS_LOG);
-  $Qlog->bindInt(':newsletters_id', $_GET['nID']);
-  $Qlog->setBatchLimit($_GET['lpage'], MAX_DISPLAY_SEARCH_RESULTS);
-  $Qlog->execute();
+$Qlog->bindTable(':table_newsletters_log', TABLE_NEWSLETTERS_LOG);
+$Qlog->bindInt(':newsletters_id', $_GET['nID']);
+$Qlog->setBatchLimit($_GET['lpage'], MAX_DISPLAY_SEARCH_RESULTS);
+$Qlog->execute();
 ?>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -58,8 +58,8 @@
   <tbody>
 
 <?php
-  while ( $Qlog->next() ) {
-?>
+  while ($Qlog->next()) {
+      ?>
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
       <td><?php echo $Qlog->valueProtected('email_address'); ?></td>

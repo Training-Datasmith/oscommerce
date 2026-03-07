@@ -16,8 +16,8 @@
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -33,8 +33,8 @@
       <td width="60%">
 
 <?php
-  foreach ( $osC_Language->getAll() as $l ) {
-    echo $osC_Language->showImage($l['code']) . '&nbsp;' . osc_draw_input_field('name[' . $l['id'] . ']') . '<br />';
+  foreach ($osC_Language->getAll() as $l) {
+      echo $osC_Language->showImage($l['code']) . '&nbsp;' . osc_draw_input_field('name[' . $l['id'] . ']') . '<br />';
   }
 ?>
 

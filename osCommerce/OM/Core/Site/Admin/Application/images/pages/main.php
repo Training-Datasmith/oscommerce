@@ -12,26 +12,26 @@
   as published by the Free Software Foundation.
 */
 
-  include('includes/modules/image/' . $_GET['module'] . '.php');
+include('includes/modules/image/' . $_GET['module'] . '.php');
 
-  $class = 'osC_Image_Admin_' . $_GET['module'];
+$class = 'osC_Image_Admin_' . $_GET['module'];
 
-  $osC_Images = new $class();
+$osC_Images = new $class();
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle() . ': ' . $osC_Images->getTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
 <p align="right"><?php echo '<input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />'; ?></p>
 
 <?php
-  if ( !isset($_POST['subaction']) && $osC_Images->hasParameters() ) {
-?>
+  if (!isset($_POST['subaction']) && $osC_Images->hasParameters()) {
+      ?>
 
 <div class="infoBoxHeading"><?php echo osc_icon('edit.png') . ' ' . $osC_Images->getTitle(); ?></div>
 <div class="infoBoxContent">
@@ -42,8 +42,8 @@
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
 
 <?php
-    foreach ( $osC_Images->getParameters() as $params ) {
-?>
+          foreach ($osC_Images->getParameters() as $params) {
+              ?>
 
     <tr>
       <td width="40%"><?php echo '<b>' . $params['key'] . '</b>'; ?></td>
@@ -51,8 +51,8 @@
     </tr>
 
 <?php
-    }
-?>
+          }
+      ?>
 
   </table>
 
@@ -63,18 +63,18 @@
 
 <?php
   } else {
-    $osC_Images->activate();
-?>
+      $osC_Images->activate();
+      ?>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
   <thead>
     <tr>
 
 <?php
-    foreach ( $osC_Images->getHeader() as $header ) {
-      echo '      <th>' . $header . '</th>';
-    }
-?>
+          foreach ($osC_Images->getHeader() as $header) {
+              echo '      <th>' . $header . '</th>';
+          }
+      ?>
 
     </tr>
   </thead>
@@ -86,20 +86,20 @@
   <tbody>
 
 <?php
-    foreach ( $osC_Images->getData() as $data ) {
-      if ( !isset($columns) ) {
-        $columns = sizeof($data);
-      }
+          foreach ($osC_Images->getData() as $data) {
+              if (!isset($columns)) {
+                  $columns = sizeof($data);
+              }
 
-      echo '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">';
+              echo '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">';
 
-      for ( $i = 0; $i < $columns; $i++ ) {
-        echo '      <td>' . $data[$i] . '</td>';
-      }
+              for ($i = 0; $i < $columns; $i++) {
+                  echo '      <td>' . $data[$i] . '</td>';
+              }
 
-      echo '    </tr>';
-    }
-?>
+              echo '    </tr>';
+          }
+      ?>
 
   </tbody>
 </table>

@@ -1,13 +1,14 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
+
 ?>
 
 <div style="float: right;"><?php echo HTML::link(OSCOM::getLink(null, null, $OSCOM_Product->getKeyword()), $OSCOM_Image->show($OSCOM_Product->getImage(), $OSCOM_Product->getTitle(), 'hspace="5" vspace="5"', 'mini')); ?></div>
@@ -15,8 +16,8 @@
 <h1><?php echo $OSCOM_Template->getPageTitle() . ($OSCOM_Product->hasModel() ? '<br /><span class="smallText">' . $OSCOM_Product->getModel() . '</span>' : ''); ?></h1>
 
 <?php
-  if ( $OSCOM_MessageStack->exists('TellAFriend') ) {
-    echo $OSCOM_MessageStack->get('TellAFriend');
+  if ($OSCOM_MessageStack->exists('TellAFriend')) {
+      echo $OSCOM_MessageStack->get('TellAFriend');
   }
 ?>
 
@@ -57,9 +58,9 @@
 </div>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo HTML::button(array('icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue'))); ?></span>
+  <span style="float: right;"><?php echo HTML::button(['icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue')]); ?></span>
 
-  <?php echo HTML::button(array('href' => OSCOM::getLink(null, null, $OSCOM_Product->getKeyword()), 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))); ?>
+  <?php echo HTML::button(['href' => OSCOM::getLink(null, null, $OSCOM_Product->getKeyword()), 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back')]); ?>
 </div>
 
 </form>

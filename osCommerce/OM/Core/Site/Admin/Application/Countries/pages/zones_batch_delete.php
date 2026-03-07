@@ -1,33 +1,33 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
 
-  $Qzones = $OSCOM_PDO->query('select zone_id, zone_name from :table_zones where zone_id in ("' . implode('", "', array_unique(array_filter($_POST['batch'], 'is_numeric'))) . '") order by zone_name');
-  $Qzones->execute();
+$Qzones = $OSCOM_PDO->query('select zone_id, zone_name from :table_zones where zone_id in ("' . implode('", "', array_unique(array_filter($_POST['batch'], 'is_numeric'))) . '") order by zone_name');
+$Qzones->execute();
 
-  $names_string = '';
+$names_string = '';
 
-  while ( $Qzones->fetch() ) {
+while ($Qzones->fetch()) {
     $names_string .= HTML::hiddenField('batch[]', $Qzones->valueInt('zone_id')) . '<b>' . $Qzones->valueProtected('zone_name') . '</b>, ';
-  }
+}
 
-  if ( !empty($names_string) ) {
+if (!empty($names_string)) {
     $names_string = substr($names_string, 0, -2);
-  }
+}
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $OSCOM_MessageStack->exists() ) {
-    echo $OSCOM_MessageStack->get();
+  if ($OSCOM_MessageStack->exists()) {
+      echo $OSCOM_MessageStack->get();
   }
 ?>
 
@@ -40,7 +40,7 @@
 
   <p><?php echo $names_string; ?></p>
 
-  <p><?php echo HTML::button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . HTML::button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+  <p><?php echo HTML::button(['priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete')]) . ' ' . HTML::button(['href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel')]); ?></p>
 
   </form>
 </div>

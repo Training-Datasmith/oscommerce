@@ -12,18 +12,18 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_DirectoryListing = new osC_DirectoryListing(DIR_FS_BACKUP);
-  $osC_DirectoryListing->setIncludeDirectories(false);
-  $osC_DirectoryListing->setCheckExtension('zip');
-  $osC_DirectoryListing->setCheckExtension('sql');
-  $osC_DirectoryListing->setCheckExtension('gz');
+$osC_DirectoryListing = new osC_DirectoryListing(DIR_FS_BACKUP);
+$osC_DirectoryListing->setIncludeDirectories(false);
+$osC_DirectoryListing->setCheckExtension('zip');
+$osC_DirectoryListing->setCheckExtension('sql');
+$osC_DirectoryListing->setCheckExtension('gz');
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -50,8 +50,8 @@
   <tbody>
 
 <?php
-  foreach ( $osC_DirectoryListing->getFiles() as $file ) {
-?>
+  foreach ($osC_DirectoryListing->getFiles() as $file) {
+      ?>
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
       <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&file=' . $file['name'] . '&action=download'), osc_icon('download.png') . '&nbsp;' . $file['name']); ?></td>
@@ -60,9 +60,9 @@
       <td align="right">
 
 <?php
-      echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&file=' . $file['name'] . '&action=restore'), osc_icon('restore.png')) . '&nbsp;' .
-           osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&file=' . $file['name'] . '&action=delete'), osc_icon('trash.png'));
-?>
+            echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&file=' . $file['name'] . '&action=restore'), osc_icon('restore.png')) . '&nbsp;' .
+                 osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&file=' . $file['name'] . '&action=delete'), osc_icon('trash.png'));
+      ?>
 
       </td>
       <td align="center"><?php echo osc_draw_checkbox_field('batch[]', $file['name'], null, 'id="batch' . addslashes($file['name']) . '"'); ?></td>
@@ -86,8 +86,8 @@
 <p><?php echo $osC_Language->get('backup_location') . ' ' . DIR_FS_BACKUP; ?></p>
 
 <?php
-  if ( defined('DB_LAST_RESTORE') ) {
-?>
+  if (defined('DB_LAST_RESTORE')) {
+      ?>
 
 <p><?php echo $osC_Language->get('last_restoration_date') . ' ' . DB_LAST_RESTORE . ' ' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=forget'), $osC_Language->get('forget_restoration_date')); ?></p>
 

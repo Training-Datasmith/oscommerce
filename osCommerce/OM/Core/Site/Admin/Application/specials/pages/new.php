@@ -12,33 +12,33 @@
   as published by the Free Software Foundation.
 */
 
-  $specials_array = array();
+$specials_array = [];
 
-  $Qspecials = $osC_Database->query('select p.products_id, p.products_price, p.products_tax_class_id, pd.products_name, s.specials_new_products_price from :table_products p left join :table_specials s on (p.products_id = s.products_id), :table_products_description pd where p.products_id = pd.products_id and pd.language_id = :language_id and p.has_children = 0 order by pd.products_name');
-  $Qspecials->bindTable(':table_products', TABLE_PRODUCTS);
-  $Qspecials->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
-  $Qspecials->bindTable(':table_specials', TABLE_SPECIALS);
-  $Qspecials->bindInt(':language_id', $osC_Language->getID());
-  $Qspecials->execute();
+$Qspecials = $osC_Database->query('select p.products_id, p.products_price, p.products_tax_class_id, pd.products_name, s.specials_new_products_price from :table_products p left join :table_specials s on (p.products_id = s.products_id), :table_products_description pd where p.products_id = pd.products_id and pd.language_id = :language_id and p.has_children = 0 order by pd.products_name');
+$Qspecials->bindTable(':table_products', TABLE_PRODUCTS);
+$Qspecials->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
+$Qspecials->bindTable(':table_specials', TABLE_SPECIALS);
+$Qspecials->bindInt(':language_id', $osC_Language->getID());
+$Qspecials->execute();
 
-  while ( $Qspecials->next() ) {
-    if ( $Qspecials->valueDecimal('specials_new_products_price') < 1 ) {
-      $specials_array[] = array('id' => $Qspecials->valueInt('products_id'),
-                                'text' => $Qspecials->value('products_name') . ' (' . $osC_Currencies->format($Qspecials->value('products_price')) . ')',
-                                'tax_class_id' => $Qspecials->valueInt('products_tax_class_id'));
+while ($Qspecials->next()) {
+    if ($Qspecials->valueDecimal('specials_new_products_price') < 1) {
+        $specials_array[] = ['id' => $Qspecials->valueInt('products_id'),
+                                  'text' => $Qspecials->value('products_name') . ' (' . $osC_Currencies->format($Qspecials->value('products_price')) . ')',
+                                  'tax_class_id' => $Qspecials->valueInt('products_tax_class_id')];
     }
-  }
+}
 
-  $Qtc = $osC_Database->query('select tax_class_id, tax_class_title from :table_tax_class order by tax_class_title');
-  $Qtc->bindTable(':table_tax_class', TABLE_TAX_CLASS);
-  $Qtc->execute();
+$Qtc = $osC_Database->query('select tax_class_id, tax_class_title from :table_tax_class order by tax_class_title');
+$Qtc->bindTable(':table_tax_class', TABLE_TAX_CLASS);
+$Qtc->execute();
 
-  $tax_class_array = array();
+$tax_class_array = [];
 
-  while ( $Qtc->next() ) {
-    $tax_class_array[] = array('id' => $Qtc->valueInt('tax_class_id'),
-                               'text' => $Qtc->value('tax_class_title'));
-  }
+while ($Qtc->next()) {
+    $tax_class_array[] = ['id' => $Qtc->valueInt('tax_class_id'),
+                               'text' => $Qtc->value('tax_class_title')];
+}
 ?>
 
 <script type="text/javascript"><!--
@@ -46,13 +46,13 @@
   var tax_rates = new Array();
 
 <?php
-  foreach ( $specials_array as $specials ) {
-    echo '  product_tax["' . $specials['id'] . '"] = ' . $specials['tax_class_id'] . ';' . "\n";
+  foreach ($specials_array as $specials) {
+      echo '  product_tax["' . $specials['id'] . '"] = ' . $specials['tax_class_id'] . ';' . "\n";
   }
 
-  foreach ( $tax_class_array as $tc_entry ) {
+foreach ($tax_class_array as $tc_entry) {
     echo '  tax_rates["' . $tc_entry['id'] . '"] = ' . $osC_Tax->getTaxRate($tc_entry['id']) . ';' . "\n";
-  }
+}
 ?>
 
   function pad(s) {
@@ -128,7 +128,7 @@
 
 <?php
   if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 

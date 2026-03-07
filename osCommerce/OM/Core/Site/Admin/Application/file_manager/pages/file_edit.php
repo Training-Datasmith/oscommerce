@@ -12,25 +12,25 @@
   as published by the Free Software Foundation.
 */
 
-  $writeable = true;
-  $contents = '';
+$writeable = true;
+$contents = '';
 
-  $target = $_SESSION['fm_directory'] . '/' . basename($_GET['entry']);
+$target = $_SESSION['fm_directory'] . '/' . basename($_GET['entry']);
 
-  if ( !is_writeable($target) ) {
+if (!is_writeable($target)) {
     $writeable = false;
 
     $osC_MessageStack->add($osC_Template->getModule(), sprintf($osC_Language->get('ms_error_file_not_writable'), $target), 'warning');
-  }
+}
 
-  $contents = file_get_contents($target);
+$contents = file_get_contents($target);
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -56,10 +56,10 @@
   <p align="center">
 
 <?php
-  if ( $writeable === true ) {
-    echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />';
+  if ($writeable === true) {
+      echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />';
   } else {
-    echo '<input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />';
+      echo '<input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />';
   }
 ?>
 

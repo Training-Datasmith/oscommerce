@@ -17,7 +17,7 @@
 
 <?php
   if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -25,9 +25,9 @@
 
 <?php
   $Qmanufacturers = $osC_Database->query('select manufacturers_id, manufacturers_name, manufacturers_image, date_added, last_modified from :table_manufacturers order by manufacturers_name');
-  $Qmanufacturers->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
-  $Qmanufacturers->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
-  $Qmanufacturers->execute();
+$Qmanufacturers->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
+$Qmanufacturers->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
+$Qmanufacturers->execute();
 ?>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -57,12 +57,12 @@
   <tbody>
 
 <?php
-  while ( $Qmanufacturers->next() ) {
-    $Qclicks = $osC_Database->query('select sum(url_clicked) as total from :table_manufacturers_info where manufacturers_id = :manufacturers_id');
-    $Qclicks->bindTable(':table_manufacturers_info', TABLE_MANUFACTURERS_INFO);
-    $Qclicks->bindInt(':manufacturers_id', $Qmanufacturers->valueInt('manufacturers_id'));
-    $Qclicks->execute();
-?>
+  while ($Qmanufacturers->next()) {
+      $Qclicks = $osC_Database->query('select sum(url_clicked) as total from :table_manufacturers_info where manufacturers_id = :manufacturers_id');
+      $Qclicks->bindTable(':table_manufacturers_info', TABLE_MANUFACTURERS_INFO);
+      $Qclicks->bindInt(':manufacturers_id', $Qmanufacturers->valueInt('manufacturers_id'));
+      $Qclicks->execute();
+      ?>
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
       <td onclick="document.getElementById('batch<?php echo $Qmanufacturers->valueInt('manufacturers_id'); ?>').checked = !document.getElementById('batch<?php echo $Qmanufacturers->valueInt('manufacturers_id'); ?>').checked;"><?php echo $Qmanufacturers->value('manufacturers_name'); ?></td>
@@ -70,9 +70,9 @@
       <td align="right">
 
 <?php
-    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&mID=' . $Qmanufacturers->valueInt('manufacturers_id') . '&action=save'), osc_icon('edit.png')) . '&nbsp;' .
-         osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&mID=' . $Qmanufacturers->valueInt('manufacturers_id') . '&action=delete'), osc_icon('trash.png'));
-?>
+          echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&mID=' . $Qmanufacturers->valueInt('manufacturers_id') . '&action=save'), osc_icon('edit.png')) . '&nbsp;' .
+               osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&mID=' . $Qmanufacturers->valueInt('manufacturers_id') . '&action=delete'), osc_icon('trash.png'));
+      ?>
 
       </td>
       <td align="center"><?php echo osc_draw_checkbox_field('batch[]', $Qmanufacturers->valueInt('manufacturers_id'), null, 'id="batch' . $Qmanufacturers->valueInt('manufacturers_id') . '"'); ?></td>

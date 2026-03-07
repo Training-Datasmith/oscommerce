@@ -1,14 +1,15 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\DirectoryListing;
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\DirectoryListing;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
+
 ?>
 
 <div class="mainBlock">
@@ -39,36 +40,36 @@
 
 <?php
   $http_url = parse_url($_POST['HTTP_WWW_ADDRESS']);
-  $http_server = $http_url['scheme'] . '://' . $http_url['host'];
-  $http_dir_ws = $http_url['path'];
+$http_server = $http_url['scheme'] . '://' . $http_url['host'];
+$http_dir_ws = $http_url['path'];
 
-  if ( isset($http_url['port']) && !empty($http_url['port']) ) {
+if (isset($http_url['port']) && !empty($http_url['port'])) {
     $http_server .= ':' . $http_url['port'];
-  }
+}
 
-  if ( substr($http_dir_ws, -1) != '/' ) {
+if (substr($http_dir_ws, -1) != '/') {
     $http_dir_ws .= '/';
-  }
+}
 
-  $http_cookie_domain = '';
+$http_cookie_domain = '';
 
-  if ( (substr_count($http_url['host'], '.') > 1) && !filter_var($http_url['host'], FILTER_VALIDATE_IP) ) {
+if ((substr_count($http_url['host'], '.') > 1) && !filter_var($http_url['host'], FILTER_VALIDATE_IP)) {
     $http_cookie_domain = $http_url['host'];
-  }
+}
 
-  $dir_fs_document_root = OSCOM_PUBLIC_BASE_DIRECTORY;
+$dir_fs_document_root = OSCOM_PUBLIC_BASE_DIRECTORY;
 
-  $DL_Cache = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'Work/Cache');
-  $DL_Cache->setIncludeDirectories(false);
-  $DL_Cache->setCheckExtension('cache');
+$DL_Cache = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'Work/Cache');
+$DL_Cache->setIncludeDirectories(false);
+$DL_Cache->setCheckExtension('cache');
 
-  foreach ( $DL_Cache->getFiles() as $files ) {
+foreach ($DL_Cache->getFiles() as $files) {
     @unlink($DL_Cache->getDirectory() . '/' . $files['name']);
-  }
+}
 
-  $db_class = str_replace('_', '\\', $_POST['DB_DATABASE_CLASS']);
+$db_class = str_replace('_', '\\', $_POST['DB_DATABASE_CLASS']);
 
-  $file_contents = <<<EOT
+$file_contents = <<<EOT
 [OSCOM]
 bootstrap_file = "index.php"
 default_site = "Shop"
@@ -123,22 +124,22 @@ store_sessions = "Database"
 offline = "true"
 EOT;
 
-  if ( is_writable(OSCOM::BASE_DIRECTORY . 'Config/settings.ini') ) {
+if (is_writable(OSCOM::BASE_DIRECTORY . 'Config/settings.ini')) {
     file_put_contents(OSCOM::BASE_DIRECTORY . 'Config/settings.ini', $file_contents);
-?>
+    ?>
 
     <p><?php echo OSCOM::getDef('text_successful_installation'); ?></p>
 
 <?php
-  } else {
-?>
+} else {
+    ?>
 
     <form name="install" action="<?php echo OSCOM::getLink(null, null, 'step=3'); ?>" method="post">
 
     <div class="noticeBox">
       <p><?php echo sprintf(OSCOM::getDef('error_configuration_file_not_writeable'), OSCOM::BASE_DIRECTORY . 'Config/settings.ini'); ?></p>
 
-      <p align="right"><?php echo HTML::button(array('icon' => 'refresh', 'title' => OSCOM::getDef('button_retry'))); ?></p>
+      <p align="right"><?php echo HTML::button(['icon' => 'refresh', 'title' => OSCOM::getDef('button_retry')]); ?></p>
 
       <p><?php echo OSCOM::getDef('error_configuration_file_alternate_method'); ?></p>
 
@@ -146,29 +147,29 @@ EOT;
     </div>
 
 <?php
-    foreach ( $_POST as $key => $value ) {
-      if ( ($key != 'x') && ($key != 'y') ) {
-        if ( is_array($value) ) {
-          for ( $i=0, $n=count($value); $i<$n; $i++ ) {
-            echo HTML::hiddenField($key . '[]', $value[$i]);
-          }
-        } else {
-          echo HTML::hiddenField($key, $value);
+        foreach ($_POST as $key => $value) {
+            if (($key != 'x') && ($key != 'y')) {
+                if (is_array($value)) {
+                    for ($i = 0, $n = count($value); $i < $n; $i++) {
+                        echo HTML::hiddenField($key . '[]', $value[$i]);
+                    }
+                } else {
+                    echo HTML::hiddenField($key, $value);
+                }
+            }
         }
-      }
-    }
-?>
+    ?>
 
     </form>
 
     <p><?php echo OSCOM::getDef('text_go_to_shop_after_cfg_file_is_saved'); ?></p>
 
 <?php
-  }
+}
 ?>
 
     <br />
 
-    <p align="center"><?php echo HTML::button(array('href' => $http_server . $http_dir_ws . 'index.php?Shop', 'icon' => 'cart', 'title' => OSCOM::getDef('button_shop'))) . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . HTML::button(array('href' => $http_server . $http_dir_ws . 'index.php?Admin', 'icon' => 'gear', 'title' => OSCOM::getDef('button_admin'))); ?></p>
+    <p align="center"><?php echo HTML::button(['href' => $http_server . $http_dir_ws . 'index.php?Shop', 'icon' => 'cart', 'title' => OSCOM::getDef('button_shop')]) . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . HTML::button(['href' => $http_server . $http_dir_ws . 'index.php?Admin', 'icon' => 'gear', 'title' => OSCOM::getDef('button_admin')]); ?></p>
   </div>
 </div>

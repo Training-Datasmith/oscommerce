@@ -12,19 +12,19 @@
   as published by the Free Software Foundation.
 */
 
-  include('includes/modules/shipping/' . $_GET['module'] . '.php');
+include('includes/modules/shipping/' . $_GET['module'] . '.php');
 
-  $osC_Language->injectDefinitions('modules/shipping/' . $_GET['module'] . '.xml');
+$osC_Language->injectDefinitions('modules/shipping/' . $_GET['module'] . '.xml');
 
-  $module = 'osC_Shipping_' . $_GET['module'];
-  $module = new $module();
+$module = 'osC_Shipping_' . $_GET['module'];
+$module = new $module();
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -37,7 +37,7 @@
 <?php
   $keys = '';
 
-  foreach ( $module->getKeys() as $key ) {
+foreach ($module->getKeys() as $key) {
     $Qkey = $osC_Database->query('select configuration_title, configuration_value, configuration_description, use_function, set_function from :table_configuration where configuration_key = :configuration_key');
     $Qkey->bindTable(':table_configuration', TABLE_CONFIGURATION);
     $Qkey->bindValue(':configuration_key', $key);
@@ -45,16 +45,16 @@
 
     $keys .= '<b>' . $Qkey->value('configuration_title') . '</b><br />' . $Qkey->value('configuration_description') . '<br />';
 
-    if ( !osc_empty($Qkey->value('set_function')) ) {
-      $keys .= osc_call_user_func($Qkey->value('set_function'), $Qkey->value('configuration_value'), $key);
+    if (!osc_empty($Qkey->value('set_function'))) {
+        $keys .= osc_call_user_func($Qkey->value('set_function'), $Qkey->value('configuration_value'), $key);
     } else {
-      $keys .= osc_draw_input_field('configuration[' . $key . ']', $Qkey->value('configuration_value'));
+        $keys .= osc_draw_input_field('configuration[' . $key . ']', $Qkey->value('configuration_value'));
     }
 
     $keys .= '<br /><br />';
-  }
+}
 
-  $keys = substr($keys, 0, strrpos($keys, '<br /><br />'));
+$keys = substr($keys, 0, strrpos($keys, '<br /><br />'));
 ?>
 
   <p><?php echo $keys; ?></p>

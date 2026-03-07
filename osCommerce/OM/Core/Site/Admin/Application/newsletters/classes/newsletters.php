@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
   $Id: $
 
@@ -12,56 +14,59 @@
   as published by the Free Software Foundation.
 */
 
-  class osC_Newsletters_Admin {
-    public static function getData($id) {
-      global $osC_Database;
+class osC_Newsletters_Admin
+{
+    public static function getData($id)
+    {
+        global $osC_Database;
 
-      $Qnewsletter = $osC_Database->query('select * from :table_newsletters where newsletters_id = :newsletters_id');
-      $Qnewsletter->bindTable(':table_newsletters', TABLE_NEWSLETTERS);
-      $Qnewsletter->bindInt(':newsletters_id', $id);
-      $Qnewsletter->execute();
+        $Qnewsletter = $osC_Database->query('select * from :table_newsletters where newsletters_id = :newsletters_id');
+        $Qnewsletter->bindTable(':table_newsletters', TABLE_NEWSLETTERS);
+        $Qnewsletter->bindInt(':newsletters_id', $id);
+        $Qnewsletter->execute();
 
-      $data = $Qnewsletter->toArray();
+        $data = $Qnewsletter->toArray();
 
-      $Qnewsletter->freeResult();
+        $Qnewsletter->freeResult();
 
-      return $data;
+        return $data;
     }
 
-    public static function save($id = null, $data) {
-      global $osC_Database;
+    public static function save($id = null, $data)
+    {
+        global $osC_Database;
 
-      if ( is_numeric($id) ) {
-        $Qemail = $osC_Database->query('update :table_newsletters set title = :title, content = :content, module = :module where newsletters_id = :newsletters_id');
-        $Qemail->bindInt(':newsletters_id', $id);
-      } else {
-        $Qemail = $osC_Database->query('insert into :table_newsletters (title, content, module, date_added, status) values (:title, :content, :module, now(), 0)');
-      }
+        if (is_numeric($id)) {
+            $Qemail = $osC_Database->query('update :table_newsletters set title = :title, content = :content, module = :module where newsletters_id = :newsletters_id');
+            $Qemail->bindInt(':newsletters_id', $id);
+        } else {
+            $Qemail = $osC_Database->query('insert into :table_newsletters (title, content, module, date_added, status) values (:title, :content, :module, now(), 0)');
+        }
 
-      $Qemail->bindTable(':table_newsletters', TABLE_NEWSLETTERS);
-      $Qemail->bindValue(':title', $data['title']);
-      $Qemail->bindValue(':content', $data['content']);
-      $Qemail->bindValue(':module', $data['module']);
-      $Qemail->setLogging($_SESSION['module'], $id);
-      $Qemail->execute();
+        $Qemail->bindTable(':table_newsletters', TABLE_NEWSLETTERS);
+        $Qemail->bindValue(':title', $data['title']);
+        $Qemail->bindValue(':content', $data['content']);
+        $Qemail->bindValue(':module', $data['module']);
+        $Qemail->setLogging($_SESSION['module'], $id);
+        $Qemail->execute();
 
-      if ( !$osC_Database->isError() ) {
-        return true;
-      }
+        if (!$osC_Database->isError()) {
+            return true;
+        }
 
-      return false;
+        return false;
     }
 
-    public static function delete($id) {
-      global $osC_Database;
+    public static function delete($id)
+    {
+        global $osC_Database;
 
-      $Qdelete = $osC_Database->query('delete from :table_newsletters where newsletters_id = :newsletters_id');
-      $Qdelete->bindTable(':table_newsletters', TABLE_NEWSLETTERS);
-      $Qdelete->bindInt(':newsletters_id', $id);
-      $Qdelete->setLogging($_SESSION['module'], $id);
-      $Qdelete->execute();
+        $Qdelete = $osC_Database->query('delete from :table_newsletters where newsletters_id = :newsletters_id');
+        $Qdelete->bindTable(':table_newsletters', TABLE_NEWSLETTERS);
+        $Qdelete->bindInt(':newsletters_id', $id);
+        $Qdelete->setLogging($_SESSION['module'], $id);
+        $Qdelete->execute();
 
-      return !$osC_Database->isError();
+        return !$osC_Database->isError();
     }
-  }
-?>
+}

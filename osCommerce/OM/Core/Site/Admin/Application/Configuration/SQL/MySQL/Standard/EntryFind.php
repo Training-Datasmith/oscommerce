@@ -1,39 +1,42 @@
 <?php
+
+declare(strict_types=1);
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  namespace osCommerce\OM\Core\Site\Admin\Application\Configuration\SQL\MySQL\Standard;
+namespace osCommerce\OM\Core\Site\Admin\Application\Configuration\SQL\MySQL\Standard;
 
-  use osCommerce\OM\Core\Registry;
-  use osCommerce\OM\Core\Site\Admin\Application\Configuration\Configuration;
+use osCommerce\OM\Core\Registry;
+use osCommerce\OM\Core\Site\Admin\Application\Configuration\Configuration;
 
-  class EntryFind {
-    public static function execute($data) {
-      $OSCOM_PDO = Registry::get('PDO');
+class EntryFind
+{
+    public static function execute($data)
+    {
+        $OSCOM_PDO = Registry::get('PDO');
 
-      $result = array('entries' => array());
+        $result = ['entries' => []];
 
-      $Qcfg = $OSCOM_PDO->prepare('select * from :table_configuration where configuration_group_id = :configuration_group_id and (configuration_key like :configuration_key or configuration_value like :configuration_value) order by sort_order, configuration_title');
-      $Qcfg->bindInt(':configuration_group_id', $data['group_id']);
-      $Qcfg->bindValue(':configuration_key', '%' . $data['search'] . '%');
-      $Qcfg->bindValue(':configuration_value', '%' . $data['search'] . '%');
-      $Qcfg->execute();
+        $Qcfg = $OSCOM_PDO->prepare('select * from :table_configuration where configuration_group_id = :configuration_group_id and (configuration_key like :configuration_key or configuration_value like :configuration_value) order by sort_order, configuration_title');
+        $Qcfg->bindInt(':configuration_group_id', $data['group_id']);
+        $Qcfg->bindValue(':configuration_key', '%' . $data['search'] . '%');
+        $Qcfg->bindValue(':configuration_value', '%' . $data['search'] . '%');
+        $Qcfg->execute();
 
-      while ( $row = $Qcfg->fetch() ) {
-        $result['entries'][] = $row;
+        while ($row = $Qcfg->fetch()) {
+            $result['entries'][] = $row;
 
-        if ( !empty($row['use_function']) ) {
-          $result['entries'][count($result['entries'])-1]['configuration_value'] = Configuration::callUserFunc($row['use_function'], $row['configuration_value']);
+            if (!empty($row['use_function'])) {
+                $result['entries'][count($result['entries']) - 1]['configuration_value'] = Configuration::callUserFunc($row['use_function'], $row['configuration_value']);
+            }
         }
-      }
 
-      $result['total'] = count($result['entries']);
+        $result['total'] = count($result['entries']);
 
-      return $result;
+        return $result;
     }
-  }
-?>
+}

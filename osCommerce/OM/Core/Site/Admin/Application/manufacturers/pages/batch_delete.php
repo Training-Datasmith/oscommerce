@@ -17,7 +17,7 @@
 
 <?php
   if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -30,14 +30,14 @@
 <?php
   $products_flag = false;
 
-  $Qmanufacturers = $osC_Database->query('select manufacturers_id, manufacturers_name from :table_manufacturers where manufacturers_id in (":manufacturers_id") order by manufacturers_name');
-  $Qmanufacturers->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
-  $Qmanufacturers->bindRaw(':manufacturers_id', implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))));
-  $Qmanufacturers->execute();
+$Qmanufacturers = $osC_Database->query('select manufacturers_id, manufacturers_name from :table_manufacturers where manufacturers_id in (":manufacturers_id") order by manufacturers_name');
+$Qmanufacturers->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
+$Qmanufacturers->bindRaw(':manufacturers_id', implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))));
+$Qmanufacturers->execute();
 
-  $names_string = '';
+$names_string = '';
 
-  while ( $Qmanufacturers->next() ) {
+while ($Qmanufacturers->next()) {
     $Qproducts = $osC_Database->query('select count(*) as products_count from :table_products where manufacturers_id = :manufacturers_id');
     $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
     $Qproducts->bindInt(':manufacturers_id', $Qmanufacturers->valueInt('manufacturers_id'));
@@ -45,29 +45,29 @@
 
     $manufacturer_name = $Qmanufacturers->valueProtected('manufacturers_name');
 
-    if ( $Qproducts->valueInt('products_count') > 0 ) {
-      if ( $products_flag === false ) {
-        $products_flag = true;
-      }
+    if ($Qproducts->valueInt('products_count') > 0) {
+        if ($products_flag === false) {
+            $products_flag = true;
+        }
 
-      $manufacturer_name .= ' (' . sprintf($osC_Language->get('total_entries'), $Qproducts->valueInt('products_count')) . ')';
+        $manufacturer_name .= ' (' . sprintf($osC_Language->get('total_entries'), $Qproducts->valueInt('products_count')) . ')';
     }
 
     $names_string .= osc_draw_hidden_field('batch[]', $Qmanufacturers->valueInt('manufacturers_id')) . '<b>' . $manufacturer_name . '</b>, ';
-  }
+}
 
-  if ( !empty($names_string) ) {
+if (!empty($names_string)) {
     $names_string = substr($names_string, 0, -2);
-  }
+}
 
-  echo '<p>' . $names_string . '</p>';
+echo '<p>' . $names_string . '</p>';
 ?>
 
   <p><?php echo osc_draw_checkbox_field('delete_image', null, true) . ' ' . $osC_Language->get('field_batch_delete_images'); ?></p>
 
 <?php
-  if ( $products_flag === true ) {
-?>
+  if ($products_flag === true) {
+      ?>
 
   <p><?php echo osc_draw_checkbox_field('delete_products') . ' ' . $osC_Language->get('field_delete_products'); ?></p>
 

@@ -12,25 +12,25 @@
   as published by the Free Software Foundation.
 */
 
-  $compression_array = array(array('id' => 'none',
-                                   'text' => $osC_Language->get('field_compression_none')));
+$compression_array = [['id' => 'none',
+                                 'text' => $osC_Language->get('field_compression_none')]];
 
-  if ( !osc_empty(CFG_APP_GZIP) && file_exists(CFG_APP_GZIP) ) {
-    $compression_array[] = array('id' => 'gzip',
-                                 'text' => $osC_Language->get('field_compression_gzip'));
-  }
+if (!osc_empty(CFG_APP_GZIP) && file_exists(CFG_APP_GZIP)) {
+    $compression_array[] = ['id' => 'gzip',
+                                 'text' => $osC_Language->get('field_compression_gzip')];
+}
 
-  if ( !osc_empty(CFG_APP_ZIP) && file_exists(CFG_APP_ZIP) ) {
-    $compression_array[] = array('id' => 'zip',
-                                 'text' => $osC_Language->get('field_compression_zip'));
-  }
+if (!osc_empty(CFG_APP_ZIP) && file_exists(CFG_APP_ZIP)) {
+    $compression_array[] = ['id' => 'zip',
+                                 'text' => $osC_Language->get('field_compression_zip')];
+}
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -45,10 +45,10 @@
   <p>
 
 <?php
-  if ( !osc_empty(DIR_FS_BACKUP) && is_dir(DIR_FS_BACKUP) && is_writeable(DIR_FS_BACKUP) ) {
-    echo osc_draw_checkbox_field('download_only', array(array('id' => 'yes', 'text' => $osC_Language->get('field_download_only'))));
+  if (!osc_empty(DIR_FS_BACKUP) && is_dir(DIR_FS_BACKUP) && is_writeable(DIR_FS_BACKUP)) {
+      echo osc_draw_checkbox_field('download_only', [['id' => 'yes', 'text' => $osC_Language->get('field_download_only')]]);
   } else {
-    echo osc_draw_radio_field('download_only', array(array('id' => 'yes', 'text' => $osC_Language->get('field_download_only'))), true);
+      echo osc_draw_radio_field('download_only', [['id' => 'yes', 'text' => $osC_Language->get('field_download_only')]], true);
   }
 ?>
 

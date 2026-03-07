@@ -12,17 +12,17 @@
   as published by the Free Software Foundation.
 */
 
-  include('includes/templates/' . $_GET['template'] . '.php');
+include('includes/templates/' . $_GET['template'] . '.php');
 
-  $module = 'osC_Template_' . $_GET['template'];
-  $module = new $module();
+$module = 'osC_Template_' . $_GET['template'];
+$module = new $module();
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -43,7 +43,7 @@
     </tr>
     <tr>
       <td><?php echo $osC_Language->get('field_css_based'); ?></td>
-      <td><?php echo ( $module->isCSSBased() ? 'Yes' : 'No' ); ?></td>
+      <td><?php echo($module->isCSSBased() ? 'Yes' : 'No'); ?></td>
     </tr>
     <tr>
       <td><?php echo $osC_Language->get('field_presentation_medium'); ?></td>

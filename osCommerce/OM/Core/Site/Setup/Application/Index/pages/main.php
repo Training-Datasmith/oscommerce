@@ -1,13 +1,14 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
+
 ?>
 
 <div class="mainBlock">
@@ -15,12 +16,12 @@
     <li style="font-weight: bold; display: inline;"><?php echo OSCOM::getDef('title_language'); ?></li>
 
 <?php
-  foreach ( $OSCOM_Language->getAll() as $available_language ) {
-?>
+  foreach ($OSCOM_Language->getAll() as $available_language) {
+      ?>
 
     <li style="display: inline;"><?php echo '<a href="' . OSCOM::getLink(null, null, 'language=' . $available_language['code']) . '">' . $OSCOM_Language->showImage($available_language['code']) . '</a>'; ?></li>
 
-<?php      
+<?php
   }
 ?>
 
@@ -54,27 +55,27 @@
         </tr>
         <tr>
           <td><?php echo OSCOM::getDef('box_server_register_globals'); ?></td>
-          <td align="right"><?php echo (((int)ini_get('register_globals') === 0) ? OSCOM::getDef('box_server_off') : OSCOM::getDef('box_server_on')); ?></td>
+          <td align="right"><?php echo(((int)ini_get('register_globals') === 0) ? OSCOM::getDef('box_server_off') : OSCOM::getDef('box_server_on')); ?></td>
           <td align="right"><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/' . (((int)ini_get('register_globals') === 0) ? 'tick.gif' : 'cross.gif')); ?>" alt="" border="0" width="16" height="16" /></td>
         </tr>
         <tr>
           <td><?php echo OSCOM::getDef('box_server_magic_quotes_gpc'); ?></td>
-          <td align="right"><?php echo (((int)ini_get('magic_quotes_gpc') === 0) ? OSCOM::getDef('box_server_off') : OSCOM::getDef('box_server_on')); ?></td>
+          <td align="right"><?php echo(((int)ini_get('magic_quotes_gpc') === 0) ? OSCOM::getDef('box_server_off') : OSCOM::getDef('box_server_on')); ?></td>
           <td align="right"><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/' . (((int)ini_get('magic_quotes_gpc') === 0) ? 'tick.gif' : 'cross.gif')); ?>" alt="" border="0" width="16" height="16" /></td>
         </tr>
         <tr>
           <td><?php echo OSCOM::getDef('box_server_file_uploads'); ?></td>
-          <td align="right"><?php echo (((int)ini_get('file_uploads') === 0) ? OSCOM::getDef('box_server_off') : OSCOM::getDef('box_server_on')); ?></td>
+          <td align="right"><?php echo(((int)ini_get('file_uploads') === 0) ? OSCOM::getDef('box_server_off') : OSCOM::getDef('box_server_on')); ?></td>
           <td align="right"><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/' . (((int)ini_get('file_uploads') === 1) ? 'tick.gif' : 'cross.gif')); ?>" alt="" border="0" width="16" height="16" /></td>
         </tr>
         <tr>
           <td><?php echo OSCOM::getDef('box_server_session_auto_start'); ?></td>
-          <td align="right"><?php echo (((int)ini_get('session.auto_start') === 0) ? OSCOM::getDef('box_server_off') : OSCOM::getDef('box_server_on')); ?></td>
+          <td align="right"><?php echo(((int)ini_get('session.auto_start') === 0) ? OSCOM::getDef('box_server_off') : OSCOM::getDef('box_server_on')); ?></td>
           <td align="right"><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/' . (((int)ini_get('session.auto_start') === 0) ? 'tick.gif' : 'cross.gif')); ?>" alt="" border="0" width="16" height="16" /></td>
         </tr>
         <tr>
           <td><?php echo OSCOM::getDef('box_server_session_use_trans_sid'); ?></td>
-          <td align="right"><?php echo (((int)ini_get('session.use_trans_sid') === 0) ? OSCOM::getDef('box_server_off') : OSCOM::getDef('box_server_on')); ?></td>
+          <td align="right"><?php echo(((int)ini_get('session.use_trans_sid') === 0) ? OSCOM::getDef('box_server_off') : OSCOM::getDef('box_server_on')); ?></td>
           <td align="right"><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/' . (((int)ini_get('session.use_trans_sid') === 0) ? 'tick.gif' : 'cross.gif')); ?>" alt="" border="0" width="16" height="16" /></td>
         </tr>
       </table>
@@ -125,8 +126,8 @@
     <h2><?php echo OSCOM::getDef('page_heading_installation_type'); ?></h2>
 
 <?php
-  if ( file_exists(OSCOM::BASE_DIRECTORY . 'config.php') && !is_writeable(OSCOM::BASE_DIRECTORY . 'config.php') ) {
-?>
+  if (file_exists(OSCOM::BASE_DIRECTORY . 'config.php') && !is_writeable(OSCOM::BASE_DIRECTORY . 'config.php')) {
+      ?>
 
     <div class="noticeBox">
       <p><?php echo sprintf(OSCOM::getDef('error_configuration_file_not_writeable'), OSCOM::BASE_DIRECTORY . 'config.php'); ?></p>
@@ -141,6 +142,6 @@
 
     <p><?php echo OSCOM::getDef('text_installation_type'); ?></p>
 
-    <p align="center"><?php echo HTML::button(array('href' => OSCOM::getLink(null, 'Install'), 'priority' => 'primary', 'icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_new_install'))); ?></p>
+    <p align="center"><?php echo HTML::button(['href' => OSCOM::getLink(null, 'Install'), 'priority' => 'primary', 'icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_new_install')]); ?></p>
   </div>
 </div>

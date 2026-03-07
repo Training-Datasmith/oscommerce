@@ -1,32 +1,33 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\DateTime;
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\DateTime;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
+
 ?>
 
 <div id="sectionMenu_personal">
   <div class="infoBox">
 
 <?php
-  if ( $new_customer ) {
-    echo '<h3>' . HTML::icon('new.png') . ' ' . OSCOM::getDef('action_heading_new_customer') . '</h3>';
+  if ($new_customer) {
+      echo '<h3>' . HTML::icon('new.png') . ' ' . OSCOM::getDef('action_heading_new_customer') . '</h3>';
   } else {
-    echo '<h3>' . HTML::icon('edit.png') . ' ' . $OSCOM_ObjectInfo->getProtected('customers_name') . '</h3>';
+      echo '<h3>' . HTML::icon('edit.png') . ' ' . $OSCOM_ObjectInfo->getProtected('customers_name') . '</h3>';
   }
 ?>
 
     <fieldset>
 
 <?php
-  if ( ACCOUNT_GENDER > -1 ) {
-?>
+  if (ACCOUNT_GENDER > -1) {
+      ?>
 
       <p id="genderFields"><label for="gender"><?php echo OSCOM::getDef('field_gender'); ?></label><?php echo HTML::radioField('gender', $gender_array, ($new_customer ? 'm' : $OSCOM_ObjectInfo->get('customers_gender')), null, ''); ?></p>
 
@@ -40,8 +41,8 @@
       <p><label for="lastname"><?php echo OSCOM::getDef('field_last_name'); ?></label><?php echo HTML::inputField('lastname', ($new_customer ? null : $OSCOM_ObjectInfo->get('customers_lastname'))); ?></p>
 
 <?php
-  if ( ACCOUNT_DATE_OF_BIRTH == '1' ) {
-?>
+  if (ACCOUNT_DATE_OF_BIRTH == '1') {
+      ?>
 
       <p><label for="dob"><?php echo OSCOM::getDef('field_date_of_birth'); ?></label><?php echo HTML::inputField('dob', ($new_customer ? null : DateTime::fromUnixTimestamp(DateTime::getTimestamp($OSCOM_ObjectInfo->get('customers_dob')), 'Y-m-d'))); ?></p>
 

@@ -1,13 +1,14 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
+
 ?>
 
 <div class="mainBlock">
@@ -15,12 +16,12 @@
     <li style="font-weight: bold; display: inline;"><?php echo OSCOM::getDef('title_language'); ?></li>
 
 <?php
-  foreach ( $OSCOM_Language->getAll() as $available_language ) {
-?>
+  foreach ($OSCOM_Language->getAll() as $available_language) {
+      ?>
 
     <li style="display: inline;"><?php echo '<a href="' . OSCOM::getLink(null, null, 'language=' . $available_language['code']) . '">' . $OSCOM_Language->showImage($available_language['code']) . '</a>'; ?></li>
 
-<?php      
+<?php
   }
 ?>
 
@@ -35,6 +36,6 @@
 
     <p><?php echo OSCOM::getDef('text_access_disabled'); ?></p>
 
-    <p align="center"><?php echo HTML::button(array('href' => OSCOM::getLink(null, OSCOM::getDefaultSiteApplication()), 'priority' => 'primary', 'icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue'))); ?></p>
+    <p align="center"><?php echo HTML::button(['href' => OSCOM::getLink(null, OSCOM::getDefaultSiteApplication()), 'priority' => 'primary', 'icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue')]); ?></p>
   </div>
 </div>

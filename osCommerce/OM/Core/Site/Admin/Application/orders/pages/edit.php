@@ -12,39 +12,39 @@
   as published by the Free Software Foundation.
 */
 
-  require('includes/classes/tax.php');
-  $osC_Tax = new osC_Tax_Admin();
+require('includes/classes/tax.php');
+$osC_Tax = new osC_Tax_Admin();
 
-  $osC_Order = new osC_Order($_GET['oID']);
+$osC_Order = new osC_Order($_GET['oID']);
 
-  if ( !$osC_Order->isValid() ) {
+if (!$osC_Order->isValid()) {
     $osC_MessageStack->add($osC_Template->getModule(), sprintf(ERROR_ORDER_DOES_NOT_EXIST, $_GET['oID']), 'error');
-  }
+}
 
-  $tabIndex = 0;
+$tabIndex = 0;
 
-  if ( isset($_GET['tabIndex']) && !empty($_GET['tabIndex']) ) {
-    switch ( $_GET['tabIndex'] ) {
-      case 'tabProducts':
-        $tabIndex = 1;
-        break;
+if (isset($_GET['tabIndex']) && !empty($_GET['tabIndex'])) {
+    switch ($_GET['tabIndex']) {
+        case 'tabProducts':
+            $tabIndex = 1;
+            break;
 
-      case 'tabTransactionHistory':
-        $tabIndex = 2;
-        break;
+        case 'tabTransactionHistory':
+            $tabIndex = 2;
+            break;
 
-      case 'tabStatusHistory':
-        $tabIndex = 3;
-        break;
+        case 'tabStatusHistory':
+            $tabIndex = 3;
+            break;
     }
-  }
+}
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -53,8 +53,8 @@
 </p>
 
 <?php
-  if ( $osC_Order->isValid() ) {
-?>
+  if ($osC_Order->isValid()) {
+      ?>
 
 <script type="text/javascript">
   var tabIndex = <?php echo (int)$tabIndex; ?>;
@@ -106,8 +106,8 @@
             <p><?php echo $osC_Order->getPaymentMethod(); ?></p>
 
 <?php
-    if ( $osC_Order->isValidCreditCard() ) {
-?>
+          if ($osC_Order->isValidCreditCard()) {
+              ?>
 
             <table border="0" cellspacing="0" cellpadding="0">
               <tr>
@@ -129,8 +129,8 @@
             </table>
 
 <?php
-    }
-?>
+          }
+      ?>
           </fieldset>
         </td>
         <td width="33%" valign="top">
@@ -169,22 +169,22 @@
       <tbody>
 
 <?php
-    foreach ( $osC_Order->getProducts() as $products ) {
-?>
+          foreach ($osC_Order->getProducts() as $products) {
+              ?>
 
         <tr>
           <td valign="top" align="right"><?php echo $products['quantity'] . '&nbsp;x'; ?></td>
           <td valign="top">
 
 <?php
-      echo $products['name'];
+                    echo $products['name'];
 
-      if ( isset($products['attributes']) && is_array($products['attributes']) && ( sizeof($products['attributes']) > 0 ) ) {
-        foreach ( $products['attributes'] as $attributes ) {
-          echo '<br /><nobr>&nbsp;&nbsp;&nbsp;<i>' . $attributes['option'] . ': ' . $attributes['value'] . '</i></nobr>';
-        }
-      }
-?>
+              if (isset($products['attributes']) && is_array($products['attributes']) && (sizeof($products['attributes']) > 0)) {
+                  foreach ($products['attributes'] as $attributes) {
+                      echo '<br /><nobr>&nbsp;&nbsp;&nbsp;<i>' . $attributes['option'] . ': ' . $attributes['value'] . '</i></nobr>';
+                  }
+              }
+              ?>
 
           </td>
           <td valign="top"><?php echo $products['model']; ?></td>
@@ -196,8 +196,8 @@
         </tr>
 
 <?php
-    }
-?>
+          }
+      ?>
 
       </tbody>
     </table>
@@ -206,8 +206,8 @@
       <tbody>
 
 <?php
-    foreach ( $osC_Order->getTotals() as $totals ) {
-?>
+          foreach ($osC_Order->getTotals() as $totals) {
+              ?>
 
         <tr>
           <td align="right"><?php echo $totals['title']; ?></td>
@@ -215,8 +215,8 @@
         </tr>
 
 <?php
-    }
-?>
+          }
+      ?>
 
       </tbody>
     </table>
@@ -235,26 +235,26 @@
       <tbody>
 
 <?php
-    foreach ( $osC_Order->getTransactionHistory() as $history ) {
-?>
+          foreach ($osC_Order->getTransactionHistory() as $history) {
+              ?>
 
         <tr>
           <td valign="top"><?php echo osC_DateTime::getShort($history['date_added'], true); ?></td>
-          <td valign="top"><?php echo ( !empty($history['status']) ) ? $history['status'] : $history['status_id']; ?></td>
+          <td valign="top"><?php echo (!empty($history['status'])) ? $history['status'] : $history['status_id']; ?></td>
           <td valign="top" align="center"><?php echo osc_icon(($history['return_status'] === 1 ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif'), null, null); ?></td>
           <td valign="top"><?php echo nl2br($history['return_value']); ?></td>
         </tr>
 
 <?php
-    }
-?>
+          }
+      ?>
 
       </tbody>
     </table>
 
 <?php
-    if ( $osC_Order->hasPostTransactionActions() ) {
-?>
+          if ($osC_Order->hasPostTransactionActions()) {
+              ?>
 
     <br />
 
@@ -265,8 +265,8 @@
     </form>
 
 <?php
-    }
-?>
+          }
+      ?>
 
   </div>
 
@@ -283,8 +283,8 @@
       <tbody>
 
 <?php
-    foreach ( $osC_Order->getStatusHistory() as $status_history ) {
-?>
+          foreach ($osC_Order->getStatusHistory() as $status_history) {
+              ?>
 
         <tr>
           <td valign="top"><?php echo osC_DateTime::getShort($status_history['date_added'], true); ?></td>
@@ -294,8 +294,8 @@
         </tr>
 
 <?php
-    }
-?>
+          }
+      ?>
       </tbody>
     </table>
 

@@ -1,15 +1,15 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
 
-  $large_image = $OSCOM_Image->show($OSCOM_Product->getImage(), $OSCOM_Product->getTitle(), 'id="productImageLarge"', 'large');
+$large_image = $OSCOM_Image->show($OSCOM_Product->getImage(), $OSCOM_Product->getTitle(), 'id="productImageLarge"', 'large');
 ?>
 
 <style type="text/css">
@@ -30,20 +30,20 @@ function loadImage(imageUrl) {
 <div class="moduleBox">
 
 <?php
-  if ( $OSCOM_Product->numberOfImages() > 1 ) {
-?>
+  if ($OSCOM_Product->numberOfImages() > 1) {
+      ?>
 
   <div id="productImageThumbnails" class="content" style="position: absolute; top: 10px; overflow: auto; width: <?php echo ($OSCOM_Image->getWidth('thumbnails') * 2) + 15; ?>px;">
 
 <?php
-    foreach ( $OSCOM_Product->getImages() as $images ) {
-      if ( isset($_GET['image']) && ($_GET['image'] == $images['id']) ) {
-        $large_image = $OSCOM_Image->show($images['image'], $OSCOM_Product->getTitle(), 'id="productImageLarge"', 'large');
-      }
+          foreach ($OSCOM_Product->getImages() as $images) {
+              if (isset($_GET['image']) && ($_GET['image'] == $images['id'])) {
+                  $large_image = $OSCOM_Image->show($images['image'], $OSCOM_Product->getTitle(), 'id="productImageLarge"', 'large');
+              }
 
-      echo '<span style="width: ' . $OSCOM_Image->getWidth($OSCOM_Image->getCode(DEFAULT_IMAGE_GROUP_ID)) . 'px; padding: 2px; float: left; text-align: center;">' . HTML::link(OSCOM::getLink(null, null, 'Images&' . $OSCOM_Product->getKeyword() . '&image=' . $images['id']),  $OSCOM_Image->show($images['image'], $OSCOM_Product->getTitle(), 'height="' . $OSCOM_Image->getHeight($OSCOM_Image->getCode(DEFAULT_IMAGE_GROUP_ID)) . '" style="max-width: ' . $OSCOM_Image->getWidth($OSCOM_Image->getCode(DEFAULT_IMAGE_GROUP_ID)) . 'px;"'), 'onclick="loadImage(\'' . $OSCOM_Image->getAddress($images['image'], 'large') . '\'); return false;"') . '</span>';
-    }
-?>
+              echo '<span style="width: ' . $OSCOM_Image->getWidth($OSCOM_Image->getCode(DEFAULT_IMAGE_GROUP_ID)) . 'px; padding: 2px; float: left; text-align: center;">' . HTML::link(OSCOM::getLink(null, null, 'Images&' . $OSCOM_Product->getKeyword() . '&image=' . $images['id']), $OSCOM_Image->show($images['image'], $OSCOM_Product->getTitle(), 'height="' . $OSCOM_Image->getHeight($OSCOM_Image->getCode(DEFAULT_IMAGE_GROUP_ID)) . '" style="max-width: ' . $OSCOM_Image->getWidth($OSCOM_Image->getCode(DEFAULT_IMAGE_GROUP_ID)) . 'px;"'), 'onclick="loadImage(\'' . $OSCOM_Image->getAddress($images['image'], 'large') . '\'); return false;"') . '</span>';
+          }
+      ?>
 
   </div>
 

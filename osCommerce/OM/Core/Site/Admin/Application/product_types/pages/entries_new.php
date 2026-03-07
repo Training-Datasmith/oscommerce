@@ -8,18 +8,18 @@
   as published by the Free Software Foundation.
 */
 
-  $actions_array = array();
+$actions_array = [];
 
-  foreach ( osC_ProductTypes_Admin::getActions($_GET[$osC_Template->getModule()]) as $action ) {
-    $actions_array[] = array('id' => $action['id'],
-                             'text' => $action['title']);
-  }
+foreach (osC_ProductTypes_Admin::getActions($_GET[$osC_Template->getModule()]) as $action) {
+    $actions_array[] = ['id' => $action['id'],
+                             'text' => $action['title']];
+}
 
-  $modules_array = array();
+$modules_array = [];
 
-  foreach ( osC_ProductTypes_Admin::getModules() as $module ) {
+foreach (osC_ProductTypes_Admin::getModules() as $module) {
     $modules_array[$module['id']] = $module['title'];
-  }
+}
 ?>
 
 <style type="text/css">
@@ -52,8 +52,8 @@
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->exists($osC_Template->getModule()) ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->exists($osC_Template->getModule())) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -72,15 +72,15 @@
     <p><label>Available Modules:</label><ul id="modulesAvailable" class="connectedList">
 
 <?php
-  foreach ( $modules_array as $id => $title ) {
-    echo '<li id="' . $id . '" class="ui-state-default fg-button fg-button-icon-left" onmouseover="$(this).addClass(\'ui-state-highlight\');" onmouseout="$(this).removeClass(\'ui-state-highlight\');"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>' . $title . '</li>';
+  foreach ($modules_array as $id => $title) {
+      echo '<li id="' . $id . '" class="ui-state-default fg-button fg-button-icon-left" onmouseover="$(this).addClass(\'ui-state-highlight\');" onmouseout="$(this).removeClass(\'ui-state-highlight\');"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>' . $title . '</li>';
   }
 ?>
 
     </ul></p>
   </fieldset>
 
-  <p><?php echo osc_draw_hidden_field('modules', implode(',', $activated_modules_array), 'id="modules"') . osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()]), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_hidden_field('modules', implode(',', $activated_modules_array), 'id="modules"') . osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(['priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save')]) . ' ' . osc_draw_button(['href' => osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()]), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel')]); ?></p>
 
   </form>
 </div>

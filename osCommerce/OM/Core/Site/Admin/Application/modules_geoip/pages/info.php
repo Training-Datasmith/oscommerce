@@ -12,20 +12,20 @@
   as published by the Free Software Foundation.
 */
 
-  include('includes/modules/geoip/' . $_GET['module'] . '.php');
+include('includes/modules/geoip/' . $_GET['module'] . '.php');
 
 //HPDL  $osC_Language->injectDefinitions('modules/geoip/' . $_GET['module'] . '.xml');
-  $osC_Language->loadIniFile('modules/geoip/' . $_GET['module'] . '.php');
+$osC_Language->loadIniFile('modules/geoip/' . $_GET['module'] . '.php');
 
-  $module = 'osC_GeoIP_' . $_GET['module'];
-  $module = new $module();
+$module = 'osC_GeoIP_' . $_GET['module'];
+$module = new $module();
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 

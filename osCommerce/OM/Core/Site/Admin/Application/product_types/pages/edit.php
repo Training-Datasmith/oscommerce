@@ -8,14 +8,14 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(osC_ProductTypes_Admin::get($_GET['tID']));
+$osC_ObjectInfo = new osC_ObjectInfo(osC_ProductTypes_Admin::get($_GET['tID']));
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->exists($osC_Template->getModule()) ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->exists($osC_Template->getModule())) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -30,7 +30,7 @@
     <p><label for="title"><?php echo OSCOM::getDef('field_title'); ?></label><?php echo osc_draw_input_field('title', $osC_ObjectInfo->get('title')); ?></p>
   </fieldset>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(['priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save')]) . ' ' . osc_draw_button(['href' => osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel')]); ?></p>
 
   </form>
 </div>

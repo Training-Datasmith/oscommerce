@@ -12,14 +12,14 @@
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->exists($osC_Template->getModule()) ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->exists($osC_Template->getModule())) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
 <div>
-  <span style="float: left;"><form id="liveSearchForm"><input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><?php echo osc_draw_button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => 'Reset')); ?></form></span>
-  <span style="float: right;"><?php echo osc_draw_button(array('href' => osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))) . ' ' . osc_draw_button(array('href' => osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&action=entry_save'), 'icon' => 'plus', 'title' => OSCOM::getDef('button_insert'))); ?></span>
+  <span style="float: left;"><form id="liveSearchForm"><input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><?php echo osc_draw_button(['type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => 'Reset']); ?></form></span>
+  <span style="float: right;"><?php echo osc_draw_button(['href' => osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back')]) . ' ' . osc_draw_button(['href' => osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&action=entry_save'), 'icon' => 'plus', 'title' => OSCOM::getDef('button_insert')]); ?></span>
 </div>
 
 <div style="clear: right; padding: 10px;"></div>

@@ -1,28 +1,29 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
-  use osCommerce\OM\Core\Site\Admin\Application\CoreUpdate\CoreUpdate;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\Site\Admin\Application\CoreUpdate\CoreUpdate;
+
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $OSCOM_MessageStack->exists() ) {
-    echo $OSCOM_MessageStack->get();
+  if ($OSCOM_MessageStack->exists()) {
+      echo $OSCOM_MessageStack->get();
   }
 ?>
 
 <form id="liveSearchForm">
-  <?php echo HTML::inputField('search', null, 'id="liveSearchField" class="searchField" placeholder="' . OSCOM::getDef('placeholder_search') . '"') . HTML::button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => OSCOM::getDef('button_reset'))); ?>
+  <?php echo HTML::inputField('search', null, 'id="liveSearchField" class="searchField" placeholder="' . OSCOM::getDef('placeholder_search') . '"') . HTML::button(['type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => OSCOM::getDef('button_reset')]); ?>
 
-  <span style="float: right;"><?php echo HTML::button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))) . (CoreUpdate::getPackageInfo('version_from') == OSCOM::getVersion() ? ' ' . HTML::button(array('href' => OSCOM::getLink(null, null, 'Apply&Process&v=' . $_GET['v']), 'icon' => 'disk', 'title' => OSCOM::getDef('button_apply_update'))) : ''); ?></span>
+  <span style="float: right;"><?php echo HTML::button(['href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back')]) . (CoreUpdate::getPackageInfo('version_from') == OSCOM::getVersion() ? ' ' . HTML::button(['href' => OSCOM::getLink(null, null, 'Apply&Process&v=' . $_GET['v']), 'icon' => 'disk', 'title' => OSCOM::getDef('button_apply_update')]) : ''); ?></span>
 </form>
 
 <div style="padding: 20px 5px 5px 5px; height: 16px;">

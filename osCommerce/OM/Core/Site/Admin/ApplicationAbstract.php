@@ -1,16 +1,19 @@
 <?php
+
+declare(strict_types=1);
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2012 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  namespace osCommerce\OM\Core\Site\Admin;
+namespace osCommerce\OM\Core\Site\Admin;
 
-  use osCommerce\OM\Core\Registry;
+use osCommerce\OM\Core\Registry;
 
-  abstract class ApplicationAbstract extends \osCommerce\OM\Core\ApplicationAbstract {
+abstract class ApplicationAbstract extends \osCommerce\OM\Core\ApplicationAbstract
+{
     protected $_link_to = true;
     protected $_group;
     protected $_icon = 'default.png';
@@ -20,36 +23,41 @@
     abstract protected function initialize();
     abstract protected function process();
 
-    public function __construct($process = true) {
-      $this->ignoreAction(Registry::get('Session')->getName());
+    public function __construct($process = true)
+    {
+        $this->ignoreAction(Registry::get('Session')->getName());
 
-      $this->initialize();
+        $this->initialize();
 
-      if ( $process === true ) {
-        $this->process();
+        if ($process === true) {
+            $this->process();
 
-        $this->runActions();
-      }
+            $this->runActions();
+        }
     }
 
-    public function canLinkTo() {
-      return $this->_link_to;
+    public function canLinkTo()
+    {
+        return $this->_link_to;
     }
 
-    public function getGroup() {
-      return $this->_group;
+    public function getGroup()
+    {
+        return $this->_group;
     }
 
-    public function getIcon() {
-      return $this->_icon;
+    public function getIcon()
+    {
+        return $this->_icon;
     }
 
-    public function getTitle() {
-      return $this->_title;
+    public function getTitle()
+    {
+        return $this->_title;
     }
 
-    public function getSortOrder() {
-      return $this->_sort_order;
+    public function getSortOrder()
+    {
+        return $this->_sort_order;
     }
-  }
-?>
+}

@@ -16,8 +16,8 @@
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -25,9 +25,9 @@
 
 <?php
   $Qnewsletters = $osC_Database->query('select newsletters_id, title, length(content) as content_length, module, date_added, date_sent, status, locked from :table_newsletters order by date_added desc');
-  $Qnewsletters->bindTable(':table_newsletters', TABLE_NEWSLETTERS);
-  $Qnewsletters->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
-  $Qnewsletters->execute();
+$Qnewsletters->bindTable(':table_newsletters', TABLE_NEWSLETTERS);
+$Qnewsletters->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
+$Qnewsletters->execute();
 ?>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -59,16 +59,16 @@
   <tbody>
 
 <?php
-  while ( $Qnewsletters->next() ) {
-    $newsletter_module_class = 'osC_Newsletter_' . $Qnewsletters->value('module');
+  while ($Qnewsletters->next()) {
+      $newsletter_module_class = 'osC_Newsletter_' . $Qnewsletters->value('module');
 
-    if ( !class_exists($newsletter_module_class) ) {
-      $osC_Language->loadIniFile('modules/newsletters/' . $Qnewsletters->value('module') . '.php');
-      include('includes/modules/newsletters/' . $Qnewsletters->value('module') . '.php');
+      if (!class_exists($newsletter_module_class)) {
+          $osC_Language->loadIniFile('modules/newsletters/' . $Qnewsletters->value('module') . '.php');
+          include('includes/modules/newsletters/' . $Qnewsletters->value('module') . '.php');
 
-      $$newsletter_module_class = new $newsletter_module_class();
-    }
-?>
+          $$newsletter_module_class = new $newsletter_module_class();
+      }
+      ?>
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
       <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $Qnewsletters->valueInt('newsletters_id') . '&action=preview'), osc_icon('newsletters.png') . '&nbsp;' . $Qnewsletters->value('title')); ?></td>
@@ -78,16 +78,16 @@
       <td align="right">
 
 <?php
-    if ( $Qnewsletters->valueInt('status') === 1 ) {
-      echo osc_image('images/pixel_trans.gif', '', '16', '16') . '&nbsp;' .
-           osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $Qnewsletters->valueInt('newsletters_id') . '&action=log'), osc_icon('log.png')) . '&nbsp;';
-    } else {
-      echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $Qnewsletters->valueInt('newsletters_id') . '&action=save'), osc_icon('edit.png')) . '&nbsp;' .
-           osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $Qnewsletters->valueInt('newsletters_id') . '&action=send'), osc_icon('email_send.png')) . '&nbsp;';
-    }
+          if ($Qnewsletters->valueInt('status') === 1) {
+              echo osc_image('images/pixel_trans.gif', '', '16', '16') . '&nbsp;' .
+                   osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $Qnewsletters->valueInt('newsletters_id') . '&action=log'), osc_icon('log.png')) . '&nbsp;';
+          } else {
+              echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $Qnewsletters->valueInt('newsletters_id') . '&action=save'), osc_icon('edit.png')) . '&nbsp;' .
+                   osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $Qnewsletters->valueInt('newsletters_id') . '&action=send'), osc_icon('email_send.png')) . '&nbsp;';
+          }
 
-    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $Qnewsletters->valueInt('newsletters_id') . '&action=delete') , osc_icon('trash.png'));
-?>
+      echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $Qnewsletters->valueInt('newsletters_id') . '&action=delete'), osc_icon('trash.png'));
+      ?>
 
       </td>
       <td align="center"><?php echo osc_draw_checkbox_field('batch[]', $Qnewsletters->valueInt('newsletters_id'), null, 'id="batch' . $Qnewsletters->valueInt('newsletters_id') . '"'); ?></td>

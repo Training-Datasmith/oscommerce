@@ -12,14 +12,14 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(osC_WeightClasses_Admin::getData($_GET['wcID']));
+$osC_ObjectInfo = new osC_ObjectInfo(osC_WeightClasses_Admin::getData($_GET['wcID']));
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -36,20 +36,20 @@
 
 <?php
   $Qwc = $osC_Database->query('select language_id, weight_class_key, weight_class_title from :table_weight_classes where weight_class_id = :weight_class_id');
-  $Qwc->bindTable(':table_weight_classes', TABLE_WEIGHT_CLASS);
-  $Qwc->bindInt(':weight_class_id', $osC_ObjectInfo->get('weight_class_id'));
-  $Qwc->execute();
+$Qwc->bindTable(':table_weight_classes', TABLE_WEIGHT_CLASS);
+$Qwc->bindInt(':weight_class_id', $osC_ObjectInfo->get('weight_class_id'));
+$Qwc->execute();
 
-  $classes_array = array();
+$classes_array = [];
 
-  while ( $Qwc->next() ) {
-    $classes_array[$Qwc->valueInt('language_id')] = array('key' => $Qwc->value('weight_class_key'),
-                                                          'title' => $Qwc->value('weight_class_title'));
-  }
+while ($Qwc->next()) {
+    $classes_array[$Qwc->valueInt('language_id')] = ['key' => $Qwc->value('weight_class_key'),
+                                                          'title' => $Qwc->value('weight_class_title')];
+}
 
-  foreach ( $osC_Language->getAll() as $l ) {
+foreach ($osC_Language->getAll() as $l) {
     echo $osC_Language->showImage($l['code']) . '&nbsp;' . osc_draw_input_field('name[' . $l['id'] . ']', $classes_array[$l['id']]['title']) . osc_draw_input_field('key[' . $l['id'] . ']', $classes_array[$l['id']]['key'], 'size="4"') . '<br />';
-  }
+}
 ?>
 
       </td>
@@ -61,15 +61,15 @@
 
 <?php
   $Qrules = $osC_Database->query('select r.weight_class_to_id, r.weight_class_rule, c.weight_class_title from :table_weight_classes_rules r, :table_weight_classes c where r.weight_class_from_id = :weight_class_from_id and r.weight_class_to_id != :weight_class_to_id and r.weight_class_to_id = c.weight_class_id and c.language_id = :language_id order by c.weight_class_title');
-  $Qrules->bindTable(':table_weight_classes_rules', TABLE_WEIGHT_CLASS_RULES);
-  $Qrules->bindTable(':table_weight_classes', TABLE_WEIGHT_CLASS);
-  $Qrules->bindInt(':weight_class_from_id', $osC_ObjectInfo->get('weight_class_id'));
-  $Qrules->bindInt(':weight_class_to_id', $osC_ObjectInfo->get('weight_class_id'));
-  $Qrules->bindInt(':language_id', $osC_Language->getID());
-  $Qrules->execute();
+$Qrules->bindTable(':table_weight_classes_rules', TABLE_WEIGHT_CLASS_RULES);
+$Qrules->bindTable(':table_weight_classes', TABLE_WEIGHT_CLASS);
+$Qrules->bindInt(':weight_class_from_id', $osC_ObjectInfo->get('weight_class_id'));
+$Qrules->bindInt(':weight_class_to_id', $osC_ObjectInfo->get('weight_class_id'));
+$Qrules->bindInt(':language_id', $osC_Language->getID());
+$Qrules->execute();
 
-  while ( $Qrules->next() ) {
-?>
+while ($Qrules->next()) {
+    ?>
 
           <tr>
             <td><?php echo $Qrules->value('weight_class_title') . ':'; ?></td>
@@ -77,7 +77,7 @@
           </tr>
 
 <?php
-  }
+}
 ?>
 
         </table>
@@ -85,8 +85,8 @@
     </tr>
 
 <?php
-  if ( $osC_ObjectInfo->get('weight_class_id') != SHIPPING_WEIGHT_UNIT ) {
-?>
+  if ($osC_ObjectInfo->get('weight_class_id') != SHIPPING_WEIGHT_UNIT) {
+      ?>
 
     <tr>
       <td width="40%"><?php echo '<b>' . $osC_Language->get('field_set_as_default') . '</b>'; ?></td>

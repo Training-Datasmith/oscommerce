@@ -1,20 +1,21 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
+
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $OSCOM_MessageStack->exists() ) {
-    echo $OSCOM_MessageStack->get();
+  if ($OSCOM_MessageStack->exists()) {
+      echo $OSCOM_MessageStack->get();
   }
 ?>
 
@@ -28,32 +29,32 @@
 <?php
   $check_default_flag = false;
 
-  $Qcurrencies = $OSCOM_PDO->query('select currencies_id, title, code from :table_currencies where currencies_id in ("' . implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))) . '") order by title');
-  $Qcurrencies->execute();
+$Qcurrencies = $OSCOM_PDO->query('select currencies_id, title, code from :table_currencies where currencies_id in ("' . implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))) . '") order by title');
+$Qcurrencies->execute();
 
-  $names_string = '';
+$names_string = '';
 
-  while ( $Qcurrencies->fetch() ) {
-    if ( $Qcurrencies->value('code') == DEFAULT_CURRENCY ) {
-      $check_default_flag = true;
+while ($Qcurrencies->fetch()) {
+    if ($Qcurrencies->value('code') == DEFAULT_CURRENCY) {
+        $check_default_flag = true;
     }
 
     $names_string .= HTML::hiddenField('batch[]', $Qcurrencies->valueInt('currencies_id')) . '<b>' . $Qcurrencies->value('title') . ' (' . $Qcurrencies->value('code') . ')</b>, ';
-  }
+}
 
-  if ( !empty($names_string) ) {
+if (!empty($names_string)) {
     $names_string = substr($names_string, 0, -2) . HTML::hiddenField('subaction', 'confirm');
-  }
+}
 
-  echo '<p>' . $names_string . '</p>';
+echo '<p>' . $names_string . '</p>';
 
-  if ( $check_default_flag === false ) {
-    echo '<p>' . HTML::button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . HTML::button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))) . '</p>';
-  } else {
+if ($check_default_flag === false) {
+    echo '<p>' . HTML::button(['priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete')]) . ' ' . HTML::button(['href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel')]) . '</p>';
+} else {
     echo '<p><b>' . OSCOM::getDef('introduction_delete_currency_invalid') . '</b></p>';
 
-    echo '<p>' . HTML::button(array('href' => OSCOM::getLink(), 'priority' => 'primary', 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))) . '</p>';
-  }
+    echo '<p>' . HTML::button(['href' => OSCOM::getLink(), 'priority' => 'primary', 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back')]) . '</p>';
+}
 ?>
 
   </form>

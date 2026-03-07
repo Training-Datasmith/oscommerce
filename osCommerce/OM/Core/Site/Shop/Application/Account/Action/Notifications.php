@@ -1,36 +1,39 @@
 <?php
+
+declare(strict_types=1);
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  namespace osCommerce\OM\Core\Site\Shop\Application\Account\Action;
+namespace osCommerce\OM\Core\Site\Shop\Application\Account\Action;
 
-  use osCommerce\OM\Core\ApplicationAbstract;
-  use osCommerce\OM\Core\Registry;
-  use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\ApplicationAbstract;
+use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\Registry;
 
-  class Notifications {
-    public static function execute(ApplicationAbstract $application) {
-      $OSCOM_Customer = Registry::get('Customer');
-      $OSCOM_NavigationHistory = Registry::get('NavigationHistory');
-      $OSCOM_Service = Registry::get('Service');
-      $OSCOM_Breadcrumb = Registry::get('Breadcrumb');
+class Notifications
+{
+    public static function execute(ApplicationAbstract $application)
+    {
+        $OSCOM_Customer = Registry::get('Customer');
+        $OSCOM_NavigationHistory = Registry::get('NavigationHistory');
+        $OSCOM_Service = Registry::get('Service');
+        $OSCOM_Breadcrumb = Registry::get('Breadcrumb');
 
-      if ( $OSCOM_Customer->isLoggedOn() === false ) {
-        $OSCOM_NavigationHistory->setSnapshot();
+        if ($OSCOM_Customer->isLoggedOn() === false) {
+            $OSCOM_NavigationHistory->setSnapshot();
 
-        OSCOM::redirect(OSCOM::getLink(null, null, 'LogIn', 'SSL'));
-      }
+            OSCOM::redirect(OSCOM::getLink(null, null, 'LogIn', 'SSL'));
+        }
 
-      $application->setPageTitle(OSCOM::getDef('notifications_heading'));
-      $application->setPageContent('notifications.php');
+        $application->setPageTitle(OSCOM::getDef('notifications_heading'));
+        $application->setPageContent('notifications.php');
 
-      if ( $OSCOM_Service->isStarted('Breadcrumb') ) {
-        $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_notifications'), OSCOM::getLink(null, null, 'Notifications', 'SSL'));
-      }
+        if ($OSCOM_Service->isStarted('Breadcrumb')) {
+            $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_notifications'), OSCOM::getLink(null, null, 'Notifications', 'SSL'));
+        }
     }
-  }
-?>
+}

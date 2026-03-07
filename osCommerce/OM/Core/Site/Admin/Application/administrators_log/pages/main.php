@@ -12,33 +12,33 @@
   as published by the Free Software Foundation.
 */
 
-  $modules_array = array(array('id' => '',
-                               'text' => $osC_Language->get('filter_all')));
+$modules_array = [['id' => '',
+                             'text' => $osC_Language->get('filter_all')]];
 
-  foreach ( $_SESSION[OSCOM::getSite()]['access'] as $module ) {
-    $modules_array[] = array('id' => $module,
-                             'text' => $module);
+foreach ($_SESSION[OSCOM::getSite()]['access'] as $module) {
+    $modules_array[] = ['id' => $module,
+                             'text' => $module];
 
-  }
+}
 
-  $admins_array = array(array('id' => '',
-                              'text' => $osC_Language->get('filter_all')));
+$admins_array = [['id' => '',
+                            'text' => $osC_Language->get('filter_all')]];
 
-  $Qadmins = $osC_Database->query('select id, user_name from :table_administrators order by user_name');
-  $Qadmins->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
-  $Qadmins->execute();
+$Qadmins = $osC_Database->query('select id, user_name from :table_administrators order by user_name');
+$Qadmins->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
+$Qadmins->execute();
 
-  while ( $Qadmins->next() ) {
-    $admins_array[] = array('id' => $Qadmins->valueInt('id'),
-                            'text' => $Qadmins->valueProtected('user_name'));
-  }
+while ($Qadmins->next()) {
+    $admins_array[] = ['id' => $Qadmins->valueInt('id'),
+                            'text' => $Qadmins->valueProtected('user_name')];
+}
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -56,26 +56,26 @@
 <?php
   $Qlog = $osC_Database->query('select SQL_CALC_FOUND_ROWS count(al.id) as total, al.id, al.module, al.module_action, al.module_id, al.action, a.user_name, unix_timestamp(al.datestamp) as datestamp from :table_administrators_log al, :table_administrators a where');
 
-  if ( !empty($_GET['fm']) && in_array($_GET['fm'], $_SESSION[OSCOM::getSite()]['access']) ) {
+if (!empty($_GET['fm']) && in_array($_GET['fm'], $_SESSION[OSCOM::getSite()]['access'])) {
     $Qlog->appendQuery('al.module = :module');
     $Qlog->bindValue(':module', $_GET['fm']);
-  } else {
+} else {
     $Qlog->appendQuery('al.module in (":modules")');
     $Qlog->bindRaw(':modules', implode('", "', $_SESSION[OSCOM::getSite()]['access']));
-  }
+}
 
-  $Qlog->appendQuery('and');
+$Qlog->appendQuery('and');
 
-  if ( is_numeric($_GET['fu']) ) {
+if (is_numeric($_GET['fu'])) {
     $Qlog->appendQuery('al.administrators_id = :administrators_id and');
     $Qlog->bindInt(':administrators_id', $_GET['fu']);
-  }
+}
 
-  $Qlog->appendQuery('al.administrators_id = a.id group by al.id order by al.id desc');
-  $Qlog->bindTable(':table_administrators_log', TABLE_ADMINISTRATORS_LOG);
-  $Qlog->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
-  $Qlog->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
-  $Qlog->execute();
+$Qlog->appendQuery('al.administrators_id = a.id group by al.id order by al.id desc');
+$Qlog->bindTable(':table_administrators_log', TABLE_ADMINISTRATORS_LOG);
+$Qlog->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
+$Qlog->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
+$Qlog->execute();
 ?>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -108,8 +108,8 @@
   <tbody>
 
 <?php
-  while ( $Qlog->next() ) {
-?>
+  while ($Qlog->next()) {
+      ?>
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
       <td onclick="document.getElementById('batch<?php echo $Qlog->valueInt('id'); ?>').checked = !document.getElementById('batch<?php echo $Qlog->valueInt('id'); ?>').checked;"><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&fm=' . $_GET['fm'] . '&fu=' . $_GET['fu'] . '&lID=' . $Qlog->valueInt('id') . '&action=info'), osc_icon('folder.png') . '&nbsp;' . $Qlog->value('module') . ' (' . $Qlog->valueInt('total') . ')'); ?></td>
@@ -120,9 +120,9 @@
       <td align="right">
 
 <?php
-    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&fm=' . $_GET['fm'] . '&fu=' . $_GET['fu'] . '&lID=' . $Qlog->valueInt('id') . '&action=info'), osc_icon('info.png')) . '&nbsp;' .
-         osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&fm=' . $_GET['fm'] . '&fu=' . $_GET['fu'] . '&lID=' . $Qlog->valueInt('id') . '&action=delete'), osc_icon('trash.png'));
-?>
+          echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&fm=' . $_GET['fm'] . '&fu=' . $_GET['fu'] . '&lID=' . $Qlog->valueInt('id') . '&action=info'), osc_icon('info.png')) . '&nbsp;' .
+               osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&fm=' . $_GET['fm'] . '&fu=' . $_GET['fu'] . '&lID=' . $Qlog->valueInt('id') . '&action=delete'), osc_icon('trash.png'));
+      ?>
 
       </td>
       <td align="center"><?php echo osc_draw_checkbox_field('batch[]', $Qlog->valueInt('id'), null, 'id="batch' . $Qlog->valueInt('id') . '"'); ?></td>

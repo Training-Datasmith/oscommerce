@@ -1,38 +1,44 @@
 <?php
+
+declare(strict_types=1);
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  namespace osCommerce\OM\Core\Site\Shop\Module\ProductType;
+namespace osCommerce\OM\Core\Site\Shop\Module\ProductType;
 
-  use osCommerce\OM\Core\OSCOM;
-  use osCommerce\OM\Core\Registry;
-  use osCommerce\OM\Core\Site\Shop\Product;
+use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\Registry;
+use osCommerce\OM\Core\Site\Shop\Product;
 
-  class RequireCustomerAccount {
-    public static function getTitle() {
-      return 'Require Customer Account';
+class RequireCustomerAccount
+{
+    public static function getTitle()
+    {
+        return 'Require Customer Account';
     }
 
-    public static function getDescription() {
-      return 'Require customer account';
+    public static function getDescription()
+    {
+        return 'Require customer account';
     }
 
-    public static function isValid(Product $OSCOM_Product) {
-      $OSCOM_Customer = Registry::get('Customer');
+    public static function isValid(Product $OSCOM_Product)
+    {
+        $OSCOM_Customer = Registry::get('Customer');
 
-      return $OSCOM_Customer->isLoggedOn();
+        return $OSCOM_Customer->isLoggedOn();
     }
 
-    public static function onFail(Product $OSCOM_Product) {
-      $OSCOM_NavigationHistory = Registry::get('NavigationHistory');
+    public static function onFail(Product $OSCOM_Product)
+    {
+        $OSCOM_NavigationHistory = Registry::get('NavigationHistory');
 
-      $OSCOM_NavigationHistory->setSnapshot();
+        $OSCOM_NavigationHistory->setSnapshot();
 
-      OSCOM::redirect(OSCOM::getLink(null, 'Account', 'LogIn', 'SSL'));
+        OSCOM::redirect(OSCOM::getLink(null, 'Account', 'LogIn', 'SSL'));
     }
-  }
-?>
+}

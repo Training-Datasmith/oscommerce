@@ -1,34 +1,35 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
+
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $OSCOM_MessageStack->exists() ) {
-    echo $OSCOM_MessageStack->get();
+  if ($OSCOM_MessageStack->exists()) {
+      echo $OSCOM_MessageStack->get();
   }
 ?>
 
 <form id="liveSearchForm">
-  <?php echo HTML::inputField('search', null, 'id="liveSearchField" class="searchField" placeholder="' . OSCOM::getDef('placeholder_search') . '"') . HTML::button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => OSCOM::getDef('button_reset'))) . '&nbsp;' . HTML::selectMenu('cid', array_merge(array(array('id' => '0', 'text' => OSCOM::getDef('top_category'))), $OSCOM_Application->getCategoryList())); ?>
+  <?php echo HTML::inputField('search', null, 'id="liveSearchField" class="searchField" placeholder="' . OSCOM::getDef('placeholder_search') . '"') . HTML::button(['type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => OSCOM::getDef('button_reset')]) . '&nbsp;' . HTML::selectMenu('cid', array_merge([['id' => '0', 'text' => OSCOM::getDef('top_category')]], $OSCOM_Application->getCategoryList())); ?>
 
   <span style="float: right;">
 
 <?php
-  if ( $OSCOM_Application->getCurrentCategoryID() > 0 ) {
-    echo HTML::button(array('href' => OSCOM::getLink(null, null, 'cid=' . $OSCOM_CategoryTree->getParentID($OSCOM_Application->getCurrentCategoryID())), 'priority' => 'secondary', 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))) . ' ';
+  if ($OSCOM_Application->getCurrentCategoryID() > 0) {
+      echo HTML::button(['href' => OSCOM::getLink(null, null, 'cid=' . $OSCOM_CategoryTree->getParentID($OSCOM_Application->getCurrentCategoryID())), 'priority' => 'secondary', 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back')]) . ' ';
   }
 
-  echo HTML::button(array('href' => OSCOM::getLink(null, null, 'Save&cid=' . $OSCOM_Application->getCurrentCategoryID()), 'icon' => 'plus', 'title' => OSCOM::getDef('button_insert')));
+echo HTML::button(['href' => OSCOM::getLink(null, null, 'Save&cid=' . $OSCOM_Application->getCurrentCategoryID()), 'icon' => 'plus', 'title' => OSCOM::getDef('button_insert')]);
 ?>
 
   </span>

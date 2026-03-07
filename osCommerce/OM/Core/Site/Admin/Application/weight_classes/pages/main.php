@@ -16,8 +16,8 @@
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -25,10 +25,10 @@
 
 <?php
   $Qclasses = $osC_Database->query('select weight_class_id, weight_class_key, weight_class_title from :table_weight_classes where language_id = :language_id order by weight_class_title');
-  $Qclasses->bindTable(':table_weight_classes', TABLE_WEIGHT_CLASS);
-  $Qclasses->bindInt(':language_id', $osC_Language->getID());
-  $Qclasses->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
-  $Qclasses->execute();
+$Qclasses->bindTable(':table_weight_classes', TABLE_WEIGHT_CLASS);
+$Qclasses->bindInt(':language_id', $osC_Language->getID());
+$Qclasses->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
+$Qclasses->execute();
 ?>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -58,13 +58,13 @@
   <tbody>
 
 <?php
-  while ( $Qclasses->next() ) {
-    $class_name = $Qclasses->value('weight_class_title');
+  while ($Qclasses->next()) {
+      $class_name = $Qclasses->value('weight_class_title');
 
-    if ( $Qclasses->valueInt('weight_class_id') == SHIPPING_WEIGHT_UNIT ) {
-      $class_name .= ' (' . $osC_Language->get('default_entry') . ')';
-    }
-?>
+      if ($Qclasses->valueInt('weight_class_id') == SHIPPING_WEIGHT_UNIT) {
+          $class_name .= ' (' . $osC_Language->get('default_entry') . ')';
+      }
+      ?>
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
       <td onclick="document.getElementById('batch<?php echo $Qclasses->valueInt('weight_class_id'); ?>').checked = !document.getElementById('batch<?php echo $Qclasses->valueInt('weight_class_id'); ?>').checked;"><?php echo $class_name; ?></td>
@@ -72,9 +72,9 @@
       <td align="right">
 
 <?php
-    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&wcID=' . $Qclasses->valueInt('weight_class_id') . '&action=save'), osc_icon('edit.png')) . '&nbsp;' .
-         osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&wcID=' . $Qclasses->valueInt('weight_class_id') . '&action=delete'), osc_icon('trash.png'));
-?>
+          echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&wcID=' . $Qclasses->valueInt('weight_class_id') . '&action=save'), osc_icon('edit.png')) . '&nbsp;' .
+               osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&wcID=' . $Qclasses->valueInt('weight_class_id') . '&action=delete'), osc_icon('trash.png'));
+      ?>
 
       </td>
       <td align="center"><?php echo osc_draw_checkbox_field('batch[]', $Qclasses->valueInt('weight_class_id'), null, 'id="batch' . $Qclasses->valueInt('weight_class_id') . '"'); ?></td>

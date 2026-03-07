@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * SplClassLoader implementation that implements the technical interoperability
  * standards for PHP 5.3 namespaces and class names.
@@ -27,7 +29,7 @@ class SplClassLoader
     /**
      * Creates a new <tt>SplClassLoader</tt> that loads classes of the
      * specified namespace.
-     * 
+     *
      * @param string $ns The namespace to use.
      */
     public function __construct($ns = null, $includePath = null)
@@ -38,7 +40,7 @@ class SplClassLoader
 
     /**
      * Sets the namespace separator used by classes in the namespace of this class loader.
-     * 
+     *
      * @param string $sep The separator to use.
      */
     public function setNamespaceSeparator($sep)
@@ -58,7 +60,7 @@ class SplClassLoader
 
     /**
      * Sets the base include path for all class files in the namespace of this class loader.
-     * 
+     *
      * @param string $includePath
      */
     public function setIncludePath($includePath)
@@ -78,7 +80,7 @@ class SplClassLoader
 
     /**
      * Sets the file extension of class files in the namespace of this class loader.
-     * 
+     *
      * @param string $fileExtension
      */
     public function setFileExtension($fileExtension)
@@ -101,7 +103,7 @@ class SplClassLoader
      */
     public function register()
     {
-        spl_autoload_register(array($this, 'loadClass'));
+        spl_autoload_register([$this, 'loadClass']);
     }
 
     /**
@@ -109,7 +111,7 @@ class SplClassLoader
      */
     public function unregister()
     {
-        spl_autoload_unregister(array($this, 'loadClass'));
+        spl_autoload_unregister([$this, 'loadClass']);
     }
 
     /**
@@ -130,12 +132,12 @@ class SplClassLoader
             }
             $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . $this->_fileExtension;
 
-// HPDL; Only include the file if it exists otherwise \class_exists() returns a
-// "file does not exist" error.
+            // HPDL; Only include the file if it exists otherwise \class_exists() returns a
+            // "file does not exist" error.
             $includeFile = ($this->_includePath !== null ? $this->_includePath . DIRECTORY_SEPARATOR : '') . $fileName;
 
             if (file_exists($includeFile)) {
-              include ($includeFile);
+                include($includeFile);
             }
         }
     }

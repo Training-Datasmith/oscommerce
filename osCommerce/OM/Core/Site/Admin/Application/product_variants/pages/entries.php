@@ -17,7 +17,7 @@
 
 <?php
   if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -25,10 +25,10 @@
 
 <?php
   $Qentries = $osC_Database->query('select id, title, sort_order from :table_products_variants_values where products_variants_groups_id = :products_variants_groups_id and languages_id = :languages_id order by sort_order, title');
-  $Qentries->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
-  $Qentries->bindInt(':products_variants_groups_id', $_GET[$osC_Template->getModule()]);
-  $Qentries->bindInt(':languages_id', $osC_Language->getID());
-  $Qentries->execute();
+$Qentries->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
+$Qentries->bindInt(':products_variants_groups_id', $_GET[$osC_Template->getModule()]);
+$Qentries->bindInt(':languages_id', $osC_Language->getID());
+$Qentries->execute();
 ?>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -57,8 +57,8 @@
   <tbody>
 
 <?php
-  while ( $Qentries->next() ) {
-?>
+  while ($Qentries->next()) {
+      ?>
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
       <td onclick="document.getElementById('batch<?php echo $Qentries->valueInt('id'); ?>').checked = !document.getElementById('batch<?php echo $Qentries->valueInt('id'); ?>').checked;"><?php echo $Qentries->value('title'); ?></td>
@@ -66,16 +66,16 @@
       <td align="right">
 
 <?php
-    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&paeID=' . $Qentries->valueInt('id') . '&action=saveEntry'), osc_icon('edit.png')) . '&nbsp;' .
-         osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&paeID=' . $Qentries->valueInt('id') . '&action=deleteEntry'), osc_icon('trash.png'));
-?>
+          echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&paeID=' . $Qentries->valueInt('id') . '&action=saveEntry'), osc_icon('edit.png')) . '&nbsp;' .
+               osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&paeID=' . $Qentries->valueInt('id') . '&action=deleteEntry'), osc_icon('trash.png'));
+      ?>
 
       </td>
       <td align="center"><?php echo osc_draw_checkbox_field('batch[]', $Qentries->valueInt('id'), null, 'id="batch' . $Qentries->valueInt('id') . '"'); ?></td>
     </tr>
 
 <?php
-    }
+  }
 ?>
 
   </tbody>

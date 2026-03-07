@@ -1,30 +1,33 @@
 <?php
+
+declare(strict_types=1);
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  namespace osCommerce\OM\Core\Site\Admin\Application\PaymentModules\Model;
+namespace osCommerce\OM\Core\Site\Admin\Application\PaymentModules\Model;
 
-  use osCommerce\OM\Core\Site\Admin\Application\PaymentModules\PaymentModules;
+use osCommerce\OM\Core\Site\Admin\Application\PaymentModules\PaymentModules;
 
-  class findInstalled {
-    public static function execute($search) {
-      $modules = PaymentModules::getInstalled();
+class findInstalled
+{
+    public static function execute($search)
+    {
+        $modules = PaymentModules::getInstalled();
 
-      $result = array('entries' => array());
+        $result = ['entries' => []];
 
-      foreach ( $modules['entries'] as $module ) {
-        if ( (stripos($module['code'], $search) !== false) || (stripos($module['title'], $search) !== false) ) {
-          $result['entries'][] = $module;
+        foreach ($modules['entries'] as $module) {
+            if ((stripos($module['code'], $search) !== false) || (stripos($module['title'], $search) !== false)) {
+                $result['entries'][] = $module;
+            }
         }
-      }
 
-      $result['total'] = count($result['entries']);
+        $result['total'] = count($result['entries']);
 
-      return $result;
+        return $result;
     }
-  }
-?>
+}

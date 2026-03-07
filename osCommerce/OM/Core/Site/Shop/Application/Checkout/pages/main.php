@@ -1,19 +1,19 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
-  use osCommerce\OM\Core\Site\Shop\Address;
-  use osCommerce\OM\Core\Site\Shop\Tax;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\Site\Shop\Address;
+use osCommerce\OM\Core\Site\Shop\Tax;
 
-  if ( $OSCOM_ShoppingCart->hasBillingMethod() ) {
+if ($OSCOM_ShoppingCart->hasBillingMethod()) {
     echo $OSCOM_PaymentModule->preConfirmationCheck();
-  }
+}
 ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
@@ -25,20 +25,20 @@
         <td width="30%" valign="top">
 
 <?php
-  if ( $OSCOM_ShoppingCart->hasShippingAddress() ) {
-?>
+  if ($OSCOM_ShoppingCart->hasShippingAddress()) {
+      ?>
           <p><?php echo '<b>' . OSCOM::getDef('order_delivery_address_title') . '</b> ' . HTML::link(OSCOM::getLink(null, 'Checkout', 'Shipping&Address', 'SSL'), '<span class="orderEdit">' . OSCOM::getDef('order_text_edit_title') . '</span>'); ?></p>
           <p><?php echo Address::format($OSCOM_ShoppingCart->getShippingAddress(), '<br />'); ?></p>
 
 <?php
-    if ( $OSCOM_ShoppingCart->hasShippingMethod() ) {
-?>
+          if ($OSCOM_ShoppingCart->hasShippingMethod()) {
+              ?>
 
           <p><?php echo '<b>' . OSCOM::getDef('order_shipping_method_title') . '</b> ' . HTML::link(OSCOM::getLink(null, 'Checkout', 'Shipping', 'SSL'), '<span class="orderEdit">' . OSCOM::getDef('order_text_edit_title') . '</span>'); ?></p>
           <p><?php echo $OSCOM_ShoppingCart->getShippingMethod('title'); ?></p>
 
 <?php
-    }
+          }
   }
 ?>
 
@@ -53,8 +53,8 @@
             <table border="0" width="100%" cellspacing="0" cellpadding="2">
 
 <?php
-  if ( $OSCOM_ShoppingCart->numberOfTaxGroups() > 1 ) {
-?>
+  if ($OSCOM_ShoppingCart->numberOfTaxGroups() > 1) {
+      ?>
 
               <tr>
                 <td colspan="2"><?php echo '<b>' . OSCOM::getDef('order_products_title') . '</b> ' . HTML::link(OSCOM::getLink(null, 'Cart', null, 'SSL'), '<span class="orderEdit">' . OSCOM::getDef('order_text_edit_title') . '</span>'); ?></td>
@@ -64,7 +64,7 @@
 
 <?php
   } else {
-?>
+      ?>
 
               <tr>
                 <td colspan="3"><?php echo '<b>' . OSCOM::getDef('order_products_title') . '</b> ' . HTML::link(OSCOM::getLink(null, 'Cart', null, 'SSL'), '<span class="orderEdit">' . OSCOM::getDef('order_text_edit_title') . '</span>'); ?></td>
@@ -73,30 +73,30 @@
 <?php
   }
 
-  foreach ( $OSCOM_ShoppingCart->getProducts() as $products ) {
+foreach ($OSCOM_ShoppingCart->getProducts() as $products) {
     echo '              <tr>' . "\n" .
          '                <td align="right" valign="top" width="30">' . $products['quantity'] . '&nbsp;x&nbsp;</td>' . "\n" .
          '                <td valign="top">' . $products['name'];
 
-    if ( (STOCK_CHECK == '1') && !$OSCOM_ShoppingCart->isInStock($products['item_id']) ) {
-      echo '<span class="markProductOutOfStock">' . STOCK_MARK_PRODUCT_OUT_OF_STOCK . '</span>';
+    if ((STOCK_CHECK == '1') && !$OSCOM_ShoppingCart->isInStock($products['item_id'])) {
+        echo '<span class="markProductOutOfStock">' . STOCK_MARK_PRODUCT_OUT_OF_STOCK . '</span>';
     }
 
-    if ( $OSCOM_ShoppingCart->isVariant($products['item_id']) ) {
-      foreach ( $OSCOM_ShoppingCart->getVariant($products['item_id']) as $variant) {
-        echo '<br />- ' . $variant['group_title'] . ': ' . HTML::outputProtected($variant['value_title']);
-      }
+    if ($OSCOM_ShoppingCart->isVariant($products['item_id'])) {
+        foreach ($OSCOM_ShoppingCart->getVariant($products['item_id']) as $variant) {
+            echo '<br />- ' . $variant['group_title'] . ': ' . HTML::outputProtected($variant['value_title']);
+        }
     }
 
     echo '</td>' . "\n";
 
-    if ( $OSCOM_ShoppingCart->numberOfTaxGroups() > 1 ) {
-      echo '                <td valign="top" align="right">' . Tax::displayTaxRateValue($products['tax']) . '</td>' . "\n";
+    if ($OSCOM_ShoppingCart->numberOfTaxGroups() > 1) {
+        echo '                <td valign="top" align="right">' . Tax::displayTaxRateValue($products['tax']) . '</td>' . "\n";
     }
 
     echo '                <td align="right" valign="top">' . $OSCOM_Currencies->displayPrice($products['price'], $products['tax_class_id'], $products['quantity']) . '</td>' . "\n" .
          '              </tr>' . "\n";
-  }
+}
 ?>
 
             </table>
@@ -109,11 +109,11 @@
 // HPDL
 //  if ($osC_OrderTotal->hasActive()) {
 //    foreach ($osC_OrderTotal->getResult() as $module) {
-    foreach ( $OSCOM_ShoppingCart->getOrderTotals() as $module ) {
-      echo '              <tr>' . "\n" .
-           '                <td align="right">' . $module['title'] . '</td>' . "\n" .
-           '                <td align="right">' . $module['text'] . '</td>' . "\n" .
-           '              </tr>';
+    foreach ($OSCOM_ShoppingCart->getOrderTotals() as $module) {
+        echo '              <tr>' . "\n" .
+             '                <td align="right">' . $module['title'] . '</td>' . "\n" .
+             '                <td align="right">' . $module['text'] . '</td>' . "\n" .
+             '              </tr>';
     }
 //  }
 ?>
@@ -127,9 +127,9 @@
 </div>
 
 <?php
-  if ( $OSCOM_ShoppingCart->hasBillingMethod() ) {
-    if ( $confirmation = $OSCOM_PaymentModule->confirmation() ) {
-?>
+  if ($OSCOM_ShoppingCart->hasBillingMethod()) {
+      if ($confirmation = $OSCOM_PaymentModule->confirmation()) {
+          ?>
 
 <div class="moduleBox">
   <h6><?php echo OSCOM::getDef('order_payment_information_title'); ?></h6>
@@ -138,14 +138,14 @@
     <p><?php echo $confirmation['title']; ?></p>
 
 <?php
-      if ( isset($confirmation['fields']) ) {
-?>
+                if (isset($confirmation['fields'])) {
+                    ?>
 
     <table border="0" cellspacing="0" cellpadding="2">
 
 <?php
-        for ( $i=0, $n=sizeof($confirmation['fields']); $i<$n; $i++ ) {
-?>
+                            for ($i = 0, $n = sizeof($confirmation['fields']); $i < $n; $i++) {
+                                ?>
 
       <tr>
         <td width="10">&nbsp;</td>
@@ -155,32 +155,32 @@
       </tr>
 
 <?php
-        }
-?>
+                            }
+                    ?>
 
     </table>
 
 <?php
-      }
+                }
 
-      if ( isset($confirmation['text']) ) {
-?>
+          if (isset($confirmation['text'])) {
+              ?>
 
     <p><?php echo $confirmation['text']; ?></p>
 
 <?php
-      }
-?>
+          }
+          ?>
 
   </div>
 </div>
 
 <?php
-    }
+      }
   }
 
-  if ( isset($_SESSION['comments']) && !empty($_SESSION['comments']) ) {
-?>
+if (isset($_SESSION['comments']) && !empty($_SESSION['comments'])) {
+    ?>
 
 <div class="moduleBox">
   <h6><?php echo '<b>' . OSCOM::getDef('order_comments_title') . '</b> ' . HTML::link(OSCOM::getLink(null, 'Checkout', 'Payment', 'SSL'), '<span class="orderEdit">' . OSCOM::getDef('order_text_edit_title') . '</span>'); ?></h6>
@@ -191,25 +191,25 @@
 </div>
 
 <?php
-  }
+}
 ?>
 
 <div class="submitFormButtons" style="text-align: right;">
 
 <?php
-  if ( $OSCOM_ShoppingCart->hasBillingMethod() && $OSCOM_PaymentModule->hasGateway() ) {
-    $form_action_url = $OSCOM_PaymentModule->getGatewayURL();
+  if ($OSCOM_ShoppingCart->hasBillingMethod() && $OSCOM_PaymentModule->hasGateway()) {
+      $form_action_url = $OSCOM_PaymentModule->getGatewayURL();
   } else {
-    $form_action_url = OSCOM::getLink(null, null, 'Process', 'SSL');
+      $form_action_url = OSCOM::getLink(null, null, 'Process', 'SSL');
   }
 
-  echo '<form name="checkout_confirmation" action="' . $form_action_url . '" method="post">';
+echo '<form name="checkout_confirmation" action="' . $form_action_url . '" method="post">';
 
-  if ( $OSCOM_ShoppingCart->hasBillingMethod() ) {
+if ($OSCOM_ShoppingCart->hasBillingMethod()) {
     echo $OSCOM_PaymentModule->getProcessButton();
-  }
+}
 
-  echo HTML::button(array('icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_confirm_order'))) . '</form>';
+echo HTML::button(['icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_confirm_order')]) . '</form>';
 ?>
 
 </div>

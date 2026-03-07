@@ -12,10 +12,10 @@
   as published by the Free Software Foundation.
 */
 
-  require('includes/classes/tax.php');
-  $osC_Tax = new osC_Tax_Admin();
+require('includes/classes/tax.php');
+$osC_Tax = new osC_Tax_Admin();
 
-  $osC_Order = new osC_Order($_GET['oID']);
+$osC_Order = new osC_Order($_GET['oID']);
 ?>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -91,24 +91,24 @@
       <tbody>
 <?php
     foreach ($osC_Order->getProducts() as $product) {
-      echo '        <tr>' . "\n" .
-           '          <td valign="top" align="right">' . $product['quantity'] . '&nbsp;x</td>' . "\n" .
-           '          <td valign="top">' . $product['name'];
+        echo '        <tr>' . "\n" .
+             '          <td valign="top" align="right">' . $product['quantity'] . '&nbsp;x</td>' . "\n" .
+             '          <td valign="top">' . $product['name'];
 
-      if (isset($product['attributes']) && (sizeof($product['attributes']) > 0)) {
-        foreach ($product['attributes'] as $attribute) {
-          echo '<br /><nobr>&nbsp;&nbsp;&nbsp;' . $attribute['option'] . ': ' . $attribute['value'] . '</nobr>';
+        if (isset($product['attributes']) && (sizeof($product['attributes']) > 0)) {
+            foreach ($product['attributes'] as $attribute) {
+                echo '<br /><nobr>&nbsp;&nbsp;&nbsp;' . $attribute['option'] . ': ' . $attribute['value'] . '</nobr>';
+            }
         }
-      }
 
-      echo '          </td>' . "\n" .
-           '          <td valign="top">' . $product['model'] . '</td>' . "\n";
-      echo '          <td align="right" valign="top">' . $osC_Tax->displayTaxRateValue($product['tax']) . '</td>' . "\n" .
-           '          <td align="right" valign="top"><b>' . $osC_Currencies->format($product['price'], true, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n" .
-           '          <td align="right" valign="top"><b>' . $osC_Currencies->displayPriceWithTaxRate($product['price'], $product['tax'], 1, true, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n" .
-           '          <td align="right" valign="top"><b>' . $osC_Currencies->format($product['price'] * $product['quantity'], true, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n" .
-           '          <td align="right" valign="top"><b>' . $osC_Currencies->displayPriceWithTaxRate($product['price'], $product['tax'], $product['quantity'], true, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n";
-      echo '        </tr>' . "\n";
+        echo '          </td>' . "\n" .
+             '          <td valign="top">' . $product['model'] . '</td>' . "\n";
+        echo '          <td align="right" valign="top">' . $osC_Tax->displayTaxRateValue($product['tax']) . '</td>' . "\n" .
+             '          <td align="right" valign="top"><b>' . $osC_Currencies->format($product['price'], true, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n" .
+             '          <td align="right" valign="top"><b>' . $osC_Currencies->displayPriceWithTaxRate($product['price'], $product['tax'], 1, true, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n" .
+             '          <td align="right" valign="top"><b>' . $osC_Currencies->format($product['price'] * $product['quantity'], true, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n" .
+             '          <td align="right" valign="top"><b>' . $osC_Currencies->displayPriceWithTaxRate($product['price'], $product['tax'], $product['quantity'], true, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n";
+        echo '        </tr>' . "\n";
     }
 ?>
       </tbody>
@@ -117,10 +117,10 @@
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
 <?php
   foreach ($osC_Order->getTotals() as $total) {
-    echo '      <tr>' . "\n" .
-         '        <td align="right">' . $total['title'] . '</td>' . "\n" .
-         '        <td align="right">' . $total['text'] . '</td>' . "\n" .
-         '      </tr>' . "\n";
+      echo '      <tr>' . "\n" .
+           '        <td align="right">' . $total['title'] . '</td>' . "\n" .
+           '        <td align="right">' . $total['text'] . '</td>' . "\n" .
+           '      </tr>' . "\n";
   }
 ?>
     </table></td>

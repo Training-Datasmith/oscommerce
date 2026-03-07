@@ -1,20 +1,21 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
+
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . HTML::object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $OSCOM_MessageStack->exists() ) {
-    echo $OSCOM_MessageStack->get();
+  if ($OSCOM_MessageStack->exists()) {
+      echo $OSCOM_MessageStack->get();
   }
 ?>
 
@@ -27,21 +28,21 @@
 
 <?php
   $Qentries = $OSCOM_PDO->query('select tax_rates_id, tax_description from :table_tax_rates where tax_rates_id in ("' . implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))) . '") order by tax_description');
-  $Qentries->execute();
+$Qentries->execute();
 
-  $names_string = '';
+$names_string = '';
 
-  while ( $Qentries->fetch() ) {
+while ($Qentries->fetch()) {
     $names_string .= HTML::hiddenField('batch[]', $Qentries->valueInt('tax_rates_id')) . '<b>' . $Qentries->valueProtected('tax_description') . '</b>, ';
-  }
+}
 
-  if ( !empty($names_string) ) {
+if (!empty($names_string)) {
     $names_string = substr($names_string, 0, -2);
-  }
+}
 
-  echo '<p>' . $names_string . '</p>';
+echo '<p>' . $names_string . '</p>';
 
-  echo '<p>' . HTML::button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . HTML::button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))) . '</p>';
+echo '<p>' . HTML::button(['priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete')]) . ' ' . HTML::button(['href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel')]) . '</p>';
 ?>
 
   </form>

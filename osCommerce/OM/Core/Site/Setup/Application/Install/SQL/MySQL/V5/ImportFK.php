@@ -1,25 +1,29 @@
 <?php
+
+declare(strict_types=1);
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  namespace osCommerce\OM\Core\Site\Setup\Application\Install\SQL\MySQL\V5;
+namespace osCommerce\OM\Core\Site\Setup\Application\Install\SQL\MySQL\V5;
 
-  use osCommerce\OM\Core\OSCOM;
-  use osCommerce\OM\Core\Registry;
+use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\Registry;
 
-  class ImportFK {
-    public static function execute($data) {
-      $OSCOM_PDO = Registry::get('PDO');
+class ImportFK
+{
+    public static function execute($data)
+    {
+        $OSCOM_PDO = Registry::get('PDO');
 
-      $sql_file = OSCOM::BASE_DIRECTORY . 'Core/Site/Setup/sql/oscommerce_innodb.sql';
+        $sql_file = OSCOM::BASE_DIRECTORY . 'Core/Site/Setup/sql/oscommerce_innodb.sql';
 
-      $OSCOM_PDO->importSQL($sql_file, $data['table_prefix']);
+        $OSCOM_PDO->importSQL($sql_file, $data['table_prefix']);
 
-      $OSCOM_PDO->exec('DROP PROCEDURE IF EXISTS CountriesGetAll;
+        $OSCOM_PDO->exec('DROP PROCEDURE IF EXISTS CountriesGetAll;
 CREATE PROCEDURE CountriesGetAll (IN pageset INT, IN maxresults INT)
 BEGIN
   IF pageset is null THEN
@@ -44,5 +48,4 @@ BEGIN
   SELECT FOUND_ROWS() as total;
 END;');
     }
-  }
-?>
+}

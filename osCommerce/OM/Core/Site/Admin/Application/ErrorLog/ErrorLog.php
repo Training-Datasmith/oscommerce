@@ -1,12 +1,15 @@
 <?php
+
+declare(strict_types=1);
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  namespace osCommerce\OM\Core\Site\Admin\Application\ErrorLog;
+namespace osCommerce\OM\Core\Site\Admin\Application\ErrorLog;
 
-  class ErrorLog extends \osCommerce\OM\Core\ApplicationModelAbstract { }
-?>
+class ErrorLog extends \osCommerce\OM\Core\ApplicationModelAbstract
+{
+}

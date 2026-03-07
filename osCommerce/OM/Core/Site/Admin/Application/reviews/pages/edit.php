@@ -12,20 +12,20 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(osC_Reviews_Admin::getData($_GET['rID']));
+$osC_ObjectInfo = new osC_ObjectInfo(osC_Reviews_Admin::getData($_GET['rID']));
 
-  $rating_array = array();
+$rating_array = [];
 
-  for ($i=1; $i<=5; $i++) {
-    $rating_array[] = array('id' => $i, 'text' => '');
-  }
+for ($i = 1; $i <= 5; $i++) {
+    $rating_array[] = ['id' => $i, 'text' => ''];
+}
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
   if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 

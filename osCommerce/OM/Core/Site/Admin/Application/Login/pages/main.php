@@ -1,13 +1,14 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
+
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
@@ -24,7 +25,7 @@
     <p><label for="user_password"><?php echo OSCOM::getDef('field_password'); ?></label><?php echo HTML::passwordField('user_password', 'tabindex="2"'); ?></p>
   </fieldset>
 
-  <p><?php echo HTML::button(array('icon' => 'key', 'title' => OSCOM::getDef('button_login'))); ?></p>
+  <p><?php echo HTML::button(['icon' => 'key', 'title' => OSCOM::getDef('button_login')]); ?></p>
 
   </form>
 </div>
@@ -42,8 +43,8 @@
 </script>
 
 <?php
-  if ( isset($_GET['Process']) && !empty($_POST['user_name']) && !empty($_POST['user_password']) ) {
-?>
+  if (isset($_GET['Process']) && !empty($_POST['user_name']) && !empty($_POST['user_password'])) {
+      ?>
 
 <script type="text/javascript" src="public/external/jquery/jquery.showPasswordCheckbox.js"></script>
 <script type="text/javascript">

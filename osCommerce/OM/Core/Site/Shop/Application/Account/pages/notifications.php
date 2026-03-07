@@ -1,18 +1,18 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
 
 // HPDL Should be moved to the customers class!
-  $Qglobal = $OSCOM_PDO->prepare('select global_product_notifications from :table_customers where customers_id = :customers_id');
-  $Qglobal->bindInt(':customers_id', $OSCOM_Customer->getID());
-  $Qglobal->execute();
+$Qglobal = $OSCOM_PDO->prepare('select global_product_notifications from :table_customers where customers_id = :customers_id');
+$Qglobal->bindInt(':customers_id', $OSCOM_Customer->getID());
+$Qglobal->execute();
 ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
@@ -45,8 +45,8 @@
 </div>
 
 <?php
-  if ( $Qglobal->valueInt('global_product_notifications') !== 1 ) {
-?>
+  if ($Qglobal->valueInt('global_product_notifications') !== 1) {
+      ?>
 
 <div class="moduleBox">
   <h6><?php echo OSCOM::getDef('newsletter_product_notifications_products'); ?></h6>
@@ -54,8 +54,8 @@
   <div class="content">
 
 <?php
-    if ( $OSCOM_Customer->hasProductNotifications() ) {
-?>
+          if ($OSCOM_Customer->hasProductNotifications()) {
+              ?>
 
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
@@ -63,12 +63,12 @@
       </tr>
 
 <?php
-      $Qproducts = $OSCOM_Customer->getProductNotifications();
-      $counter = 0;
+                    $Qproducts = $OSCOM_Customer->getProductNotifications();
+              $counter = 0;
 
-      while ( $Qproducts->next() ) {
-        $counter++;
-?>
+              while ($Qproducts->next()) {
+                  $counter++;
+                  ?>
 
       <tr>
         <td width="30"><?php echo HTML::checkboxField('products[' . $counter . ']', $Qproducts->valueInt('products_id'), true); ?></td>
@@ -76,16 +76,16 @@
       </tr>
 
 <?php
-      }
-?>
+              }
+              ?>
 
     </table>
 
 <?php
-    } else {
-      echo OSCOM::getDef('newsletter_product_notifications_products_none');
-    }
-?>
+          } else {
+              echo OSCOM::getDef('newsletter_product_notifications_products_none');
+          }
+      ?>
 
   </div>
 </div>
@@ -95,7 +95,7 @@
 ?>
 
 <div class="submitFormButtons" style="text-align: right;">
-  <?php echo HTML::button(array('icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue'))); ?>
+  <?php echo HTML::button(['icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue')]); ?>
 </div>
 
 </form>

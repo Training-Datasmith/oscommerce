@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
   $Id: $
 
@@ -12,36 +14,36 @@
   as published by the Free Software Foundation.
 */
 
-  class osC_Application_Statistics extends osC_Template_Admin {
+class osC_Application_Statistics extends osC_Template_Admin
+{
+    /* Protected variables */
 
-/* Protected variables */
+    protected $_module = 'statistics';
+    protected $_page_title;
+    protected $_page_contents = 'main.php';
 
-    protected $_module = 'statistics',
-              $_page_title,
-              $_page_contents = 'main.php';
+    /* Class constructor */
 
-/* Class constructor */
+    public function __construct()
+    {
+        global $osC_Language;
 
-    function __construct() {
-      global $osC_Language;
+        $this->_page_title = $osC_Language->get('heading_title');
 
-      $this->_page_title = $osC_Language->get('heading_title');
+        if (!isset($_GET['module'])) {
+            $_GET['module'] = '';
+        }
 
-      if ( !isset($_GET['module']) ) {
-        $_GET['module'] = '';
-      }
+        if (!isset($_GET['page']) || (isset($_GET['page']) && !is_numeric($_GET['page']))) {
+            $_GET['page'] = 1;
+        }
 
-      if ( !isset($_GET['page']) || ( isset($_GET['page']) && !is_numeric($_GET['page']) ) ) {
-        $_GET['page'] = 1;
-      }
+        if (!empty($_GET['module']) && !file_exists('includes/modules/statistics/' . $_GET['module'] . '.php')) {
+            $_GET['module'] = '';
+        }
 
-      if ( !empty($_GET['module']) && !file_exists('includes/modules/statistics/' . $_GET['module'] . '.php') ) {
-        $_GET['module'] = '';
-      }
-
-      if ( empty($_GET['module']) ) {
-        $this->_page_contents = 'listing.php';
-      }
+        if (empty($_GET['module'])) {
+            $this->_page_contents = 'listing.php';
+        }
     }
-  }
-?>
+}

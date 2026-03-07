@@ -51,7 +51,7 @@
 
 <?php
   if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -59,10 +59,10 @@
 
 <?php
   $Qgroups = $osC_Database->query('select id, title, sort_order from :table_products_variants_groups where languages_id = :languages_id order by sort_order, title');
-  $Qgroups->bindTable(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
-  $Qgroups->bindInt(':languages_id', $osC_Language->getID());
-  $Qgroups->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
-  $Qgroups->execute();
+$Qgroups->bindTable(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
+$Qgroups->bindInt(':languages_id', $osC_Language->getID());
+$Qgroups->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
+$Qgroups->execute();
 ?>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -93,12 +93,12 @@
   <tbody>
 
 <?php
-  while ( $Qgroups->next() ) {
-    $Qentries = $osC_Database->query('select count(*) as total from :table_products_variants_values where products_variants_groups_id = :products_variants_groups_id');
-    $Qentries->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
-    $Qentries->bindInt(':products_variants_groups_id', $Qgroups->valueInt('id'));
-    $Qentries->execute();
-?>
+  while ($Qgroups->next()) {
+      $Qentries = $osC_Database->query('select count(*) as total from :table_products_variants_values where products_variants_groups_id = :products_variants_groups_id');
+      $Qentries->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
+      $Qentries->bindInt(':products_variants_groups_id', $Qgroups->valueInt('id'));
+      $Qentries->execute();
+      ?>
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
       <td onclick="document.getElementById('batch<?php echo $Qgroups->valueInt('id'); ?>').checked = !document.getElementById('batch<?php echo $Qgroups->valueInt('id'); ?>').checked;"><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $Qgroups->valueInt('id') . '&page=' . $_GET['page']), osc_icon('folder.png') . '&nbsp;' . $Qgroups->value('title')); ?></td>
@@ -107,9 +107,9 @@
       <td align="right">
 
 <?php
-    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&paID=' . $Qgroups->valueInt('id') . '&action=save'), osc_icon('edit.png')) . '&nbsp;' .
-         osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&paID=' . $Qgroups->valueInt('id') . '&action=delete'), osc_icon('trash.png'));
-?>
+          echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&paID=' . $Qgroups->valueInt('id') . '&action=save'), osc_icon('edit.png')) . '&nbsp;' .
+               osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&paID=' . $Qgroups->valueInt('id') . '&action=delete'), osc_icon('trash.png'));
+      ?>
 
       </td>
       <td align="center"><?php echo osc_draw_checkbox_field('batch[]', $Qgroups->valueInt('id'), null, 'id="batch' . $Qgroups->valueInt('id') . '"'); ?></td>

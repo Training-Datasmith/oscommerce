@@ -1,91 +1,92 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
-  use osCommerce\OM\Core\Site\Admin\Application\Customers\Customers;
-  use osCommerce\OM\Core\Site\Shop\Address;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\Site\Admin\Application\Customers\Customers;
+use osCommerce\OM\Core\Site\Shop\Address;
+
 ?>
 
 <div id="sectionMenu_addressBook">
   <div class="infoBox">
 
 <?php
-  if ( $new_customer ) {
-    echo '<h3>' . HTML::icon('new.png') . ' ' . OSCOM::getDef('action_heading_new_customer') . '</h3>';
+  if ($new_customer) {
+      echo '<h3>' . HTML::icon('new.png') . ' ' . OSCOM::getDef('action_heading_new_customer') . '</h3>';
   } else {
-    echo '<h3>' . HTML::icon('edit.png') . ' ' . $OSCOM_ObjectInfo->getProtected('customers_name') . '</h3>';
+      echo '<h3>' . HTML::icon('edit.png') . ' ' . $OSCOM_ObjectInfo->getProtected('customers_name') . '</h3>';
   }
 ?>
 
     <ul style="margin: 0; padding: 0; list-style: none;">
 
 <?php
-  if ( $new_customer === false ) {
-    $address_fields = '';
+  if ($new_customer === false) {
+      $address_fields = '';
 
-    foreach ( Customers::getAddressBook($_GET['id']) as $ab ) {
-      $address_fields .= HTML::hiddenField('ab[' . $ab['address_book_id'] . '][id]', $ab['address_book_id']) .
-                         HTML::hiddenField('ab[' . $ab['address_book_id'] . '][gender]', $ab['gender']) .
-                         HTML::hiddenField('ab[' . $ab['address_book_id'] . '][firstname]', $ab['firstname']) .
-                         HTML::hiddenField('ab[' . $ab['address_book_id'] . '][lastname]', $ab['lastname']) .
-                         HTML::hiddenField('ab[' . $ab['address_book_id'] . '][company]', $ab['company']) .
-                         HTML::hiddenField('ab[' . $ab['address_book_id'] . '][street_address]', $ab['street_address']) .
-                         HTML::hiddenField('ab[' . $ab['address_book_id'] . '][suburb]', $ab['suburb']) .
-                         HTML::hiddenField('ab[' . $ab['address_book_id'] . '][city]', $ab['city']) .
-                         HTML::hiddenField('ab[' . $ab['address_book_id'] . '][postcode]', $ab['postcode']) .
-                         HTML::hiddenField('ab[' . $ab['address_book_id'] . '][state]', $ab['state']) .
-                         HTML::hiddenField('ab[' . $ab['address_book_id'] . '][zone_id]', $ab['zone_id']) .
-                         HTML::hiddenField('ab[' . $ab['address_book_id'] . '][country_id]', $ab['country_id']) .
-                         HTML::hiddenField('ab[' . $ab['address_book_id'] . '][telephone]', $ab['telephone_number']) .
-                         HTML::hiddenField('ab[' . $ab['address_book_id'] . '][fax]', $ab['fax_number']) .
-                         HTML::hiddenField('ab[' . $ab['address_book_id'] . '][changed]', 'false');
+      foreach (Customers::getAddressBook($_GET['id']) as $ab) {
+          $address_fields .= HTML::hiddenField('ab[' . $ab['address_book_id'] . '][id]', $ab['address_book_id']) .
+                             HTML::hiddenField('ab[' . $ab['address_book_id'] . '][gender]', $ab['gender']) .
+                             HTML::hiddenField('ab[' . $ab['address_book_id'] . '][firstname]', $ab['firstname']) .
+                             HTML::hiddenField('ab[' . $ab['address_book_id'] . '][lastname]', $ab['lastname']) .
+                             HTML::hiddenField('ab[' . $ab['address_book_id'] . '][company]', $ab['company']) .
+                             HTML::hiddenField('ab[' . $ab['address_book_id'] . '][street_address]', $ab['street_address']) .
+                             HTML::hiddenField('ab[' . $ab['address_book_id'] . '][suburb]', $ab['suburb']) .
+                             HTML::hiddenField('ab[' . $ab['address_book_id'] . '][city]', $ab['city']) .
+                             HTML::hiddenField('ab[' . $ab['address_book_id'] . '][postcode]', $ab['postcode']) .
+                             HTML::hiddenField('ab[' . $ab['address_book_id'] . '][state]', $ab['state']) .
+                             HTML::hiddenField('ab[' . $ab['address_book_id'] . '][zone_id]', $ab['zone_id']) .
+                             HTML::hiddenField('ab[' . $ab['address_book_id'] . '][country_id]', $ab['country_id']) .
+                             HTML::hiddenField('ab[' . $ab['address_book_id'] . '][telephone]', $ab['telephone_number']) .
+                             HTML::hiddenField('ab[' . $ab['address_book_id'] . '][fax]', $ab['fax_number']) .
+                             HTML::hiddenField('ab[' . $ab['address_book_id'] . '][changed]', 'false');
 
-      $address_string = '<div class="abLabel">';
+          $address_string = '<div class="abLabel">';
 
-      if ( in_array($ab['gender'], array('m', 'f')) ) {
-        $address_string .= '<div style="float: right; background: url(\'';
+          if (in_array($ab['gender'], ['m', 'f'])) {
+              $address_string .= '<div style="float: right; background: url(\'';
 
-        if ( $ab['gender'] == 'm' ) {
-          $address_string .= HTML::iconRaw('user_male.png', '32x32');
-        } else {
-          $address_string .= HTML::iconRaw('user_female.png', '32x32');
-        }
+              if ($ab['gender'] == 'm') {
+                  $address_string .= HTML::iconRaw('user_male.png', '32x32');
+              } else {
+                  $address_string .= HTML::iconRaw('user_female.png', '32x32');
+              }
 
-        $address_string .= '\') no-repeat; opacity: 0.5; filter: alpha(opacity=50); width: 32px; height: 32px;"></div>';
+              $address_string .= '\') no-repeat; opacity: 0.5; filter: alpha(opacity=50); width: 32px; height: 32px;"></div>';
+          }
+
+          $address_string .= Address::format($ab, '<br />');
+
+          if (!empty($ab['telephone_number']) || !empty($ab['fax_number'])) {
+              $address_string .= '<br /><br />';
+
+              if (!empty($ab['telephone_number'])) {
+                  $address_string .= HTML::icon('telephone.png', null, null, 'style="margin-right: 6px;"') . HTML::outputProtected($ab['telephone_number']);
+              }
+
+              if (!empty($ab['telephone_number']) && !empty($ab['fax_number'])) {
+                  $address_string .= '<br />';
+              }
+
+              if (!empty($ab['fax_number'])) {
+                  $address_string .= HTML::icon('fax.png', null, null, 'style="margin-right: 6px;"') . HTML::outputProtected($ab['fax_number']);
+              }
+          }
+
+          $address_string .= '</div>';
+
+          $address_string .= '<div style="clear: both;"></div>';
+
+          $address_string .= '<div class="abActions" style="float: right;"><span class="default"><a href="#" onclick="showEditAddressForm(\'' . $ab['address_book_id'] . '\'); return false;">' . HTML::icon('edit.png') . '</a>&nbsp;<a href="#" onclick="deleteAddress(\'' . $ab['address_book_id'] . '\'); return false;">' . HTML::icon('trash.png') . '</a></span></div>';
+
+          echo '      <li id="abEntry' . $ab['address_book_id'] . '" style="float: left; margin: 10px; padding: 10px; border: 1px solid #999; background-color: #fff; box-shadow: 4px 4px 8px #ccc;">' . $address_string . '</li>';
       }
-
-      $address_string .= Address::format($ab, '<br />');
-
-      if ( !empty($ab['telephone_number']) || !empty($ab['fax_number']) ) {
-        $address_string .= '<br /><br />';
-
-        if ( !empty($ab['telephone_number']) ) {
-          $address_string .= HTML::icon('telephone.png', null, null, 'style="margin-right: 6px;"') . HTML::outputProtected($ab['telephone_number']);
-        }
-
-        if ( !empty($ab['telephone_number']) && !empty($ab['fax_number']) ) {
-          $address_string .= '<br />';
-        }
-
-        if ( !empty($ab['fax_number']) ) {
-          $address_string .= HTML::icon('fax.png', null, null, 'style="margin-right: 6px;"') . HTML::outputProtected($ab['fax_number']);
-        }
-      }
-
-      $address_string .= '</div>';
-
-      $address_string .= '<div style="clear: both;"></div>';
-
-      $address_string .= '<div class="abActions" style="float: right;"><span class="default"><a href="#" onclick="showEditAddressForm(\'' . $ab['address_book_id'] . '\'); return false;">' . HTML::icon('edit.png') . '</a>&nbsp;<a href="#" onclick="deleteAddress(\'' . $ab['address_book_id'] . '\'); return false;">' . HTML::icon('trash.png') . '</a></span></div>';
-
-      echo '      <li id="abEntry' . $ab['address_book_id'] . '" style="float: left; margin: 10px; padding: 10px; border: 1px solid #999; background-color: #fff; box-shadow: 4px 4px 8px #ccc;">' . $address_string . '</li>';
-    }
   }
 ?>
 
@@ -97,8 +98,8 @@
 </div>
 
 <?php
-  if ( $new_customer === false ) {
-    echo $address_fields . HTML::hiddenField('ab_default_id', $OSCOM_ObjectInfo->get('customers_default_address_id'));
+  if ($new_customer === false) {
+      echo $address_fields . HTML::hiddenField('ab_default_id', $OSCOM_ObjectInfo->get('customers_default_address_id'));
   }
 ?>
 
@@ -118,18 +119,18 @@
   <div class="infoBox">
 
 <?php
-  if ( $new_customer ) {
-    echo '<h3>' . HTML::icon('new.png') . ' ' . OSCOM::getDef('action_heading_new_customer') . '</h3>';
+  if ($new_customer) {
+      echo '<h3>' . HTML::icon('new.png') . ' ' . OSCOM::getDef('action_heading_new_customer') . '</h3>';
   } else {
-    echo '<h3>' . HTML::icon('edit.png') . ' ' . $OSCOM_ObjectInfo->getProtected('customers_name') . '</h3>';
+      echo '<h3>' . HTML::icon('edit.png') . ' ' . $OSCOM_ObjectInfo->getProtected('customers_name') . '</h3>';
   }
 ?>
 
     <fieldset>
 
 <?php
-  if ( ACCOUNT_GENDER > -1 ) {
-?>
+  if (ACCOUNT_GENDER > -1) {
+      ?>
 
     <p id="abGenderFields"><label for="ab_gender"><?php echo OSCOM::getDef('field_gender'); ?></label><?php echo HTML::radioField('ab_gender', $gender_array, 'm', null, ''); ?></p>
 
@@ -152,8 +153,8 @@ $('#ab_lastname').val($('#lastname').val());
 </script>
 
 <?php
-  if ( ACCOUNT_COMPANY > -1 ) {
-?>
+  if (ACCOUNT_COMPANY > -1) {
+      ?>
 
     <p><label for="ab_company"><?php echo OSCOM::getDef('field_company'); ?></label><?php echo HTML::inputField('ab_company'); ?></p>
 
@@ -164,8 +165,8 @@ $('#ab_lastname').val($('#lastname').val());
     <p><label for="ab_street_address"><?php echo OSCOM::getDef('field_street_address'); ?></label><?php echo HTML::inputField('ab_street_address'); ?></p>
 
 <?php
-  if ( ACCOUNT_SUBURB > -1 ) {
-?>
+  if (ACCOUNT_SUBURB > -1) {
+      ?>
 
     <p><label for="ab_suburb"><?php echo OSCOM::getDef('field_suburb'); ?></label><?php echo HTML::inputField('ab_suburb'); ?></p>
 
@@ -177,62 +178,62 @@ $('#ab_lastname').val($('#lastname').val());
     <p><label for="ab_city"><?php echo OSCOM::getDef('field_city'); ?></label><?php echo HTML::inputField('ab_city'); ?></p>
 
 <?php
-  $countries_array = array();
+  $countries_array = [];
 
-  foreach ( Address::getCountries() as $country ) {
-    $countries_array[] = array('id' => $country['id'],
-                               'text' => $country['name']);
-  }
+foreach (Address::getCountries() as $country) {
+    $countries_array[] = ['id' => $country['id'],
+                               'text' => $country['name']];
+}
 ?>
 
     <p><label for="ab_country"><?php echo OSCOM::getDef('field_country'); ?></label><?php echo HTML::selectMenu('ab_country', $countries_array, STORE_COUNTRY); ?></p>
 
 <?php
-  if ( ACCOUNT_STATE > -1 ) {
-    if ( Address::hasZones(STORE_COUNTRY) ) {
-      $zones_array = array();
+  if (ACCOUNT_STATE > -1) {
+      if (Address::hasZones(STORE_COUNTRY)) {
+          $zones_array = [];
 
-      foreach ( Address::getZones(STORE_COUNTRY) as $zone ) {
-        $zones_array[] = array('id' => $zone['id'],
-                               'text' => $zone['name']);
-      }
-?>
+          foreach (Address::getZones(STORE_COUNTRY) as $zone) {
+              $zones_array[] = ['id' => $zone['id'],
+                                     'text' => $zone['name']];
+          }
+          ?>
 
     <p><label for="ab_state"><?php echo OSCOM::getDef('field_state'); ?></label><?php echo HTML::selectMenu('ab_state', $zones_array); ?></p>
 
 <?php
-    } else {
-?>
+      } else {
+          ?>
 
     <p><label for="ab_state"><?php echo OSCOM::getDef('field_state'); ?></label><?php echo HTML::inputField('ab_state'); ?></p>
 
 <?php
-    }
+      }
   }
 
-  if ( ACCOUNT_TELEPHONE > -1 ) {
-?>
+if (ACCOUNT_TELEPHONE > -1) {
+    ?>
 
     <p><label for="ab_telephone"><?php echo OSCOM::getDef('field_telephone_number'); ?></label><?php echo HTML::inputField('ab_telephone'); ?></p>
 
 <?php
-  }
+}
 
-  if ( ACCOUNT_FAX > -1 ) {
-?>
+if (ACCOUNT_FAX > -1) {
+    ?>
 
     <p><label for="ab_fax"><?php echo OSCOM::getDef('field_fax_number'); ?></label><?php echo HTML::inputField('ab_fax'); ?></p>
 
 <?php
-  }
+}
 ?>
 
     <p><label for="ab_default"><?php echo OSCOM::getDef('field_set_as_primary'); ?></label><?php echo HTML::checkboxField('ab_default'); ?></p>
 
     </fieldset>
 
-    <p id="abSubmitButtonsNew"><?php echo HTML::button(array('type' => 'button', 'params' => 'onclick="processAddress();"', 'priority' => 'primary', 'icon' => 'plus', 'title' => OSCOM::getDef('button_add'))) . ' ' . HTML::button(array('type' => 'button', 'params' => 'onclick="cancelAddressForm();"', 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
-    <p id="abSubmitButtonsEdit"><?php echo HTML::button(array('type' => 'button', 'params' => 'data-abButtonType="henrysBucket"', 'priority' => 'primary', 'icon' => 'arrowrefresh-1-n', 'title' => OSCOM::getDef('button_update'))) . ' ' . HTML::button(array('type' => 'button', 'params' => 'onclick="cancelAddressForm();"', 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+    <p id="abSubmitButtonsNew"><?php echo HTML::button(['type' => 'button', 'params' => 'onclick="processAddress();"', 'priority' => 'primary', 'icon' => 'plus', 'title' => OSCOM::getDef('button_add')]) . ' ' . HTML::button(['type' => 'button', 'params' => 'onclick="cancelAddressForm();"', 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel')]); ?></p>
+    <p id="abSubmitButtonsEdit"><?php echo HTML::button(['type' => 'button', 'params' => 'data-abButtonType="henrysBucket"', 'priority' => 'primary', 'icon' => 'arrowrefresh-1-n', 'title' => OSCOM::getDef('button_update')]) . ' ' . HTML::button(['type' => 'button', 'params' => 'onclick="cancelAddressForm();"', 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel')]); ?></p>
   </div>
 </div>
 
@@ -264,7 +265,7 @@ $(function() {
         if ( len > 0 ) {
           var html = '';
 
-          $('#ab_state').replaceWith('<?php echo HTML::selectMenu('ab_state', array()); ?>');
+          $('#ab_state').replaceWith('<?php echo HTML::selectMenu('ab_state', []); ?>');
 
           for (var i = 0; i < len; i++) {
             html += '<option value="' + response.zones[i].id + '">' + response.zones[i].name + '</option>';

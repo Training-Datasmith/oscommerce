@@ -12,14 +12,14 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_Order = new osC_Order($_GET['oID']);
+$osC_Order = new osC_Order($_GET['oID']);
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
   if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -31,7 +31,7 @@
 
   <p><?php echo '<b>#' . $osC_Order->getOrderID() . ': ' . $osC_Order->getCustomer('name') . '</b>'; ?></p>
 
-  <p><?php echo osc_draw_checkbox_field('restock', array(array('id' => '', 'text' => $osC_Language->get('field_restock_product_quantity')))); ?></p>
+  <p><?php echo osc_draw_checkbox_field('restock', [['id' => '', 'text' => $osC_Language->get('field_restock_product_quantity')]]); ?></p>
 
   <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_delete') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&' . (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 

@@ -1,15 +1,15 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\Access;
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
-  use osCommerce\OM\Core\Registry;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\Registry;
+
 ?>
 
 <!doctype html>
@@ -89,26 +89,26 @@
 <body>
 
 <?php
-  if ( $OSCOM_Template->hasPageHeader() ) {
-    include($OSCOM_Template->getTemplateFile('header.php'));
+  if ($OSCOM_Template->hasPageHeader()) {
+      include($OSCOM_Template->getTemplateFile('header.php'));
   }
 ?>
 
 <div id="appContent">
 
 <?php
-  if ( Registry::get('MessageStack')->exists('header') ) {
-    echo Registry::get('MessageStack')->get('header');
+  if (Registry::get('MessageStack')->exists('header')) {
+      echo Registry::get('MessageStack')->get('header');
   }
 
-  require($OSCOM_Template->getPageContentsFile());
+require($OSCOM_Template->getPageContentsFile());
 ?>
 
 </div>
 
 <?php
-  if ( $OSCOM_Template->hasPageFooter() ) {
-?>
+  if ($OSCOM_Template->hasPageFooter()) {
+      ?>
 
 <div id="footer">
   <?php include($OSCOM_Template->getTemplateFile('footer.php')); ?>

@@ -1,36 +1,39 @@
 <?php
+
+declare(strict_types=1);
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  namespace osCommerce\OM\Core\Site\Setup\Application\Install\RPC;
+namespace osCommerce\OM\Core\Site\Setup\Application\Install\RPC;
 
-  use osCommerce\OM\Core\Site\Setup\Application\Install\Install;
+use osCommerce\OM\Core\Site\Setup\Application\Install\Install;
 
-  class DBImportSample {
-    public static function execute() {
-      $data = array('server' => trim(urldecode($_POST['server'])),
-                    'username' => trim(urldecode($_POST['username'])),
-                    'password' => trim(urldecode($_POST['password'])),
-                    'database' => trim(urldecode($_POST['name'])),
-                    'port' => trim(urldecode($_POST['port'])),
-                    'class' => str_replace('_', '\\', trim(urldecode($_POST['class']))),
-                    'table_prefix' => trim(urldecode($_POST['prefix']))
-                   );
+class DBImportSample
+{
+    public static function execute()
+    {
+        $data = ['server' => trim(urldecode($_POST['server'])),
+                      'username' => trim(urldecode($_POST['username'])),
+                      'password' => trim(urldecode($_POST['password'])),
+                      'database' => trim(urldecode($_POST['name'])),
+                      'port' => trim(urldecode($_POST['port'])),
+                      'class' => str_replace('_', '\\', trim(urldecode($_POST['class']))),
+                      'table_prefix' => trim(urldecode($_POST['prefix'])),
+                     ];
 
-      try {
-        Install::importSampleDB($data);
+        try {
+            Install::importSampleDB($data);
 
-        $result = array('result' => true);
-      } catch ( \Exception $e ) {
-        $result = array('result' => false,
-                        'error_message' => $e->getMessage());
-      }
+            $result = ['result' => true];
+        } catch (\Exception $e) {
+            $result = ['result' => false,
+                            'error_message' => $e->getMessage()];
+        }
 
-      echo json_encode($result);
+        echo json_encode($result);
     }
-  }
-?>
+}

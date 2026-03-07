@@ -12,25 +12,25 @@
   as published by the Free Software Foundation.
 */
 
-  $Qgroups = $osC_Database->query('select distinct banners_group from :table_banners order by banners_group');
-  $Qgroups->bindTable(':table_banners', TABLE_BANNERS);
-  $Qgroups->execute();
+$Qgroups = $osC_Database->query('select distinct banners_group from :table_banners order by banners_group');
+$Qgroups->bindTable(':table_banners', TABLE_BANNERS);
+$Qgroups->execute();
 
-  $groups_array = array();
+$groups_array = [];
 
-  while ( $Qgroups->next() ) {
-    $groups_array[] = array('id' => $Qgroups->value('banners_group'),
-                            'text' => $Qgroups->value('banners_group'));
-  }
+while ($Qgroups->next()) {
+    $groups_array[] = ['id' => $Qgroups->value('banners_group'),
+                            'text' => $Qgroups->value('banners_group')];
+}
 
-  $osC_ObjectInfo = new osC_ObjectInfo(osC_BannerManager_Admin::getData($_GET['bID']));
+$osC_ObjectInfo = new osC_ObjectInfo(osC_BannerManager_Admin::getData($_GET['bID']));
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 

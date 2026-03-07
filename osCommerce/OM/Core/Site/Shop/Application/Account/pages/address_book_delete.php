@@ -1,22 +1,22 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
-  use osCommerce\OM\Core\Site\Shop\Address;
-  use osCommerce\OM\Core\Site\Shop\AddressBook;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\Site\Shop\Address;
+
 ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
 <?php
-  if ( $OSCOM_MessageStack->exists('AddressBook') ) {
-    echo $OSCOM_MessageStack->get('AddressBook');
+  if ($OSCOM_MessageStack->exists('AddressBook')) {
+      echo $OSCOM_MessageStack->get('AddressBook');
   }
 ?>
 
@@ -41,9 +41,9 @@
 </div>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo HTML::button(array('icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))); ?></span>
+  <span style="float: right;"><?php echo HTML::button(['icon' => 'trash', 'title' => OSCOM::getDef('button_delete')]); ?></span>
 
-  <?php echo HTML::button(array('href' => OSCOM::getLink(null, null, 'AddressBook', 'SSL'), 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))); ?>
+  <?php echo HTML::button(['href' => OSCOM::getLink(null, null, 'AddressBook', 'SSL'), 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back')]); ?>
 </div>
 
 </form>

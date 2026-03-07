@@ -12,17 +12,17 @@
   as published by the Free Software Foundation.
 */
 
-  include('includes/templates/' . $_GET['template'] . '.php');
+include('includes/templates/' . $_GET['template'] . '.php');
 
-  $module = 'osC_Template_' . $_GET['template'];
-  $module = new $module();
+$module = 'osC_Template_' . $_GET['template'];
+$module = new $module();
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -31,8 +31,8 @@
   <form name="mUninstall" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&template=' . $module->getCode() . '&action=uninstall'); ?>" method="post">
 
 <?php
-  if ( $module->getCode() == DEFAULT_TEMPLATE ) {
-?>
+  if ($module->getCode() == DEFAULT_TEMPLATE) {
+      ?>
 
   <p><?php echo '<b>' . $osC_Language->get('uninstall_error_template_prohibited') . '</b>'; ?></p>
 
@@ -40,7 +40,7 @@
 
 <?php
   } else {
-?>
+      ?>
 
   <p><?php echo $osC_Language->get('introduction_uninstall_template'); ?></p>
 

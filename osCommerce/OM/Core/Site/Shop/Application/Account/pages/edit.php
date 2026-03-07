@@ -1,23 +1,23 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
-  use osCommerce\OM\Core\Site\Shop\Account;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\Site\Shop\Account;
 
-  $Qaccount = Account::getEntry();
+$Qaccount = Account::getEntry();
 ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
 <?php
-  if ( $OSCOM_MessageStack->exists('Edit') ) {
-    echo $OSCOM_MessageStack->get('Edit');
+  if ($OSCOM_MessageStack->exists('Edit')) {
+      echo $OSCOM_MessageStack->get('Edit');
   }
 ?>
 
@@ -32,10 +32,10 @@
     <ol>
 
 <?php
-  if ( ACCOUNT_GENDER > -1 ) {
-    $gender_array = array(array('id' => 'm', 'text' => OSCOM::getDef('gender_male')),
-                          array('id' => 'f', 'text' => OSCOM::getDef('gender_female')));
-?>
+  if (ACCOUNT_GENDER > -1) {
+      $gender_array = [['id' => 'm', 'text' => OSCOM::getDef('gender_male')],
+                            ['id' => 'f', 'text' => OSCOM::getDef('gender_female')]];
+      ?>
 
       <li><?php echo HTML::label(OSCOM::getDef('field_customer_gender'), 'gender_1', null, (ACCOUNT_GENDER > 0)) . HTML::radioField('gender', $gender_array, $Qaccount->value('customers_gender')); ?></li>
 
@@ -47,10 +47,10 @@
       <li><?php echo HTML::label(OSCOM::getDef('field_customer_last_name'), 'lastname', null, true) . ' ' . HTML::inputField('lastname', $Qaccount->value('customers_lastname')); ?></li>
 
 <?php
-  if ( ACCOUNT_DATE_OF_BIRTH == '1' ) {
-?>
+  if (ACCOUNT_DATE_OF_BIRTH == '1') {
+      ?>
 
-      <li><?php echo HTML::label(OSCOM::getDef('field_customer_date_of_birth'), 'dob_days', null, true) . ' ' . HTML::dateSelectMenu('dob', array('year' => $Qaccount->value('customers_dob_year'), 'month' => $Qaccount->value('customers_dob_month'), 'date' => $Qaccount->value('customers_dob_date')), false, null, null, date('Y')-1901, -5); ?></li>
+      <li><?php echo HTML::label(OSCOM::getDef('field_customer_date_of_birth'), 'dob_days', null, true) . ' ' . HTML::dateSelectMenu('dob', ['year' => $Qaccount->value('customers_dob_year'), 'month' => $Qaccount->value('customers_dob_month'), 'date' => $Qaccount->value('customers_dob_date')], false, null, null, date('Y') - 1901, -5); ?></li>
 
 <?php
   }
@@ -62,7 +62,7 @@
 </div>
 
 <div class="submitFormButtons" style="text-align: right;">
-  <?php echo HTML::button(array('icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue'))); ?>
+  <?php echo HTML::button(['icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue')]); ?>
 </div>
 
 </form>

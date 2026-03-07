@@ -17,15 +17,15 @@
 
 <?php
   if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 
-  $Qreviews = $osC_Database->query('select r.reviews_id, r.products_id, r.date_added, r.last_modified, r.reviews_rating, r.reviews_status, pd.products_name, l.code as languages_code from :table_reviews r left join :table_products_description pd on (r.products_id = pd.products_id and r.languages_id = pd.language_id), :table_languages l where r.languages_id = l.languages_id order by r.date_added desc');
-  $Qreviews->bindTable(':table_reviews', TABLE_REVIEWS);
-  $Qreviews->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
-  $Qreviews->bindTable(':table_languages', TABLE_LANGUAGES);
-  $Qreviews->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
-  $Qreviews->execute();
+$Qreviews = $osC_Database->query('select r.reviews_id, r.products_id, r.date_added, r.last_modified, r.reviews_rating, r.reviews_status, pd.products_name, l.code as languages_code from :table_reviews r left join :table_products_description pd on (r.products_id = pd.products_id and r.languages_id = pd.language_id), :table_languages l where r.languages_id = l.languages_id order by r.date_added desc');
+$Qreviews->bindTable(':table_reviews', TABLE_REVIEWS);
+$Qreviews->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
+$Qreviews->bindTable(':table_languages', TABLE_LANGUAGES);
+$Qreviews->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
+$Qreviews->execute();
 ?>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -58,12 +58,12 @@
 
 <?php
   while ($Qreviews->next()) {
-    if ( defined('SERVICE_REVIEW_ENABLE_MODERATION') && ( SERVICE_REVIEW_ENABLE_MODERATION != -1 ) ) {
-      echo '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" ' . (($Qreviews->valueInt('reviews_status') !== 1) ? 'class="deactivatedRow"' : '') . '>';
-    } else {
-      echo '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">';
-    }
-?>
+      if (defined('SERVICE_REVIEW_ENABLE_MODERATION') && (SERVICE_REVIEW_ENABLE_MODERATION != -1)) {
+          echo '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" ' . (($Qreviews->valueInt('reviews_status') !== 1) ? 'class="deactivatedRow"' : '') . '>';
+      } else {
+          echo '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">';
+      }
+      ?>
 
       <td onclick="document.getElementById('batch<?php echo $Qreviews->valueInt('reviews_id'); ?>').checked = !document.getElementById('batch<?php echo $Qreviews->valueInt('reviews_id'); ?>').checked;"><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&rID=' . $Qreviews->valueInt('reviews_id') . '&action=preview'), osc_icon('reviews.png') . '&nbsp;' . $Qreviews->value('products_name')); ?></td>
       <td align="center"><?php echo $osC_Language->showImage($Qreviews->value('languages_code')); ?></td>
@@ -72,9 +72,9 @@
       <td align="right">
 
 <?php
-    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&rID=' . $Qreviews->valueInt('reviews_id') . '&action=save'), osc_icon('edit.png')) . '&nbsp;' .
-         osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&rID=' . $Qreviews->valueInt('reviews_id') . '&action=delete'), osc_icon('trash.png'));
-?>
+          echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&rID=' . $Qreviews->valueInt('reviews_id') . '&action=save'), osc_icon('edit.png')) . '&nbsp;' .
+               osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&rID=' . $Qreviews->valueInt('reviews_id') . '&action=delete'), osc_icon('trash.png'));
+      ?>
 
       </td>
       <td align="center"><?php echo osc_draw_checkbox_field('batch[]', $Qreviews->valueInt('reviews_id'), null, 'id="batch' . $Qreviews->valueInt('reviews_id') . '"'); ?></td>

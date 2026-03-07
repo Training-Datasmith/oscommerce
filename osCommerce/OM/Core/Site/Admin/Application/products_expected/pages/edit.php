@@ -12,23 +12,23 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(osC_Products_Admin::get($_GET['pID']));
+$osC_ObjectInfo = new osC_ObjectInfo(osC_Products_Admin::get($_GET['pID']));
 
-  $Qdata = $osC_Database->query('select str_to_date(pa.value, "%Y-%m-%d") as products_date_available from :table_product_attributes pa, :table_templates_boxes tb where tb.code = :code and tb.modules_group = :modules_group and tb.id = pa.id');
-  $Qdata->bindTable(':table_product_attributes', TABLE_PRODUCT_ATTRIBUTES);
-  $Qdata->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
-  $Qdata->bindValue(':code', 'date_available');
-  $Qdata->bindValue(':modules_group', 'product_attributes');
-  $Qdata->execute();
+$Qdata = $osC_Database->query('select str_to_date(pa.value, "%Y-%m-%d") as products_date_available from :table_product_attributes pa, :table_templates_boxes tb where tb.code = :code and tb.modules_group = :modules_group and tb.id = pa.id');
+$Qdata->bindTable(':table_product_attributes', TABLE_PRODUCT_ATTRIBUTES);
+$Qdata->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
+$Qdata->bindValue(':code', 'date_available');
+$Qdata->bindValue(':modules_group', 'product_attributes');
+$Qdata->execute();
 
-  $osC_ObjectInfo->set('products_date_available', $Qdata->value('products_date_available'));
+$osC_ObjectInfo->set('products_date_available', $Qdata->value('products_date_available'));
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->exists($osC_Template->getModule()) ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->exists($osC_Template->getModule())) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 

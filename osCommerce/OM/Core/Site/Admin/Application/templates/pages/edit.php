@@ -12,17 +12,17 @@
   as published by the Free Software Foundation.
 */
 
-  include('includes/templates/' . $_GET['template'] . '.php');
+include('includes/templates/' . $_GET['template'] . '.php');
 
-  $module = 'osC_Template_' . $_GET['template'];
-  $module = new $module();
+$module = 'osC_Template_' . $_GET['template'];
+$module = new $module();
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -35,26 +35,26 @@
 <?php
   $keys = '';
 
-  foreach ( $module->getKeys() as $key => $value ) {
+foreach ($module->getKeys() as $key => $value) {
     $keys .= '<b>' . $value['title'] . '</b><br />' . $value['description'] . '<br />';
 
-    if ( !empty($value['set_function']) ) {
-      $keys .= osc_call_user_func($value['set_function'], $value['value'], $key);
+    if (!empty($value['set_function'])) {
+        $keys .= osc_call_user_func($value['set_function'], $value['value'], $key);
     } else {
-      $keys .= osc_draw_input_field('configuration[' . $key . ']', $value['value']);
+        $keys .= osc_draw_input_field('configuration[' . $key . ']', $value['value']);
     }
 
     $keys .= '<br /><br />';
-  }
+}
 
-  $keys = substr($keys, 0, strrpos($keys, '<br /><br />'));
+$keys = substr($keys, 0, strrpos($keys, '<br /><br />'));
 ?>
 
   <p><?php echo $keys; ?></p>
 
 <?php
-  if ( $module->getCode() != DEFAULT_TEMPLATE ) {
-?>
+  if ($module->getCode() != DEFAULT_TEMPLATE) {
+      ?>
 
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>

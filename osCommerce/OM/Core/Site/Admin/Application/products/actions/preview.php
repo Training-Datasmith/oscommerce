@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
   $Id: $
 
@@ -12,13 +14,14 @@
   as published by the Free Software Foundation.
 */
 
-  class osC_Application_Products_Actions_preview extends osC_Application_Products {
-    public function __construct() {
-      parent::__construct();
+class osC_Application_Products_Actions_preview extends osC_Application_Products
+{
+    public function __construct()
+    {
+        parent::__construct();
 
-      if ( isset($_GET[$this->_module]) && is_numeric($_GET[$this->_module]) ) {
-        $this->_page_contents = 'preview.php';
-      }
+        if (isset($_GET[$this->_module]) && is_numeric($_GET[$this->_module])) {
+            $this->_page_contents = 'preview.php';
+        }
     }
-  }
-?>
+}

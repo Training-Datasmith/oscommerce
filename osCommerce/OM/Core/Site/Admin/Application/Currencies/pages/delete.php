@@ -1,24 +1,24 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\ObjectInfo;
-  use osCommerce\OM\Core\OSCOM;
-  use osCommerce\OM\Core\Site\Admin\Application\Currencies\Currencies;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\ObjectInfo;
+use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\Site\Admin\Application\Currencies\Currencies;
 
-  $OSCOM_ObjectInfo = new ObjectInfo(Currencies::get($_GET['id']));
+$OSCOM_ObjectInfo = new ObjectInfo(Currencies::get($_GET['id']));
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $OSCOM_MessageStack->exists() ) {
-    echo $OSCOM_MessageStack->get();
+  if ($OSCOM_MessageStack->exists()) {
+      echo $OSCOM_MessageStack->get();
   }
 ?>
 
@@ -26,16 +26,16 @@
   <h3><?php echo HTML::icon('trash.png') . ' ' . $OSCOM_ObjectInfo->getProtected('title'); ?></h3>
 
 <?php
-  if ( $OSCOM_ObjectInfo->get('code') == DEFAULT_CURRENCY ) {
-?>
+  if ($OSCOM_ObjectInfo->get('code') == DEFAULT_CURRENCY) {
+      ?>
 
   <p><?php echo '<b>' . OSCOM::getDef('introduction_delete_currency_invalid') . '</b>'; ?></p>
 
-  <p><?php echo HTML::button(array('href' => OSCOM::getLink(), 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))); ?></p>
+  <p><?php echo HTML::button(['href' => OSCOM::getLink(), 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back')]); ?></p>
 
 <?php
   } else {
-?>
+      ?>
 
   <form name="cDelete" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'Delete&Process&id=' . $_GET['id']); ?>" method="post">
 
@@ -43,7 +43,7 @@
 
   <p><?php echo '<b>' . $OSCOM_ObjectInfo->getProtected('title') . '</b>'; ?></p>
 
-  <p><?php echo HTML::button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . HTML::button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+  <p><?php echo HTML::button(['priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete')]) . ' ' . HTML::button(['href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel')]); ?></p>
 
   </form>
 

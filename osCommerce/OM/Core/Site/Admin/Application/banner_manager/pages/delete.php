@@ -12,14 +12,14 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(osC_BannerManager_Admin::getData($_GET['bID']));
+$osC_ObjectInfo = new osC_ObjectInfo(osC_BannerManager_Admin::getData($_GET['bID']));
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -32,8 +32,8 @@
   <p><?php echo '<b>' . $osC_ObjectInfo->get('banners_title') . '</b>'; ?></p>
 
 <?php
-  if ( !osc_empty($osC_ObjectInfo->get('banners_image')) ) {
-    echo '  <p>' . osc_draw_checkbox_field('delete_image', array(array('id' => 'on', 'text' => $osC_Language->get('field_delete_image'))), true) . '</p>';
+  if (!osc_empty($osC_ObjectInfo->get('banners_image'))) {
+      echo '  <p>' . osc_draw_checkbox_field('delete_image', [['id' => 'on', 'text' => $osC_Language->get('field_delete_image')]], true) . '</p>';
   }
 ?>
 

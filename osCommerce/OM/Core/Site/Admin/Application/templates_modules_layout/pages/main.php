@@ -12,30 +12,30 @@
   as published by the Free Software Foundation.
 */
 
-  require('includes/templates/' . $_GET['filter'] . '.php');
+require('includes/templates/' . $_GET['filter'] . '.php');
 
-  $filter_id = 0;
-  $templates_array = array();
+$filter_id = 0;
+$templates_array = [];
 
-  $Qtemplates = $osC_Database->query('select id, title, code from :table_templates order by title');
-  $Qtemplates->bindTable(':table_templates', TABLE_TEMPLATES);
-  $Qtemplates->execute();
+$Qtemplates = $osC_Database->query('select id, title, code from :table_templates order by title');
+$Qtemplates->bindTable(':table_templates', TABLE_TEMPLATES);
+$Qtemplates->execute();
 
-  while ( $Qtemplates->next() ) {
-    if ( $Qtemplates->value('code') == $_GET['filter'] ) {
-      $filter_id = $Qtemplates->valueInt('id');
+while ($Qtemplates->next()) {
+    if ($Qtemplates->value('code') == $_GET['filter']) {
+        $filter_id = $Qtemplates->valueInt('id');
     }
 
-    $templates_array[] = array('id' => $Qtemplates->value('code'),
-                               'text' => $Qtemplates->value('title'));
-  }
+    $templates_array[] = ['id' => $Qtemplates->value('code'),
+                               'text' => $Qtemplates->value('title')];
+}
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set']), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -73,14 +73,14 @@
 
 <?php
   $Qlayout = $osC_Database->query('select b2p.*, b.title as box_title from :table_templates_boxes_to_pages b2p, :table_templates_boxes b where b2p.templates_id = :templates_id and b2p.templates_boxes_id = b.id and b.modules_group = :modules_group order by b2p.page_specific desc, b2p.boxes_group, b2p.sort_order, b.title');
-  $Qlayout->bindTable(':table_templates_boxes_to_pages', TABLE_TEMPLATES_BOXES_TO_PAGES);
-  $Qlayout->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
-  $Qlayout->bindInt(':templates_id', $filter_id);
-  $Qlayout->bindValue(':modules_group', $_GET['set']);
-  $Qlayout->execute();
+$Qlayout->bindTable(':table_templates_boxes_to_pages', TABLE_TEMPLATES_BOXES_TO_PAGES);
+$Qlayout->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
+$Qlayout->bindInt(':templates_id', $filter_id);
+$Qlayout->bindValue(':modules_group', $_GET['set']);
+$Qlayout->execute();
 
-  while ( $Qlayout->next() ) {
-?>
+while ($Qlayout->next()) {
+    ?>
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
       <td onclick="document.getElementById('batch<?php echo $Qlayout->valueInt('id'); ?>').checked = !document.getElementById('batch<?php echo $Qlayout->valueInt('id'); ?>').checked;"><?php echo $Qlayout->value('box_title'); ?></td>
@@ -91,16 +91,16 @@
       <td align="right">
 
 <?php
-    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&filter=' . $_GET['filter'] . '&lID=' . $Qlayout->valueInt('id') . '&action=save'), osc_icon('edit.png')) . '&nbsp;' .
-         osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&filter=' . $_GET['filter'] . '&lID=' . $Qlayout->valueInt('id') . '&action=delete'), osc_icon('trash.png'));
-?>
+        echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&filter=' . $_GET['filter'] . '&lID=' . $Qlayout->valueInt('id') . '&action=save'), osc_icon('edit.png')) . '&nbsp;' .
+             osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&filter=' . $_GET['filter'] . '&lID=' . $Qlayout->valueInt('id') . '&action=delete'), osc_icon('trash.png'));
+    ?>
 
       </td>
       <td align="center"><?php echo osc_draw_checkbox_field('batch[]', $Qlayout->valueInt('id'), null, 'id="batch' . $Qlayout->valueInt('id') . '"'); ?></td>
     </tr>
 
 <?php
-  }
+}
 ?>
 
   </tbody>

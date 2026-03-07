@@ -12,15 +12,15 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_DirectoryListing = new osC_DirectoryListing('../includes/modules/' . $_GET['set']);
-  $osC_DirectoryListing->setIncludeDirectories(false);
+$osC_DirectoryListing = new osC_DirectoryListing('../includes/modules/' . $_GET['set']);
+$osC_DirectoryListing->setIncludeDirectories(false);
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set']), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -39,46 +39,46 @@
   <tbody>
 
 <?php
-  foreach ( $osC_DirectoryListing->getFiles() as $file ) {
-    include('../includes/modules/' . $_GET['set'] . '/' . $file['name']);
+  foreach ($osC_DirectoryListing->getFiles() as $file) {
+      include('../includes/modules/' . $_GET['set'] . '/' . $file['name']);
 
-    $code = substr($file['name'], 0, strrpos($file['name'], '.'));
-    $class = 'osC_' . ucfirst($_GET['set']) . '_' . $code;
+      $code = substr($file['name'], 0, strrpos($file['name'], '.'));
+      $class = 'osC_' . ucfirst($_GET['set']) . '_' . $code;
 
-   if ( class_exists($class) ) {
-      if ( call_user_func(array($class, 'isInstalled'), $code, $_GET['set']) === false ) {
-        $osC_Language->injectDefinitions('modules/' . $_GET['set'] . '/' . $code . '.xml');
-      }
+      if (class_exists($class)) {
+          if (call_user_func([$class, 'isInstalled'], $code, $_GET['set']) === false) {
+              $osC_Language->injectDefinitions('modules/' . $_GET['set'] . '/' . $code . '.xml');
+          }
 
-      $module = new $class();
-?>
+          $module = new $class();
+          ?>
 
-    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" <?php echo ( $module->isInstalled() && !$module->isActive() ? 'class="deactivatedRow"' : '') ?>>
+    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" <?php echo ($module->isInstalled() && !$module->isActive() ? 'class="deactivatedRow"' : '') ?>>
       <td><?php echo $module->getTitle(); ?></td>
       <td align="right">
 
 <?php
-    if ( $module->isInstalled() && $module->isActive() ) {
-      if ( $module->hasKeys() ) {
-        echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&module=' . $code . '&action=save'), osc_icon('edit.png')) . '&nbsp;';
-      } else {
-        echo osc_image('images/pixel_trans.gif', '', '16', '16') . '&nbsp;';
-      }
+              if ($module->isInstalled() && $module->isActive()) {
+                  if ($module->hasKeys()) {
+                      echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&module=' . $code . '&action=save'), osc_icon('edit.png')) . '&nbsp;';
+                  } else {
+                      echo osc_image('images/pixel_trans.gif', '', '16', '16') . '&nbsp;';
+                  }
 
-      echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&module=' . $code . '&action=uninstall'), osc_icon('uninstall.png')) . '&nbsp;';
-    } else {
-      echo osc_image('images/pixel_trans.gif', '', '16', '16') . '&nbsp;' .
-           osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&module=' . $code . '&action=install'), osc_icon('install.png')) . '&nbsp;';
-    }
+                  echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&module=' . $code . '&action=uninstall'), osc_icon('uninstall.png')) . '&nbsp;';
+              } else {
+                  echo osc_image('images/pixel_trans.gif', '', '16', '16') . '&nbsp;' .
+                       osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&module=' . $code . '&action=install'), osc_icon('install.png')) . '&nbsp;';
+              }
 
-    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&module=' . $code . '&action=info'), osc_icon('info.png'));
-?>
+          echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&module=' . $code . '&action=info'), osc_icon('info.png'));
+          ?>
 
       </td>
     </tr>
 
 <?php
-    }
+      }
   }
 ?>
 

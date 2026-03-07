@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
   $Id: $
 
@@ -12,23 +14,24 @@
   as published by the Free Software Foundation.
 */
 
-  class osC_Application_Products_Actions_delete extends osC_Application_Products {
-    public function __construct() {
-      global $osC_Language, $osC_MessageStack;
+class osC_Application_Products_Actions_delete extends osC_Application_Products
+{
+    public function __construct()
+    {
+        global $osC_Language, $osC_MessageStack;
 
-      parent::__construct();
+        parent::__construct();
 
-      $this->_page_contents = 'delete.php';
+        $this->_page_contents = 'delete.php';
 
-      if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
-        if ( osC_Products_Admin::delete($_GET[$this->_module]) ) {
-          $osC_MessageStack->add($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
-        } else {
-          $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
+        if (isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm')) {
+            if (osC_Products_Admin::delete($_GET[$this->_module])) {
+                $osC_MessageStack->add($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
+            } else {
+                $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
+            }
+
+            osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&cID=' . $_GET['cID']));
         }
-
-        osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&cID=' . $_GET['cID']));
-      }
     }
-  }
-?>
+}

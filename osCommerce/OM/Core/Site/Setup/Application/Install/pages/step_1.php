@@ -1,26 +1,26 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\OSCOM;
-  use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
 
-  $www_location = 'http://' . $_SERVER['HTTP_HOST'];
+$www_location = 'http://' . $_SERVER['HTTP_HOST'];
 
-  if ( isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI']) ) {
+if (isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI'])) {
     $www_location .= $_SERVER['REQUEST_URI'];
-  } else {
+} else {
     $www_location .= $_SERVER['SCRIPT_FILENAME'];
-  }
+}
 
-  $www_location = substr($www_location, 0, strpos($www_location, 'index.php'));
+$www_location = substr($www_location, 0, strpos($www_location, 'index.php'));
 
-  $db_table_types = array(array('id' => 'MySQL_Standard', 'text' => 'MySQL Standard'),
-                          array('id' => 'MySQL_V5', 'text' => 'MySQL v5'));
+$db_table_types = [['id' => 'MySQL_Standard', 'text' => 'MySQL Standard'],
+                        ['id' => 'MySQL_V5', 'text' => 'MySQL v5']];
 ?>
 
 <script language="javascript" type="text/javascript">
@@ -161,7 +161,7 @@
       </tr>
     </table>
 
-    <p align="right"><?php echo HTML::button(array('priority' => 'primary', 'icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue'))) . ' ' . HTML::button(array('href' => OSCOM::getLink(null, OSCOM::getDefaultSiteApplication()), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+    <p align="right"><?php echo HTML::button(['priority' => 'primary', 'icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue')]) . ' ' . HTML::button(['href' => OSCOM::getLink(null, OSCOM::getDefaultSiteApplication()), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel')]); ?></p>
 
     </form>
   </div>

@@ -1,26 +1,26 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
-  use osCommerce\OM\Core\Site\Admin\Application\ZoneGroups\ZoneGroups;
-  use osCommerce\OM\Core\Site\Shop\Address;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\Site\Admin\Application\ZoneGroups\ZoneGroups;
+use osCommerce\OM\Core\Site\Shop\Address;
 
-  $countries_array = array(array('id' => '',
-                                 'text' => OSCOM::getDef('all_countries')));
+$countries_array = [['id' => '',
+                               'text' => OSCOM::getDef('all_countries')]];
 
-  foreach ( Address::getCountries() as $country ) {
-    $countries_array[] = array('id' => $country['id'],
-                               'text' => $country['name']);
-  }
+foreach (Address::getCountries() as $country) {
+    $countries_array[] = ['id' => $country['id'],
+                               'text' => $country['name']];
+}
 
-  $zones_array = array(array('id' => '',
-                             'text' => OSCOM::getDef('all_zones')));
+$zones_array = [['id' => '',
+                           'text' => OSCOM::getDef('all_zones')]];
 ?>
 
 <script type="text/javascript">
@@ -42,8 +42,8 @@
 <h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $OSCOM_MessageStack->exists() ) {
-    echo $OSCOM_MessageStack->get();
+  if ($OSCOM_MessageStack->exists()) {
+      echo $OSCOM_MessageStack->get();
   }
 ?>
 
@@ -59,7 +59,7 @@
     <p><label for="zone_id"><?php echo OSCOM::getDef('field_zone'); ?></label><?php echo HTML::selectMenu('zone_id', $zones_array); ?></p>
   </fieldset>
 
-  <p><?php echo HTML::button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . HTML::button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+  <p><?php echo HTML::button(['priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save')]) . ' ' . HTML::button(['href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel')]); ?></p>
 
   </form>
 </div>

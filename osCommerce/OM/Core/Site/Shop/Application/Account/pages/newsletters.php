@@ -1,18 +1,18 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
 
 // HPDL Should be moved to the customers class!
-  $Qnewsletter = $OSCOM_PDO->prepare('select customers_newsletter from :table_customers where customers_id = :customers_id');
-  $Qnewsletter->bindInt(':customers_id', $OSCOM_Customer->getID());
-  $Qnewsletter->execute();
+$Qnewsletter = $OSCOM_PDO->prepare('select customers_newsletter from :table_customers where customers_id = :customers_id');
+$Qnewsletter->bindInt(':customers_id', $OSCOM_Customer->getID());
+$Qnewsletter->execute();
 ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
@@ -37,7 +37,7 @@
 </div>
 
 <div class="submitFormButtons" style="text-align: right;">
-  <?php echo HTML::button(array('icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue'))); ?>
+  <?php echo HTML::button(['icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue')]); ?>
 </div>
 
 </form>

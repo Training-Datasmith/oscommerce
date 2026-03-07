@@ -12,12 +12,12 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_DirectoryListing = new osC_DirectoryListing('includes/modules/newsletters');
-  $osC_DirectoryListing->setIncludeDirectories(false);
+$osC_DirectoryListing = new osC_DirectoryListing('includes/modules/newsletters');
+$osC_DirectoryListing->setIncludeDirectories(false);
 
-  $modules_array = array();
+$modules_array = [];
 
-  foreach ( $osC_DirectoryListing->getFiles() as $file ) {
+foreach ($osC_DirectoryListing->getFiles() as $file) {
     $module = substr($file['name'], 0, strrpos($file['name'], '.'));
 
     $osC_Language->loadIniFile('modules/newsletters/' . $file['name']);
@@ -26,16 +26,16 @@
     $newsletter_module_class = 'osC_Newsletter_' . $module;
     $osC_NewsletterModule = new $newsletter_module_class();
 
-    $modules_array[] = array('id' => $module,
-                             'text' => $osC_NewsletterModule->getTitle());
-  }
+    $modules_array[] = ['id' => $module,
+                             'text' => $osC_NewsletterModule->getTitle()];
+}
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 

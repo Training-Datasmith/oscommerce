@@ -12,16 +12,16 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_DirectoryListing = new osC_DirectoryListing('includes/modules/image');
-  $osC_DirectoryListing->setIncludeDirectories(false);
-  $osC_DirectoryListing->setCheckExtension('php');
+$osC_DirectoryListing = new osC_DirectoryListing('includes/modules/image');
+$osC_DirectoryListing->setIncludeDirectories(false);
+$osC_DirectoryListing->setCheckExtension('php');
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -40,28 +40,28 @@
   <tbody>
 
 <?php
-  foreach ( $osC_DirectoryListing->getFiles() as $file ) {
-    include('includes/modules/image/' . $file['name']);
+  foreach ($osC_DirectoryListing->getFiles() as $file) {
+      include('includes/modules/image/' . $file['name']);
 
-    $class = 'osC_Image_Admin_' . substr($file['name'], 0, strrpos($file['name'], '.'));
+      $class = 'osC_Image_Admin_' . substr($file['name'], 0, strrpos($file['name'], '.'));
 
-    if ( class_exists($class) ) {
-      $module = new $class();
-?>
+      if (class_exists($class)) {
+          $module = new $class();
+          ?>
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
       <td><?php echo $module->getTitle(); ?></td>
       <td align="right">
 
 <?php
-      echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&module=' . substr($file['name'], 0, strrpos($file['name'], '.'))), osc_icon('run.png'));
-?>
+                echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&module=' . substr($file['name'], 0, strrpos($file['name'], '.'))), osc_icon('run.png'));
+          ?>
 
       </td>
     </tr>
 
 <?php
-    }
+      }
   }
 ?>
 

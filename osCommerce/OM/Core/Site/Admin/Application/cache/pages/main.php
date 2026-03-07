@@ -12,39 +12,39 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_DirectoryListing = new osC_DirectoryListing(DIR_FS_WORK);
-  $osC_DirectoryListing->setIncludeDirectories(false);
-  $osC_DirectoryListing->setCheckExtension('cache');
+$osC_DirectoryListing = new osC_DirectoryListing(DIR_FS_WORK);
+$osC_DirectoryListing->setIncludeDirectories(false);
+$osC_DirectoryListing->setCheckExtension('cache');
 
-  $cached_files = array();
+$cached_files = [];
 
-  foreach ( $osC_DirectoryListing->getFiles() as $file ) {
+foreach ($osC_DirectoryListing->getFiles() as $file) {
     $last_modified = filemtime(DIR_FS_WORK . '/' . $file['name']);
 
-    if ( strpos($file['name'], '-') !== false ) {
-      $code = substr($file['name'], 0, strpos($file['name'], '-'));
+    if (strpos($file['name'], '-') !== false) {
+        $code = substr($file['name'], 0, strpos($file['name'], '-'));
     } else {
-      $code = substr($file['name'], 0, strpos($file['name'], '.'));
+        $code = substr($file['name'], 0, strpos($file['name'], '.'));
     }
 
-    if ( isset($cached_files[$code]) ) {
-      $cached_files[$code]['total']++;
+    if (isset($cached_files[$code])) {
+        $cached_files[$code]['total']++;
 
-      if ( $last_modified > $cached_files[$code]['last_modified'] ) {
-        $cached_files[$code]['last_modified'] = $last_modified;
-      }
+        if ($last_modified > $cached_files[$code]['last_modified']) {
+            $cached_files[$code]['last_modified'] = $last_modified;
+        }
     } else {
-      $cached_files[$code] = array('total' => 1,
-                                   'last_modified' => $last_modified);
+        $cached_files[$code] = ['total' => 1,
+                                     'last_modified' => $last_modified];
     }
-  }
+}
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -69,8 +69,8 @@
   <tbody>
 
 <?php
-  foreach( $cached_files as $cache => $stats ) {
-?>
+  foreach ($cached_files as $cache => $stats) {
+      ?>
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
       <td onclick="document.getElementById('batch<?php echo $cache; ?>').checked = !document.getElementById('batch<?php echo $cache; ?>').checked;"><?php echo $cache; ?></td>

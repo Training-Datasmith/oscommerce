@@ -17,7 +17,7 @@
 
 <?php
   if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -26,8 +26,8 @@
   <form name="fmDelete" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&entry=' . $_GET['entry'] . '&action=delete'); ?>" method="post">
 
 <?php
-  if ( is_writeable($_SESSION['fm_directory'] . '/' . $_GET['entry']) ) {
-?>
+  if (is_writeable($_SESSION['fm_directory'] . '/' . $_GET['entry'])) {
+      ?>
 
   <p><?php echo $osC_Language->get('introduction_delete_entry'); ?></p>
 
@@ -37,7 +37,7 @@
 
 <?php
   } else {
-?>
+      ?>
 
   <p><?php echo sprintf($osC_Language->get('delete_error_not_writable'), $_SESSION['fm_directory'] . '/' . $_GET['entry']); ?></p>
 

@@ -12,25 +12,25 @@
   as published by the Free Software Foundation.
 */
 
-  $modules_array = array();
+$modules_array = [];
 
-  $osC_DirectoryListing = new osC_DirectoryListing('../includes/modules/variants');
-  $osC_DirectoryListing->setIncludeDirectories(false);
-  $osC_DirectoryListing->setCheckExtension('php');
+$osC_DirectoryListing = new osC_DirectoryListing('../includes/modules/variants');
+$osC_DirectoryListing->setIncludeDirectories(false);
+$osC_DirectoryListing->setCheckExtension('php');
 
-  foreach ( $osC_DirectoryListing->getFiles() as $file ) {
+foreach ($osC_DirectoryListing->getFiles() as $file) {
     $module = substr($file['name'], 0, strrpos($file['name'], '.'));
 
-    $modules_array[] = array('id' => $module,
-                             'text' => $module);
-  }
+    $modules_array[] = ['id' => $module,
+                             'text' => $module];
+}
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
   if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -47,7 +47,7 @@
 
 <?php
   foreach ($osC_Language->getAll() as $l) {
-    echo $osC_Language->showImage($l['code']) . '&nbsp;' .  osc_draw_input_field('group_name[' . $l['id'] . ']') . '<br />';
+      echo $osC_Language->showImage($l['code']) . '&nbsp;' .  osc_draw_input_field('group_name[' . $l['id'] . ']') . '<br />';
   }
 ?>
 

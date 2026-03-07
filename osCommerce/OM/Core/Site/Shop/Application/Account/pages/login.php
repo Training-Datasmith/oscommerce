@@ -1,20 +1,21 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
+
 ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
 <?php
-  if ( $OSCOM_MessageStack->exists('LogIn') ) {
-    echo $OSCOM_MessageStack->get('LogIn');
+  if ($OSCOM_MessageStack->exists('LogIn')) {
+      echo $OSCOM_MessageStack->get('LogIn');
   }
 ?>
 
@@ -33,7 +34,7 @@
 
     <p><?php echo sprintf(OSCOM::getDef('login_returning_customer_password_forgotten'), OSCOM::getLink(null, null, 'PasswordForgotten', 'SSL')); ?></p>
 
-    <p align="right"><?php echo HTML::button(array('icon' => 'key', 'title' => OSCOM::getDef('button_sign_in'))); ?></p>
+    <p align="right"><?php echo HTML::button(['icon' => 'key', 'title' => OSCOM::getDef('button_sign_in')]); ?></p>
   </div>
 
   </form>
@@ -47,6 +48,6 @@
   <div class="content">
     <p><?php echo OSCOM::getDef('login_new_customer_text'); ?></p>
 
-    <p align="right"><?php echo HTML::button(array('href' => OSCOM::getLink(null, null, 'Create', 'SSL'), 'icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue'))); ?></p>
+    <p align="right"><?php echo HTML::button(['href' => OSCOM::getLink(null, null, 'Create', 'SSL'), 'icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue')]); ?></p>
   </div>
 </div>

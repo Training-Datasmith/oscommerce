@@ -12,14 +12,14 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(osC_Manufacturers_Admin::getData($_GET['mID']));
+$osC_ObjectInfo = new osC_ObjectInfo(osC_Manufacturers_Admin::getData($_GET['mID']));
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
   if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -38,20 +38,20 @@
 <?php
   echo $osC_Language->get('field_url');
 
-  $manufacturers_array = array();
+$manufacturers_array = [];
 
-  $Qmanufacturer = $osC_Database->query('select manufacturers_url, languages_id from :table_manufacturers_info where manufacturers_id = :manufacturers_id');
-  $Qmanufacturer->bindTable(':table_manufacturers_info', TABLE_MANUFACTURERS_INFO);
-  $Qmanufacturer->bindInt(':manufacturers_id', $osC_ObjectInfo->get('manufacturers_id'));
-  $Qmanufacturer->execute();
+$Qmanufacturer = $osC_Database->query('select manufacturers_url, languages_id from :table_manufacturers_info where manufacturers_id = :manufacturers_id');
+$Qmanufacturer->bindTable(':table_manufacturers_info', TABLE_MANUFACTURERS_INFO);
+$Qmanufacturer->bindInt(':manufacturers_id', $osC_ObjectInfo->get('manufacturers_id'));
+$Qmanufacturer->execute();
 
-  while ( $Qmanufacturer->next() ) {
+while ($Qmanufacturer->next()) {
     $manufacturers_array[$Qmanufacturer->valueInt('languages_id')] = $Qmanufacturer->value('manufacturers_url');
-  }
+}
 
-  foreach ( $osC_Language->getAll() as $l ) {
+foreach ($osC_Language->getAll() as $l) {
     echo '<br />' . $osC_Language->showImage($l['code']) . '&nbsp;' . osc_draw_input_field('manufacturers_url[' . $l['id'] . ']', $manufacturers_array[$l['id']]);
-  }
+}
 ?>
 
   </p>

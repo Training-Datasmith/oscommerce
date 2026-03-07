@@ -1,31 +1,32 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
-  use osCommerce\OM\Core\Site\Shop\Address;
-  use osCommerce\OM\Core\Site\Shop\AddressBook;
+use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\Site\Shop\Address;
+use osCommerce\OM\Core\Site\Shop\AddressBook;
+
 ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
 <?php
-  if ( $OSCOM_MessageStack->exists('CheckoutAddress') ) {
-    echo $OSCOM_MessageStack->get('CheckoutAddress');
+  if ($OSCOM_MessageStack->exists('CheckoutAddress')) {
+      echo $OSCOM_MessageStack->get('CheckoutAddress');
   }
 ?>
 
 <form name="checkout_address" action="<?php echo OSCOM::getLink(null, null, 'Shipping&Address&Process', 'SSL'); ?>" method="post" onsubmit="return check_form_optional(checkout_address);">
 
 <?php
-  if ( !isset($_GET['Process']) ) {
-    if ( $OSCOM_Customer->hasDefaultAddress() ) {
-?>
+  if (!isset($_GET['Process'])) {
+      if ($OSCOM_Customer->hasDefaultAddress()) {
+          ?>
 
 <div class="moduleBox">
   <h6><?php echo OSCOM::getDef('shipping_address_title'); ?></h6>
@@ -46,10 +47,10 @@
 </div>
 
 <?php
-    }
+      }
 
-    if ( $OSCOM_Customer->isLoggedOn() && (AddressBook::numberOfEntries() > 1) ) {
-?>
+      if ($OSCOM_Customer->isLoggedOn() && (AddressBook::numberOfEntries() > 1)) {
+          ?>
 
 <div class="moduleBox">
   <h6><?php echo OSCOM::getDef('address_book_entries_title'); ?></h6>
@@ -67,25 +68,25 @@
       </tr>
 
 <?php
-      $radio_buttons = 0;
+                $radio_buttons = 0;
 
-      $Qaddresses = AddressBook::getListing();
+          $Qaddresses = AddressBook::getListing();
 
-      while ( $Qaddresses->fetch() ) {
-?>
+          while ($Qaddresses->fetch()) {
+              ?>
 
       <tr>
         <td width="10">&nbsp;</td>
         <td colspan="2"><table border="0" width="100%" cellspacing="0" cellpadding="2">
 
 <?php
-       if ( $Qaddresses->valueInt('address_book_id') == $OSCOM_ShoppingCart->getShippingAddress('id') ) {
-          echo '          <tr id="defaultSelected" class="moduleRowSelected" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="selectRowEffect(this, ' . $radio_buttons . ')">' . "\n";
-        } else {
-          echo '          <tr class="moduleRow" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="selectRowEffect(this, ' . $radio_buttons . ')">' . "\n";
-        }
-/* HPDL osc_draw_radio_field() does not like integer default values */
-?>
+                     if ($Qaddresses->valueInt('address_book_id') == $OSCOM_ShoppingCart->getShippingAddress('id')) {
+                         echo '          <tr id="defaultSelected" class="moduleRowSelected" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="selectRowEffect(this, ' . $radio_buttons . ')">' . "\n";
+                     } else {
+                         echo '          <tr class="moduleRow" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="selectRowEffect(this, ' . $radio_buttons . ')">' . "\n";
+                     }
+              /* HPDL osc_draw_radio_field() does not like integer default values */
+              ?>
 
             <td width="10">&nbsp;</td>
             <td colspan="2"><b><?php echo $Qaddresses->valueProtected('firstname') . ' ' . $Qaddresses->valueProtected('lastname'); ?></b></td>
@@ -108,20 +109,20 @@
       </tr>
 
 <?php
-        $radio_buttons++;
-      }
-?>
+                      $radio_buttons++;
+          }
+          ?>
 
     </table>
   </div>
 </div>
 
 <?php
-    }
+      }
   }
 
-  if ( !$OSCOM_Customer->isLoggedOn() || (AddressBook::numberOfEntries() < MAX_ADDRESS_BOOK_ENTRIES) ) {
-?>
+if (!$OSCOM_Customer->isLoggedOn() || (AddressBook::numberOfEntries() < MAX_ADDRESS_BOOK_ENTRIES)) {
+    ?>
 
 <div class="moduleBox">
   <em style="float: right; margin-top: 10px;"><?php echo OSCOM::getDef('form_required_information'); ?></em>
@@ -138,7 +139,7 @@
 </div>
 
 <?php
-  }
+}
 ?>
 
 <br />
@@ -146,7 +147,7 @@
 <div class="moduleBox">
   <div class="content">
     <div style="float: right;">
-      <?php echo HTML::button(array('icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue'))); ?>
+      <?php echo HTML::button(['icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue')]); ?>
     </div>
 
     <?php echo '<b>' . OSCOM::getDef('continue_checkout_procedure_title') . '</b><br />' . OSCOM::getDef('continue_checkout_procedure_to_shipping'); ?>

@@ -17,7 +17,7 @@
 
 <?php
   if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -29,24 +29,24 @@
 
 <?php
   $Qorders = $osC_Database->query('select orders_id, customers_name from :table_orders where orders_id in (":orders_id") order by orders_id');
-  $Qorders->bindTable(':table_orders', TABLE_ORDERS);
-  $Qorders->bindRaw(':orders_id', implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))));
-  $Qorders->execute();
+$Qorders->bindTable(':table_orders', TABLE_ORDERS);
+$Qorders->bindRaw(':orders_id', implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))));
+$Qorders->execute();
 
-  $names_string = '';
+$names_string = '';
 
-  while ( $Qorders->next() ) {
+while ($Qorders->next()) {
     $names_string .= osc_draw_hidden_field('batch[]', $Qorders->valueInt('orders_id')) . '<b>#' . $Qorders->valueInt('orders_id') . ': ' . $Qorders->valueProtected('customers_name') . '</b>, ';
-  }
+}
 
-  if ( !empty($names_string) ) {
+if (!empty($names_string)) {
     $names_string = substr($names_string, 0, -2);
-  }
+}
 
-  echo '<p>' . $names_string . '</p>';
+echo '<p>' . $names_string . '</p>';
 ?>
 
-  <p><?php echo osc_draw_checkbox_field('restock', array(array('id' => '', 'text' => $osC_Language->get('field_restock_product_quantity')))); ?></p>
+  <p><?php echo osc_draw_checkbox_field('restock', [['id' => '', 'text' => $osC_Language->get('field_restock_product_quantity')]]); ?></p>
 
   <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_delete') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&' . (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 

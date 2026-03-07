@@ -16,20 +16,20 @@
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->exists($osC_Template->getModule()) ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->exists($osC_Template->getModule())) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 
-  $Qproducts = $osC_Database->query('select p.products_id, pd.products_name, str_to_date(pa.value, "%Y-%m-%d") as products_date_available from :table_products p, :table_products_description pd, :table_product_attributes pa, :table_templates_boxes tb where tb.code = :code and tb.modules_group = :modules_group and tb.id = pa.id and pa.products_id = p.products_id and p.products_id = pd.products_id and pd.language_id = :language_id order by products_date_available');
-  $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
-  $Qproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
-  $Qproducts->bindTable(':table_product_attributes', TABLE_PRODUCT_ATTRIBUTES);
-  $Qproducts->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
-  $Qproducts->bindValue(':code', 'date_available');
-  $Qproducts->bindValue(':modules_group', 'product_attributes');
-  $Qproducts->bindInt(':language_id', $osC_Language->getID());
-  $Qproducts->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
-  $Qproducts->execute();
+$Qproducts = $osC_Database->query('select p.products_id, pd.products_name, str_to_date(pa.value, "%Y-%m-%d") as products_date_available from :table_products p, :table_products_description pd, :table_product_attributes pa, :table_templates_boxes tb where tb.code = :code and tb.modules_group = :modules_group and tb.id = pa.id and pa.products_id = p.products_id and p.products_id = pd.products_id and pd.language_id = :language_id order by products_date_available');
+$Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
+$Qproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
+$Qproducts->bindTable(':table_product_attributes', TABLE_PRODUCT_ATTRIBUTES);
+$Qproducts->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
+$Qproducts->bindValue(':code', 'date_available');
+$Qproducts->bindValue(':modules_group', 'product_attributes');
+$Qproducts->bindInt(':language_id', $osC_Language->getID());
+$Qproducts->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
+$Qproducts->execute();
 ?>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -57,8 +57,8 @@
   <tbody>
 
 <?php
-  while ( $Qproducts->next() ) {
-?>
+  while ($Qproducts->next()) {
+      ?>
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
       <td onclick="document.getElementById('batch<?php echo $Qproducts->valueInt('products_id'); ?>').checked = !document.getElementById('batch<?php echo $Qproducts->valueInt('products_id'); ?>').checked;"><?php echo $Qproducts->value('products_name'); ?></td>
@@ -66,8 +66,8 @@
       <td align="right">
 
 <?php
-    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=save'), osc_icon('edit.png'));
-?>
+          echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=save'), osc_icon('edit.png'));
+      ?>
 
       </td>
     </tr>

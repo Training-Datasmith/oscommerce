@@ -1,39 +1,42 @@
 <?php
+
+declare(strict_types=1);
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  namespace osCommerce\OM\Core\Site\Admin\Application\CoreUpdate\Model;
+namespace osCommerce\OM\Core\Site\Admin\Application\CoreUpdate\Model;
 
-  use \Phar;
-  use osCommerce\OM\Core\OSCOM;
+use osCommerce\OM\Core\OSCOM;
+use Phar;
 
-  class getPackageInfo {
-    public static function execute($key = null) {
-      $phar_can_open = true;
+class getPackageInfo
+{
+    public static function execute($key = null)
+    {
+        $phar_can_open = true;
 
-      try {
-        $phar = new Phar(OSCOM::BASE_DIRECTORY . 'Work/CoreUpdate/update.phar');
-      } catch ( \Exception $e ) {
-        $phar_can_open = false;
+        try {
+            $phar = new Phar(OSCOM::BASE_DIRECTORY . 'Work/CoreUpdate/update.phar');
+        } catch (\Exception $e) {
+            $phar_can_open = false;
 
-        trigger_error($e->getMessage());
-      }
-
-      if ( $phar_can_open === true ) {
-        $result = $phar->getMetadata();
-
-        if ( isset($key) ) {
-          $result = $result[$key] ?: null;
+            trigger_error($e->getMessage());
         }
 
-        return $result;
-      }
+        if ($phar_can_open === true) {
+            $result = $phar->getMetadata();
 
-      return false;
+            if (isset($key)) {
+                $result = $result[$key] ?: null;
+            }
+
+            return $result;
+        }
+
+        return false;
     }
-  }
-?>
+}

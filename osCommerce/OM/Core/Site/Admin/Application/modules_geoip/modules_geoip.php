@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
   $Id: $
 
@@ -12,160 +14,163 @@
   as published by the Free Software Foundation.
 */
 
-  class osC_Application_Modules_geoip extends osC_Template_Admin {
+class osC_Application_Modules_geoip extends osC_Template_Admin
+{
+    /* Protected variables */
 
-/* Protected variables */
+    protected $_module = 'modules_geoip';
+    protected $_page_title;
+    protected $_page_contents = 'main.php';
 
-    protected $_module = 'modules_geoip',
-              $_page_title,
-              $_page_contents = 'main.php';
+    /* Class constructor */
 
-/* Class constructor */
+    public function __construct()
+    {
+        global $osC_Language, $osC_MessageStack;
 
-    function __construct() {
-      global $osC_Language, $osC_MessageStack;
+        $this->_page_title = $osC_Language->get('heading_title');
 
-      $this->_page_title = $osC_Language->get('heading_title');
-
-      if ( !isset($_GET['action']) ) {
-        $_GET['action'] = '';
-      }
-
-      include('includes/classes/geoip.php');
-
-      if ( !empty($_GET['action']) ) {
-        switch ( $_GET['action'] ) {
-          case 'info':
-            $this->_page_contents = 'info.php';
-
-            break;
-
-          case 'save':
-            $this->_page_contents = 'edit.php';
-
-            if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
-              $data = array('configuration' => $_POST['configuration']);
-
-              if ( $this->_save($data) ) {
-                $osC_MessageStack->add($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
-              } else {
-                $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
-              }
-
-              osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
-            }
-
-            break;
-
-          case 'install':
-            if ( $this->_install($_GET['module']) ) {
-              $osC_MessageStack->add($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
-            } else {
-              $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
-            }
-
-            osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
-
-            break;
-
-          case 'uninstall':
-            $this->_page_contents = 'uninstall.php';
-
-            if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
-              if ( $this->_uninstall($_GET['module']) ) {
-                $osC_MessageStack->add($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
-              } else {
-                $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
-              }
-
-              osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
-            }
-
-            break;
+        if (!isset($_GET['action'])) {
+            $_GET['action'] = '';
         }
-      }
-    }
 
-/* Private methods */
+        include('includes/classes/geoip.php');
 
-    function _save($data) {
-      global $osC_Database;
+        if (!empty($_GET['action'])) {
+            switch ($_GET['action']) {
+                case 'info':
+                    $this->_page_contents = 'info.php';
 
-      $error = false;
+                    break;
 
-      $osC_Database->startTransaction();
+                case 'save':
+                    $this->_page_contents = 'edit.php';
 
-      foreach ( $data['configuration'] as $key => $value ) {
-        $Qupdate = $osC_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
-        $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
-        $Qupdate->bindValue(':configuration_value', is_array($data['configuration'][$key]) ? implode(',', $data['configuration'][$key]) : $value);
-        $Qupdate->bindValue(':configuration_key', $key);
-        $Qupdate->setLogging($_SESSION['module']);
-        $Qupdate->execute();
+                    if (isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm')) {
+                        $data = ['configuration' => $_POST['configuration']];
 
-        if ( $osC_Database->isError() ) {
-          $error = true;
-          break;
+                        if ($this->_save($data)) {
+                            $osC_MessageStack->add($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
+                        } else {
+                            $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
+                        }
+
+                        osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
+                    }
+
+                    break;
+
+                case 'install':
+                    if ($this->_install($_GET['module'])) {
+                        $osC_MessageStack->add($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
+                    } else {
+                        $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
+                    }
+
+                    osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
+
+                    break;
+
+                case 'uninstall':
+                    $this->_page_contents = 'uninstall.php';
+
+                    if (isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm')) {
+                        if ($this->_uninstall($_GET['module'])) {
+                            $osC_MessageStack->add($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
+                        } else {
+                            $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
+                        }
+
+                        osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
+                    }
+
+                    break;
+            }
         }
-      }
-
-      if ( $error === false ) {
-        $osC_Database->commitTransaction();
-
-        osC_Cache::clear('configuration');
-
-        return true;
-      }
-
-      $osC_Database->rollbackTransaction();
-
-      return false;
     }
 
-    function _install($key) {
-      global $osC_Database, $osC_Language;
+    /* Private methods */
 
-      if ( file_exists('includes/modules/geoip/' . $key . '.php') ) {
-//HPDL        $osC_Language->injectDefinitions('modules/geoip/' . $key . '.xml');
-        $osC_Language->loadIniFile('modules/geoip/' . $key . '.php');
+    public function _save($data)
+    {
+        global $osC_Database;
 
-        include('includes/modules/geoip/' . $key . '.php');
+        $error = false;
 
-        $module = 'osC_GeoIP_' . $key;
-        $module = new $module();
+        $osC_Database->startTransaction();
 
-        $module->install();
+        foreach ($data['configuration'] as $key => $value) {
+            $Qupdate = $osC_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
+            $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
+            $Qupdate->bindValue(':configuration_value', is_array($data['configuration'][$key]) ? implode(',', $data['configuration'][$key]) : $value);
+            $Qupdate->bindValue(':configuration_key', $key);
+            $Qupdate->setLogging($_SESSION['module']);
+            $Qupdate->execute();
 
-        osC_Cache::clear('modules-geoip');
-        osC_Cache::clear('configuration');
+            if ($osC_Database->isError()) {
+                $error = true;
+                break;
+            }
+        }
 
-        return true;
-      }
+        if ($error === false) {
+            $osC_Database->commitTransaction();
 
-      return false;
+            osC_Cache::clear('configuration');
+
+            return true;
+        }
+
+        $osC_Database->rollbackTransaction();
+
+        return false;
     }
 
-    function _uninstall($key) {
-      global $osC_Database, $osC_Language;
+    public function _install($key)
+    {
+        global $osC_Database, $osC_Language;
 
-      if ( file_exists('includes/modules/geoip/' . $key . '.php') ) {
-//HPDL        $osC_Language->injectDefinitions('modules/geoip/' . $key . '.xml');
-        $osC_Language->loadIniFile('modules/geoip/' . $key . '.php');
+        if (file_exists('includes/modules/geoip/' . $key . '.php')) {
+            //HPDL        $osC_Language->injectDefinitions('modules/geoip/' . $key . '.xml');
+            $osC_Language->loadIniFile('modules/geoip/' . $key . '.php');
 
-        include('includes/modules/geoip/' . $key . '.php');
+            include('includes/modules/geoip/' . $key . '.php');
 
-        $module = 'osC_GeoIP_' . $key;
-        $module = new $module();
+            $module = 'osC_GeoIP_' . $key;
+            $module = new $module();
 
-        $module->remove();
+            $module->install();
 
-        osC_Cache::clear('modules-geoip');
-        osC_Cache::clear('configuration');
+            osC_Cache::clear('modules-geoip');
+            osC_Cache::clear('configuration');
 
-        return true;
-      }
+            return true;
+        }
 
-      return false;
+        return false;
     }
-  }
-?>
+
+    public function _uninstall($key)
+    {
+        global $osC_Database, $osC_Language;
+
+        if (file_exists('includes/modules/geoip/' . $key . '.php')) {
+            //HPDL        $osC_Language->injectDefinitions('modules/geoip/' . $key . '.xml');
+            $osC_Language->loadIniFile('modules/geoip/' . $key . '.php');
+
+            include('includes/modules/geoip/' . $key . '.php');
+
+            $module = 'osC_GeoIP_' . $key;
+            $module = new $module();
+
+            $module->remove();
+
+            osC_Cache::clear('modules-geoip');
+            osC_Cache::clear('configuration');
+
+            return true;
+        }
+
+        return false;
+    }
+}

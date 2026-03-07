@@ -12,25 +12,25 @@
   as published by the Free Software Foundation.
 */
 
-  $categories_array = array();
+$categories_array = [];
 
-  foreach ( $osC_CategoryTree->getArray() as $value ) {
-    $categories_array[] = array('id' => end(explode('_', $value['id'])),
-                                'text' => $value['title']);
-  }
+foreach ($osC_CategoryTree->getArray() as $value) {
+    $categories_array[] = ['id' => end(explode('_', $value['id'])),
+                                'text' => $value['title']];
+}
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->exists($osC_Template->getModule()) ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->exists($osC_Template->getModule())) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
 <div style="padding-bottom: 10px;">
   <span><form id="liveSearchForm"><input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><input type="button" value="Reset" class="operationButton" onclick="osC_DataTable.reset();" /></form></span>
-  <span><form name="filter" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT); ?>" method="get"><?php echo osc_draw_hidden_field($osC_Template->getModule()); ?><?php echo osc_draw_pull_down_menu('cID', array_merge(array(array('id' => '', 'text' => $osC_Language->get('top_category'))), $categories_array)); ?><input type="submit" value="Filter" class="operationButton" /></form></span>
+  <span><form name="filter" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT); ?>" method="get"><?php echo osc_draw_hidden_field($osC_Template->getModule()); ?><?php echo osc_draw_pull_down_menu('cID', array_merge([['id' => '', 'text' => $osC_Language->get('top_category')]], $categories_array)); ?><input type="submit" value="Filter" class="operationButton" /></form></span>
   <span style="float: right;"><?php echo '<input type="button" value="' . $osC_Language->get('button_insert') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $current_category_id . '&action=save') . '\';" class="infoBoxButton" />'; ?></span>
 </div>
 

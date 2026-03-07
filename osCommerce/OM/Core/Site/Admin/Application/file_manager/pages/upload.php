@@ -16,8 +16,8 @@
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -25,8 +25,8 @@
 <div class="infoBoxContent">
 
 <?php
-  if ( is_writeable($_SESSION['fm_directory']) ) {
-?>
+  if (is_writeable($_SESSION['fm_directory'])) {
+      ?>
 
   <form name="fmUpload" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=upload'); ?>" method="post" enctype="multipart/form-data">
 
@@ -37,8 +37,8 @@
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
 
 <?php
-   for ( $i = 0; $i < 10; $i++ ) {
-?>
+         for ($i = 0; $i < 10; $i++) {
+             ?>
 
     <tr>
       <td width="40%"><?php echo '<b>' . $osC_Language->get('field_file') . '</b>'; ?></td>
@@ -46,8 +46,8 @@
     </tr>
 
 <?php
-  }
-?>
+         }
+      ?>
 
   </table>
 
@@ -57,7 +57,7 @@
 
 <?php
   } else {
-?>
+      ?>
 
   <p><?php echo sprintf($osC_Language->get('upload_error_directory_not_writable'), $_SESSION['fm_directory']); ?></p>
 

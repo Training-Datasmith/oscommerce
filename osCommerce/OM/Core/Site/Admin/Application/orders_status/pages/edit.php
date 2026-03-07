@@ -12,14 +12,14 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(osC_OrdersStatus_Admin::getData($_GET['osID']));
+$osC_ObjectInfo = new osC_ObjectInfo(osC_OrdersStatus_Admin::getData($_GET['osID']));
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
@@ -36,27 +36,27 @@
 
 <?php
   $Qsd = $osC_Database->query('select language_id, orders_status_name from :table_orders_status where orders_status_id = :orders_status_id');
-  $Qsd->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
-  $Qsd->bindInt(':orders_status_id', $osC_ObjectInfo->get('orders_status_id'));
-  $Qsd->execute();
+$Qsd->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
+$Qsd->bindInt(':orders_status_id', $osC_ObjectInfo->get('orders_status_id'));
+$Qsd->execute();
 
-  $status_name = array();
+$status_name = [];
 
-  while ( $Qsd->next() ) {
+while ($Qsd->next()) {
     $status_name[$Qsd->valueInt('language_id')] = $Qsd->value('orders_status_name');
-  }
+}
 
-  foreach ( $osC_Language->getAll() as $l ) {
+foreach ($osC_Language->getAll() as $l) {
     echo $osC_Language->showImage($l['code']) . '&nbsp;' . osc_draw_input_field('name[' . $l['id'] . ']', (isset($status_name[$l['id']]) ? $status_name[$l['id']] : null)) . '<br />';
-  }
+}
 ?>
 
       </td>
     </tr>
 
 <?php
-    if ( $osC_ObjectInfo->get('orders_status_id') != DEFAULT_ORDERS_STATUS_ID ) {
-?>
+    if ($osC_ObjectInfo->get('orders_status_id') != DEFAULT_ORDERS_STATUS_ID) {
+        ?>
 
     <tr>
       <td width="40%"><?php echo '<b>' . $osC_Language->get('field_set_as_default') . '</b>'; ?></td>
