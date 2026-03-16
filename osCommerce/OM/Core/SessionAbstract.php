@@ -78,7 +78,10 @@ abstract class SessionAbstract
             $this->_life_time = ini_get('session.gc_maxlifetime');
         }
 
-        session_set_cookie_params(0, ((OSCOM::getRequestType() == 'NONSSL') ? OSCOM::getConfig('http_cookie_path') : OSCOM::getConfig('https_cookie_path')), ((OSCOM::getRequestType() == 'NONSSL') ? OSCOM::getConfig('http_cookie_domain') : OSCOM::getConfig('https_cookie_domain')));
+        session_set_cookie_params(['lifetime' => 0,
+                                   'path' => ((OSCOM::getRequestType() == 'NONSSL') ? OSCOM::getConfig('http_cookie_path') : OSCOM::getConfig('https_cookie_path')),
+                                   'domain' => ((OSCOM::getRequestType() == 'NONSSL') ? OSCOM::getConfig('http_cookie_domain') : OSCOM::getConfig('https_cookie_domain')),
+                                   'httponly' => true]);
 
         if (isset($_GET[$this->_name]) && (empty($_GET[$this->_name]) || !ctype_alnum($_GET[$this->_name]) || !$this->exists($_GET[$this->_name]))) {
             unset($_GET[$this->_name]);

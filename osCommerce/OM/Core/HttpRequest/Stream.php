@@ -28,7 +28,12 @@ class Stream
         $options['http']['header'] = implode("\r\n", $parameters['header']);
 
         if (!empty($parameters['certificate'])) {
-            $options['ssl'] = ['local_cert' => $parameters['certificate']];
+            $options['ssl'] = ['local_cert' => $parameters['certificate'],
+                               'verify_peer' => true,
+                               'verify_peer_name' => true];
+        } else {
+            $options['ssl'] = ['verify_peer' => true,
+                               'verify_peer_name' => true];
         }
 
         $context = stream_context_create($options);

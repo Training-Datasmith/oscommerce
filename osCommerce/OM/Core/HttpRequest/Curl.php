@@ -18,7 +18,8 @@ class Curl
 
         $curl_options = [CURLOPT_PORT => $parameters['server']['port'],
                               CURLOPT_HEADER => true,
-                              CURLOPT_SSL_VERIFYPEER => false,
+                              CURLOPT_SSL_VERIFYPEER => true,
+                              CURLOPT_SSL_VERIFYHOST => 2,
                               CURLOPT_RETURNTRANSFER => true,
                               CURLOPT_FORBID_REUSE => true,
                               CURLOPT_FRESH_CONNECT => true,

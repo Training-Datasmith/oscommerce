@@ -74,7 +74,7 @@ class Cache
             $difference = floor((time() - filemtime($filename)) / 60);
 
             if (empty($expire) || (is_numeric($expire) && ($difference < $expire))) {
-                $this->_data = unserialize(file_get_contents($filename));
+                $this->_data = unserialize(file_get_contents($filename), ['allowed_classes' => false]);
 
                 return true;
             }

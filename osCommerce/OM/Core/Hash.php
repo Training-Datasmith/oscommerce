@@ -63,11 +63,11 @@ class Hash
 
         while (strlen($rand_value) < $length) {
             if ($type == 'digits') {
-                $rand_value .= rand(0, 9);
+                $rand_value .= random_int(0, 9);
             } elseif ($type == 'chars') {
-                $rand_value .= substr($chars_pattern, rand(0, 51), 1);
+                $rand_value .= substr($chars_pattern, random_int(0, 51), 1);
             } else {
-                $rand_value .= substr($mixed_pattern, rand(0, 61), 1);
+                $rand_value .= substr($mixed_pattern, random_int(0, 61), 1);
             }
         }
 

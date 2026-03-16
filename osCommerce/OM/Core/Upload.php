@@ -81,6 +81,14 @@ class Upload
         }
 
         if (!empty($this->_upload)) {
+            $this->_upload['name'] = basename($this->_upload['name']);
+
+            if (strpos($this->_upload['name'], '..') !== false || strpos($this->_upload['name'], '/') !== false || strpos($this->_upload['name'], '\\') !== false || strpos($this->_upload['name'], "\0") !== false) {
+                trigger_error('File Upload [' . $this->_upload['type'] . ']: Invalid filename rejected: ' . $this->_upload['name']);
+
+                return false;
+            }
+
             if (!empty($this->_extensions)) {
                 if (!in_array(strtolower(substr($this->_upload['name'], strrpos($this->_upload['name'], '.') + 1)), $this->_extensions)) {
                     trigger_error('File Upload [' . $this->_upload['type'] . ']: ' . $this->_upload['name'] . ' not allowed as ' . implode(', ', $this->_extensions));
