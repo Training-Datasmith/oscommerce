@@ -1,4 +1,5 @@
 <?php
+
 /*
   $Id: $
 
@@ -11,33 +12,24 @@
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
-
 $specials_array = [];
-
-$Qspecials = $osC_Database->query('select p.products_id, p.products_price, p.products_tax_class_id, pd.products_name, s.specials_new_products_price from :table_products p left join :table_specials s on (p.products_id = s.products_id), :table_products_description pd where p.products_id = pd.products_id and pd.language_id = :language_id and p.has_children = 0 order by pd.products_name');
-$Qspecials->bindTable(':table_products', TABLE_PRODUCTS);
-$Qspecials->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
-$Qspecials->bindTable(':table_specials', TABLE_SPECIALS);
-$Qspecials->bindInt(':language_id', $osC_Language->getID());
+$Qspecials = $os_c_database->query('select p.products_id, p.products_price, p.products_tax_class_id, pd.products_name, s.specials_new_products_price from :table_products p left join :table_specials s on (p.products_id = s.products_id), :table_products_description pd where p.products_id = pd.products_id and pd.language_id = :language_id and p.has_children = 0 order by pd.products_name');
+$Qspecials->bind_table(':table_products', TABLE_PRODUCTS);
+$Qspecials->bind_table(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
+$Qspecials->bind_table(':table_specials', TABLE_SPECIALS);
+$Qspecials->bind_int(':language_id', $os_c_language->get_id());
 $Qspecials->execute();
-
 while ($Qspecials->next()) {
-    if ($Qspecials->valueDecimal('specials_new_products_price') < 1) {
-        $specials_array[] = ['id' => $Qspecials->valueInt('products_id'),
-                                  'text' => $Qspecials->value('products_name') . ' (' . $osC_Currencies->format($Qspecials->value('products_price')) . ')',
-                                  'tax_class_id' => $Qspecials->valueInt('products_tax_class_id')];
+    if ($Qspecials->value_decimal('specials_new_products_price') < 1) {
+        $specials_array[] = ['id' => $Qspecials->value_int('products_id'), 'text' => $Qspecials->value('products_name') . ' (' . $os_c_currencies->format($Qspecials->value('products_price')) . ')', 'tax_class_id' => $Qspecials->value_int('products_tax_class_id')];
     }
 }
-
-$Qtc = $osC_Database->query('select tax_class_id, tax_class_title from :table_tax_class order by tax_class_title');
-$Qtc->bindTable(':table_tax_class', TABLE_TAX_CLASS);
+$Qtc = $os_c_database->query('select tax_class_id, tax_class_title from :table_tax_class order by tax_class_title');
+$Qtc->bind_table(':table_tax_class', TABLE_TAX_CLASS);
 $Qtc->execute();
-
 $tax_class_array = [];
-
 while ($Qtc->next()) {
-    $tax_class_array[] = ['id' => $Qtc->valueInt('tax_class_id'),
-                               'text' => $Qtc->value('tax_class_title')];
+    $tax_class_array[] = ['id' => $Qtc->value_int('tax_class_id'), 'text' => $Qtc->value('tax_class_title')];
 }
 ?>
 
@@ -45,13 +37,12 @@ while ($Qtc->next()) {
   var product_tax = new Array();
   var tax_rates = new Array();
 
-<?php
-  foreach ($specials_array as $specials) {
-      echo '  product_tax["' . $specials['id'] . '"] = ' . $specials['tax_class_id'] . ';' . "\n";
-  }
-
+<?php 
+foreach ($specials_array as $specials) {
+    echo '  product_tax["' . $specials['id'] . '"] = ' . $specials['tax_class_id'] . ';' . "\n";
+}
 foreach ($tax_class_array as $tc_entry) {
-    echo '  tax_rates["' . $tc_entry['id'] . '"] = ' . $osC_Tax->getTaxRate($tc_entry['id']) . ';' . "\n";
+    echo '  tax_rates["' . $tc_entry['id'] . '"] = ' . $os_c_tax->get_tax_rate($tc_entry['id']) . ';' . "\n";
 }
 ?>
 
@@ -124,26 +115,46 @@ foreach ($tax_class_array as $tc_entry) {
   }
 //--></script>
 
-<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php 
+echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module()), $os_c_template->get_page_title());
+?></h1>
 
-<?php
-  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
-      echo $osC_MessageStack->get($osC_Template->getModule());
-  }
+<?php 
+if ($os_c_message_stack->size($os_c_template->get_module()) > 0) {
+    echo $os_c_message_stack->get($os_c_template->get_module());
+}
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('new.png') . ' ' . $osC_Language->get('action_heading_new_special'); ?></div>
+<div class="infoBoxHeading"><?php 
+echo osc_icon('new.png') . ' ' . $os_c_language->get('action_heading_new_special');
+?></div>
 <div class="infoBoxContent">
-  <form name="special" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=save'); ?>" method="post">
+  <form name="special" action="<?php 
+echo osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '&page=' . $_GET['page'] . '&action=save');
+?>" method="post">
 
-  <p><?php echo $osC_Language->get('introduction_new_special'); ?></p>
+  <p><?php 
+echo $os_c_language->get('introduction_new_special');
+?></p>
 
-  <p><?php echo '<b>' . $osC_Language->get('field_product') . '</b><br />' . osc_draw_pull_down_menu('products_id', $specials_array); ?></p>
-  <p><?php echo '<b>' . $osC_Language->get('field_price_net_percentage') . '</b><br />' . osc_draw_input_field('specials_price', null, 'onkeyup="updateGross(\'specials_price\', event)"'); ?></p>
-  <p><?php echo '<b>' . $osC_Language->get('field_price_gross') . '</b><br />' . osc_draw_input_field('specials_price_gross', null, 'onkeyup="updateNet(\'specials_price\', event)"'); ?></p>
-  <p><?php echo '<b>' . $osC_Language->get('field_status') . '</b><br />' . osc_draw_checkbox_field('specials_status', '1'); ?></p>
-  <p><?php echo '<b>' . $osC_Language->get('field_date_start') . '</b><br />' . osc_draw_input_field('specials_start_date'); ?></p>
-  <p><?php echo '<b>' . $osC_Language->get('field_date_expires') . '</b><br />' . osc_draw_input_field('specials_expires_date'); ?></p>
+  <p><?php 
+echo '<b>' . $os_c_language->get('field_product') . '</b><br />' . osc_draw_pull_down_menu('products_id', $specials_array);
+?></p>
+  <p><?php 
+echo '<b>' . $os_c_language->get('field_price_net_percentage') . '</b><br />' . osc_draw_input_field('specials_price', null, 'onkeyup="updateGross(\'specials_price\', event)"');
+?></p>
+  <p><?php 
+echo '<b>' . $os_c_language->get('field_price_gross') . '</b><br />' . osc_draw_input_field('specials_price_gross', null, 'onkeyup="updateNet(\'specials_price\', event)"');
+?></p>
+  <p><?php 
+echo '<b>' . $os_c_language->get('field_status') . '</b><br />' . osc_draw_checkbox_field('specials_status', '1');
+?></p>
+  <p><?php 
+echo '<b>' . $os_c_language->get('field_date_start') . '</b><br />' . osc_draw_input_field('specials_start_date');
+?></p>
+  <p><?php 
+echo '<b>' . $os_c_language->get('field_date_expires') . '</b><br />' . osc_draw_input_field('specials_expires_date');
+?></p>
 
 <script type="text/javascript"><!--
   updateGross('specials_price', false);
@@ -163,7 +174,9 @@ foreach ($tax_class_array as $tc_entry) {
   });
 //--></script>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php 
+echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $os_c_language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $os_c_language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '&page=' . $_GET['page']) . '\';" class="operationButton" />';
+?></p>
 
   </form>
 </div>

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /*
   $Id: $
 
@@ -13,24 +13,19 @@ declare(strict_types=1);
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
-
-class osC_Application_Products_Actions_copy extends osC_Application_Products
+class Os_C_application_products_actions_copy extends Os_C_application_products
 {
     public function __construct()
     {
-        global $osC_Language, $osC_MessageStack;
-
+        global $os_c_language, $os_c_message_stack;
         parent::__construct();
-
         $this->_page_contents = 'copy.php';
-
-        if (isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm')) {
-            if (osC_Products_Admin::copy($_GET[$this->_module], $_POST['new_category_id'], $_POST['copy_as'])) {
-                $osC_MessageStack->add($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
+        if (isset($_POST['subaction']) && $_POST['subaction'] == 'confirm') {
+            if (Os_C_products_admin::copy($_GET[$this->_module], $_POST['new_category_id'], $_POST['copy_as'])) {
+                $os_c_message_stack->add($this->_module, $os_c_language->get('ms_success_action_performed'), 'success');
             } else {
-                $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
+                $os_c_message_stack->add($this->_module, $os_c_language->get('ms_error_action_not_performed'), 'error');
             }
-
             osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&cID=' . $_GET['cID']));
         }
     }

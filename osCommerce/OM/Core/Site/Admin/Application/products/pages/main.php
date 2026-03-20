@@ -1,4 +1,5 @@
 <?php
+
 /*
   $Id$
 
@@ -11,27 +12,33 @@
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
-
 $categories_array = [];
-
-foreach ($osC_CategoryTree->getArray() as $value) {
-    $categories_array[] = ['id' => end(explode('_', $value['id'])),
-                                'text' => $value['title']];
+foreach ($os_c_category_tree->get_array() as $value) {
+    $categories_array[] = ['id' => end(explode('_', $value['id'])), 'text' => $value['title']];
 }
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php 
+echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module()), $os_c_template->get_page_title());
+?></h1>
 
-<?php
-  if ($osC_MessageStack->exists($osC_Template->getModule())) {
-      echo $osC_MessageStack->get($osC_Template->getModule());
-  }
+<?php 
+if ($os_c_message_stack->exists($os_c_template->get_module())) {
+    echo $os_c_message_stack->get($os_c_template->get_module());
+}
 ?>
 
 <div style="padding-bottom: 10px;">
   <span><form id="liveSearchForm"><input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><input type="button" value="Reset" class="operationButton" onclick="osC_DataTable.reset();" /></form></span>
-  <span><form name="filter" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT); ?>" method="get"><?php echo osc_draw_hidden_field($osC_Template->getModule()); ?><?php echo osc_draw_pull_down_menu('cID', array_merge([['id' => '', 'text' => $osC_Language->get('top_category')]], $categories_array)); ?><input type="submit" value="Filter" class="operationButton" /></form></span>
-  <span style="float: right;"><?php echo '<input type="button" value="' . $osC_Language->get('button_insert') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $current_category_id . '&action=save') . '\';" class="infoBoxButton" />'; ?></span>
+  <span><form name="filter" action="<?php 
+echo osc_href_link_admin(FILENAME_DEFAULT);
+?>" method="get"><?php 
+echo osc_draw_hidden_field($os_c_template->get_module());
+echo osc_draw_pull_down_menu('cID', array_merge([['id' => '', 'text' => $os_c_language->get('top_category')]], $categories_array));
+?><input type="submit" value="Filter" class="operationButton" /></form></span>
+  <span style="float: right;"><?php 
+echo '<input type="button" value="' . $os_c_language->get('button_insert') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '&cID=' . $current_category_id . '&action=save') . '\';" class="infoBoxButton" />';
+?></span>
 </div>
 
 <div style="padding: 2px; height: 16px;">
@@ -44,17 +51,31 @@ foreach ($osC_CategoryTree->getArray() as $value) {
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable" id="productsDataTable">
   <thead>
     <tr>
-      <th><?php echo $osC_Language->get('table_heading_products'); ?></th>
-      <th><?php echo $osC_Language->get('table_heading_price'); ?></th>
-      <th><?php echo $osC_Language->get('table_heading_quantity'); ?></th>
-      <th width="150"><?php echo $osC_Language->get('table_heading_action'); ?></th>
-      <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
+      <th><?php 
+echo $os_c_language->get('table_heading_products');
+?></th>
+      <th><?php 
+echo $os_c_language->get('table_heading_price');
+?></th>
+      <th><?php 
+echo $os_c_language->get('table_heading_quantity');
+?></th>
+      <th width="150"><?php 
+echo $os_c_language->get('table_heading_action');
+?></th>
+      <th align="center" width="20"><?php 
+echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"');
+?></th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="4"><?php echo '<input type="image" src="' . osc_icon_raw('copy.png') . '" title="' . $osC_Language->get('icon_copy') . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $current_category_id . '&action=batch_copy') . '\';" />&nbsp;<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . $osC_Language->get('icon_trash') . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $current_category_id . '&action=batch_delete') . '\';" />'; ?></th>
-      <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
+      <th align="right" colspan="4"><?php 
+echo '<input type="image" src="' . osc_icon_raw('copy.png') . '" title="' . $os_c_language->get('icon_copy') . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '&cID=' . $current_category_id . '&action=batch_copy') . '\';" />&nbsp;<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . $os_c_language->get('icon_trash') . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '&cID=' . $current_category_id . '&action=batch_delete') . '\';" />';
+?></th>
+      <th align="center" width="20"><?php 
+echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"');
+?></th>
     </tr>
   </tfoot>
   <tbody>
@@ -64,7 +85,9 @@ foreach ($osC_CategoryTree->getArray() as $value) {
 </form>
 
 <div style="padding: 2px;">
-  <span id="dataTableLegend"><?php echo '<b>' . $osC_Language->get('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . $osC_Language->get('icon_edit') . '&nbsp;&nbsp;' . osc_icon('copy.png') . '&nbsp;' . $osC_Language->get('icon_copy') . '&nbsp;&nbsp;' . osc_icon('trash.png') . '&nbsp;' . $osC_Language->get('icon_trash'); ?></span>
+  <span id="dataTableLegend"><?php 
+echo '<b>' . $os_c_language->get('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . $os_c_language->get('icon_edit') . '&nbsp;&nbsp;' . osc_icon('copy.png') . '&nbsp;' . $os_c_language->get('icon_copy') . '&nbsp;&nbsp;' . osc_icon('trash.png') . '&nbsp;' . $os_c_language->get('icon_trash');
+?></span>
   <span id="batchPullDownMenu"></span>
 </div>
 
@@ -82,20 +105,40 @@ foreach ($osC_CategoryTree->getArray() as $value) {
   }
 
   var dataTableName = 'productsDataTable';
-  var dataTableDataURL = '<?php echo osc_href_link_admin('rpc.php', $osC_Template->getModule() . '&cID=' . $current_category_id . '&action=getAll'); ?>';
+  var dataTableDataURL = '<?php 
+echo osc_href_link_admin('rpc.php', $os_c_template->get_module() . '&cID=' . $current_category_id . '&action=getAll');
+?>';
 
-  var productLink = '<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=PRODUCTID&cID=' . $current_category_id . '&action=preview'); ?>';
-  var productLinkIcon = '<?php echo osc_icon('products.png'); ?>';
-  var productVariantLinkIcon = '<?php echo osc_icon('attach.png'); ?>';
+  var productLink = '<?php 
+echo osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '=PRODUCTID&cID=' . $current_category_id . '&action=preview');
+?>';
+  var productLinkIcon = '<?php 
+echo osc_icon('products.png');
+?>';
+  var productVariantLinkIcon = '<?php 
+echo osc_icon('attach.png');
+?>';
 
-  var productEditLink = '<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=PRODUCTID&cID=' . $current_category_id . '&action=save'); ?>';
-  var productEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';
+  var productEditLink = '<?php 
+echo osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '=PRODUCTID&cID=' . $current_category_id . '&action=save');
+?>';
+  var productEditLinkIcon = '<?php 
+echo osc_icon('edit.png');
+?>';
 
-  var productCopyLink = '<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=PRODUCTID&cID=' . $current_category_id . '&action=copy'); ?>';
-  var productCopyLinkIcon = '<?php echo osc_icon('copy.png'); ?>';
+  var productCopyLink = '<?php 
+echo osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '=PRODUCTID&cID=' . $current_category_id . '&action=copy');
+?>';
+  var productCopyLinkIcon = '<?php 
+echo osc_icon('copy.png');
+?>';
 
-  var productDeleteLink = '<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=PRODUCTID&cID=' . $current_category_id . '&action=delete'); ?>';
-  var productDeleteLinkIcon = '<?php echo osc_icon('trash.png'); ?>';
+  var productDeleteLink = '<?php 
+echo osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '=PRODUCTID&cID=' . $current_category_id . '&action=delete');
+?>';
+  var productDeleteLinkIcon = '<?php 
+echo osc_icon('trash.png');
+?>';
 
   var osC_DataTable = new osC_DataTable();
   osC_DataTable.load();

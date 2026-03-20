@@ -1,34 +1,28 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
+namespace Os_Commerce\OM\Core\Site\Admin\Application\Languages\Action\Insert_Definition;
 
-namespace osCommerce\OM\Core\Site\Admin\Application\Languages\Action\InsertDefinition;
-
-use osCommerce\OM\Core\ApplicationAbstract;
-use osCommerce\OM\Core\OSCOM;
-use osCommerce\OM\Core\Registry;
-use osCommerce\OM\Core\Site\Admin\Application\Languages\Languages;
-
+use Os_Commerce\OM\Core\Application_Abstract;
+use Os_Commerce\OM\Core\OSCOM;
+use Os_Commerce\OM\Core\Registry;
+use Os_Commerce\OM\Core\Site\Admin\Application\Languages\Languages;
 class Process
 {
-    public static function execute(ApplicationAbstract $application)
+    public static function execute(Application_Abstract $application)
     {
-        $data = ['group' => $_POST['defgroup'],
-                      'key' => $_POST['key'],
-                      'values' => $_POST['value']];
-
-        if (Languages::insertDefinition($data)) {
-            Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
+        $data = ['group' => $_POST['defgroup'], 'key' => $_POST['key'], 'values' => $_POST['value']];
+        if (Languages::insert_definition($data)) {
+            Registry::get('MessageStack')->add(null, OSCOM::get_def('ms_success_action_performed'), 'success');
         } else {
-            Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
+            Registry::get('MessageStack')->add(null, OSCOM::get_def('ms_error_action_not_performed'), 'error');
         }
-
-        OSCOM::redirect(OSCOM::getLink(null, null, 'id=' . $_GET['id'] . (isset($_GET['group']) ? '&group=' . $_GET['group'] : '')));
+        OSCOM::redirect(OSCOM::get_link(null, null, 'id=' . $_GET['id'] . (isset($_GET['group']) ? '&group=' . $_GET['group'] : '')));
     }
 }

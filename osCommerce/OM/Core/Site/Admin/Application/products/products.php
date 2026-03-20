@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /*
   $Id: $
 
@@ -13,55 +13,42 @@ declare(strict_types=1);
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
-
-require('includes/applications/products/classes/products.php');
-require('includes/applications/product_attributes/classes/product_attributes.php');
-require('../includes/classes/variants.php');
-
-class osC_Application_Products extends osC_Template_Admin
+require 'includes/applications/products/classes/products.php';
+require 'includes/applications/product_attributes/classes/product_attributes.php';
+require '../includes/classes/variants.php';
+class Os_C_application_products extends Os_C_template_admin
 {
     /* Protected variables */
-
     protected $_module = 'products';
     protected $_page_title;
     protected $_page_contents = 'main.php';
-
     /* Class constructor */
-
     public function __construct()
     {
-        global $osC_Language, $osC_MessageStack, $osC_Currencies, $osC_Tax, $osC_CategoryTree, $osC_Image, $current_category_id;
-
-        $this->_page_title = $osC_Language->get('heading_title');
-
+        global $os_c_language, $os_c_message_stack, $os_c_currencies, $os_c_tax, $os_c_category_tree, $os_c_image, $current_category_id;
+        $this->_page_title = $os_c_language->get('heading_title');
         $current_category_id = 0;
-
         if (isset($_GET['cID']) && is_numeric($_GET['cID'])) {
             $current_category_id = $_GET['cID'];
         } else {
             $_GET['cID'] = $current_category_id;
         }
-
-        require('../includes/classes/currencies.php');
-        $osC_Currencies = new osC_Currencies();
-
-        require('includes/classes/tax.php');
-        $osC_Tax = new osC_Tax_Admin();
-
-        require('includes/classes/category_tree.php');
-        $osC_CategoryTree = new osC_CategoryTree_Admin();
-        $osC_CategoryTree->setSpacerString('&nbsp;', 2);
-
-        require('includes/classes/image.php');
-        $osC_Image = new osC_Image_Admin();
-
+        require '../includes/classes/currencies.php';
+        $os_c_currencies = new Os_C_currencies();
+        require 'includes/classes/tax.php';
+        $os_c_tax = new Os_C_tax_admin();
+        require 'includes/classes/category_tree.php';
+        $os_c_category_tree = new Os_C_category_Tree_admin();
+        $os_c_category_tree->set_spacer_string('&nbsp;', 2);
+        require 'includes/classes/image.php';
+        $os_c_image = new Os_C_image_admin();
         // check if the catalog image directory exists
         if (is_dir(realpath('../images/products'))) {
             if (!is_writeable(realpath('../images/products'))) {
-                $osC_MessageStack->add('header', sprintf($osC_Language->get('ms_error_image_directory_not_writable'), realpath('../images/products')), 'error');
+                $os_c_message_stack->add('header', sprintf($os_c_language->get('ms_error_image_directory_not_writable'), realpath('../images/products')), 'error');
             }
         } else {
-            $osC_MessageStack->add('header', sprintf($osC_Language->get('ms_error_image_directory_non_existant'), realpath('../images/products')), 'error');
+            $os_c_message_stack->add('header', sprintf($os_c_language->get('ms_error_image_directory_non_existant'), realpath('../images/products')), 'error');
         }
     }
 }

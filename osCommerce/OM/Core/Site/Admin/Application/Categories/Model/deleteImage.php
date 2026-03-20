@@ -1,38 +1,33 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
+namespace Os_Commerce\OM\Core\Site\Admin\Application\Categories\Model;
 
-namespace osCommerce\OM\Core\Site\Admin\Application\Categories\Model;
-
-use osCommerce\OM\Core\OSCOM;
-use osCommerce\OM\Core\Registry;
-use osCommerce\OM\Core\Site\Admin\CategoryTree;
-
+use Os_Commerce\OM\Core\OSCOM;
+use Os_Commerce\OM\Core\Registry;
+use Os_Commerce\OM\Core\Site\Admin\Category_Tree;
 /**
  * @since v3.0.2
  */
-
-class deleteImage
+class Delete_Image
 {
     public static function execute($id)
     {
         if (Registry::exists('CategoryTree')) {
-            $OSCOM_CategoryTree = Registry::get('CategoryTree');
+            $oscom_category_tree = Registry::get('CategoryTree');
         } else {
-            $OSCOM_CategoryTree = new CategoryTree();
-            Registry::set('CategoryTree', $OSCOM_CategoryTree);
+            $oscom_category_tree = new Category_Tree();
+            Registry::set('CategoryTree', $oscom_category_tree);
         }
-
-        $data = $OSCOM_CategoryTree->getData($id);
-
-        if (!empty($data['image']) && file_exists(OSCOM::getConfig('dir_fs_public', 'OSCOM') . 'categories/' . $data['image'])) {
-            unlink(OSCOM::getConfig('dir_fs_public', 'OSCOM') . 'categories/' . $data['image']);
+        $data = $oscom_category_tree->get_data($id);
+        if (!empty($data['image']) && file_exists(OSCOM::get_config('dir_fs_public', 'OSCOM') . 'categories/' . $data['image'])) {
+            unlink(OSCOM::get_config('dir_fs_public', 'OSCOM') . 'categories/' . $data['image']);
         }
     }
 }

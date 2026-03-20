@@ -1,28 +1,33 @@
 <?php
+
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
-
-use osCommerce\OM\Core\HTML;
-use osCommerce\OM\Core\OSCOM;
-
+use Os_Commerce\OM\Core\HTML;
+use Os_Commerce\OM\Core\OSCOM;
 ?>
 
-<h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
+<h1><?php 
+echo $OSCOM_Template->get_icon(32) . HTML::link(OSCOM::get_link(), $OSCOM_Template->get_page_title());
+?></h1>
 
-<?php
-  if ($OSCOM_MessageStack->exists()) {
-      echo $OSCOM_MessageStack->get();
-  }
+<?php 
+if ($oscom_message_stack->exists()) {
+    echo $oscom_message_stack->get();
+}
 ?>
 
 <form id="liveSearchForm">
-  <?php echo HTML::inputField('search', null, 'id="liveSearchField" class="searchField" placeholder="' . OSCOM::getDef('placeholder_search') . '"') . HTML::button(['type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => OSCOM::getDef('button_reset')]); ?>
+  <?php 
+echo HTML::input_field('search', null, 'id="liveSearchField" class="searchField" placeholder="' . OSCOM::get_def('placeholder_search') . '"') . HTML::button(['type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => OSCOM::get_def('button_reset')]);
+?>
 
-  <span style="float: right;"><?php echo HTML::selectMenu('logs', $OSCOM_Application->getLogList(), null, 'onchange="viewLog();"'); ?></span>
+  <span style="float: right;"><?php 
+echo HTML::select_menu('logs', $OSCOM_Application->get_log_list(), null, 'onchange="viewLog();"');
+?></span>
 </form>
 
 <div style="padding: 20px 5px 5px 5px; height: 16px;">
@@ -33,9 +38,15 @@ use osCommerce\OM\Core\OSCOM;
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable" id="coreUpdateDataTable">
   <thead>
     <tr>
-      <th><?php echo OSCOM::getDef('table_heading_release_version'); ?></th>
-      <th><?php echo OSCOM::getDef('table_heading_release_date'); ?></th>
-      <th width="150"><?php echo OSCOM::getDef('table_heading_action'); ?></th>
+      <th><?php 
+echo OSCOM::get_def('table_heading_release_version');
+?></th>
+      <th><?php 
+echo OSCOM::get_def('table_heading_release_date');
+?></th>
+      <th width="150"><?php 
+echo OSCOM::get_def('table_heading_action');
+?></th>
     </tr>
   </thead>
   <tfoot>
@@ -48,7 +59,9 @@ use osCommerce\OM\Core\OSCOM;
 </table>
 
 <div style="padding: 5px;">
-  <span id="dataTableLegend"><?php echo '<b>' . OSCOM::getDef('table_action_legend') . '</b> ' . HTML::icon('newsletters.png', OSCOM::getDef('icon_view_announcement')) . '&nbsp;' . OSCOM::getDef('icon_view_announcement') . ' ' . HTML::icon('folder_contents.png', OSCOM::getDef('icon_view_contents')) . '&nbsp;' . OSCOM::getDef('icon_view_contents'); ?></span>
+  <span id="dataTableLegend"><?php 
+echo '<b>' . OSCOM::get_def('table_action_legend') . '</b> ' . HTML::icon('newsletters.png', OSCOM::get_def('icon_view_announcement')) . '&nbsp;' . OSCOM::get_def('icon_view_announcement') . ' ' . HTML::icon('folder_contents.png', OSCOM::get_def('icon_view_contents')) . '&nbsp;' . OSCOM::get_def('icon_view_contents');
+?></span>
   <span id="batchPullDownMenu"></span>
 </div>
 
@@ -65,12 +78,20 @@ use osCommerce\OM\Core\OSCOM;
   }
 
   var dataTableName = 'coreUpdateDataTable';
-  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'GetAvailablePackages'); ?>';
+  var dataTableDataURL = '<?php 
+echo OSCOM::get_rpc_link(null, null, 'GetAvailablePackages');
+?>';
 
-  var announcementIcon = '<?php echo HTML::icon('newsletters.png', OSCOM::getDef('icon_view_announcement')); ?>';
+  var announcementIcon = '<?php 
+echo HTML::icon('newsletters.png', OSCOM::get_def('icon_view_announcement'));
+?>';
 
-  var updateInstallLink = '<?php echo OSCOM::getLink(null, null, 'Apply&v=VCODE'); ?>';
-  var updateInstallLinkIcon = '<?php echo HTML::icon('folder_contents.png', OSCOM::getDef('icon_view_contents')); ?>';
+  var updateInstallLink = '<?php 
+echo OSCOM::get_link(null, null, 'Apply&v=VCODE');
+?>';
+  var updateInstallLinkIcon = '<?php 
+echo HTML::icon('folder_contents.png', OSCOM::get_def('icon_view_contents'));
+?>';
 
   var osC_DataTable = new osC_DataTable();
   osC_DataTable.load();
@@ -121,11 +142,17 @@ use osCommerce\OM\Core\OSCOM;
 
       var newCell = newRow.insertCell(0);
       newCell.colSpan = 3;
-      newCell.innerHTML = '<?php echo HTML::icon('tick.png') . ' '; ?>' + htmlSpecialChars("<?php echo OSCOM::getDef('up_to_date'); ?>");
+      newCell.innerHTML = '<?php 
+echo HTML::icon('tick.png') . ' ';
+?>' + htmlSpecialChars("<?php 
+echo OSCOM::get_def('up_to_date');
+?>");
     }
   }
 
   function viewLog() {
-    window.location.href = '<?php echo OSCOM::getLink(null, null, 'ViewLog&log=LOGID'); ?>'.replace('LOGID', $('#logs option:selected').val());
+    window.location.href = '<?php 
+echo OSCOM::get_link(null, null, 'ViewLog&log=LOGID');
+?>'.replace('LOGID', $('#logs option:selected').val());
   }
 </script>

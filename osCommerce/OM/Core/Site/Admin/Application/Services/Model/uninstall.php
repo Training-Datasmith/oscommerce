@@ -1,46 +1,35 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
+namespace Os_Commerce\OM\Core\Site\Admin\Application\Services\Model;
 
-namespace osCommerce\OM\Core\Site\Admin\Application\Services\Model;
-
-use osCommerce\OM\Core\Cache;
-use osCommerce\OM\Core\OSCOM;
-
+use Os_Commerce\OM\Core\Cache;
+use Os_Commerce\OM\Core\OSCOM;
 /**
  * @since v3.0.2
  */
-
 class uninstall
 {
     public static function execute($module)
     {
-        $class = 'osCommerce\\OM\\Core\\Site\\Admin\\Module\\Service\\' . $module;
-
+        $class = 'osCommerce\OM\Core\Site\Admin\Module\Service\\' . $module;
         if (class_exists($class)) {
             $OSCOM_SM = new $class();
             $OSCOM_SM->remove();
-
             $sm = explode(';', MODULE_SERVICES_INSTALLED);
-
             unset($sm[array_search($module, $sm)]);
-
-            $data = ['key' => 'MODULE_SERVICES_INSTALLED',
-                          'value' => implode(';', $sm)];
-
-            if (OSCOM::callDB('Admin\Configuration\EntrySave', $data)) {
+            $data = ['key' => 'MODULE_SERVICES_INSTALLED', 'value' => implode(';', $sm)];
+            if (OSCOM::call_db('Admin\Configuration\EntrySave', $data)) {
                 Cache::clear('configuration');
-
                 return true;
             }
         }
-
         return false;
     }
 }

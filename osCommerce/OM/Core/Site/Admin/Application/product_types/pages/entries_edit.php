@@ -1,4 +1,5 @@
 <?php
+
 /*
   osCommerce Online Merchant $osCommerce-SIG$
   Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
@@ -7,18 +8,13 @@
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
-
-$osC_ObjectInfo = new osC_ObjectInfo(osC_ProductTypes_Admin::getAssignments($_GET[$osC_Template->getModule()], $_GET['aID']));
-
+$os_c_object_info = new Os_C_object_Info(Os_C_product_Types_admin::get_assignments($_GET[$os_c_template->get_module()], $_GET['aID']));
 $modules_array = [];
-
-foreach (osC_ProductTypes_Admin::getModules() as $module) {
+foreach (Os_C_product_Types_admin::get_modules() as $module) {
     $modules_array[$module['id']] = $module['title'];
 }
-
 $activated_modules_array = [];
-
-foreach ($osC_ObjectInfo->get('modules') as $module) {
+foreach ($os_c_object_info->get('modules') as $module) {
     $activated_modules_array[] = $module['module'];
 }
 ?>
@@ -50,46 +46,56 @@ foreach ($osC_ObjectInfo->get('modules') as $module) {
 }
 </style>
 
-<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php 
+echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module()), $os_c_template->get_page_title());
+?></h1>
 
-<?php
-  if ($osC_MessageStack->exists($osC_Template->getModule())) {
-      echo $osC_MessageStack->get($osC_Template->getModule());
-  }
+<?php 
+if ($os_c_message_stack->exists($os_c_template->get_module())) {
+    echo $os_c_message_stack->get($os_c_template->get_module());
+}
 ?>
 
 <div class="infoBox">
-  <h3><?php echo osc_icon('edit.png') . ' ' . $osC_ObjectInfo->getProtected('action_title'); ?></h3>
+  <h3><?php 
+echo osc_icon('edit.png') . ' ' . $os_c_object_info->get_protected('action_title');
+?></h3>
 
-  <form name="tEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . (int)$_GET[$osC_Template->getModule()] . '&aID=' . $osC_ObjectInfo->get('action') . '&action=entry_save'); ?>" method="post">
+  <form name="tEdit" action="<?php 
+echo osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '=' . (int) $_GET[$os_c_template->get_module()] . '&aID=' . $os_c_object_info->get('action') . '&action=entry_save');
+?>" method="post">
 
-  <p><?php echo OSCOM::getDef('introduction_edit_assignments'); ?></p>
+  <p><?php 
+echo OSCOM::get_def('introduction_edit_assignments');
+?></p>
 
   <fieldset id="containment">
     <p><label>Active Modules:</label><ul id="modulesInstalled" class="connectedList">
 
-<?php
-  foreach ($activated_modules_array as $id) {
-      echo '<li id="' . $id . '" class="ui-state-default fg-button fg-button-icon-left" onmouseover="$(this).addClass(\'ui-state-highlight\');" onmouseout="$(this).removeClass(\'ui-state-highlight\');"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>' . $modules_array[$id] . '</li>';
-  }
+<?php 
+foreach ($activated_modules_array as $id) {
+    echo '<li id="' . $id . '" class="ui-state-default fg-button fg-button-icon-left" onmouseover="$(this).addClass(\'ui-state-highlight\');" onmouseout="$(this).removeClass(\'ui-state-highlight\');"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>' . $modules_array[$id] . '</li>';
+}
 ?>
 
     </ul></p>
 
     <p><label>Available Modules:</label><ul id="modulesAvailable" class="connectedList">
 
-<?php
-  foreach ($modules_array as $id => $title) {
-      if (!in_array($id, $activated_modules_array)) {
-          echo '<li id="' . $id . '" class="ui-state-default fg-button fg-button-icon-left" onmouseover="$(this).addClass(\'ui-state-highlight\');" onmouseout="$(this).removeClass(\'ui-state-highlight\');"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>' . $title . '</li>';
-      }
-  }
+<?php 
+foreach ($modules_array as $id => $title) {
+    if (!in_array($id, $activated_modules_array)) {
+        echo '<li id="' . $id . '" class="ui-state-default fg-button fg-button-icon-left" onmouseover="$(this).addClass(\'ui-state-highlight\');" onmouseout="$(this).removeClass(\'ui-state-highlight\');"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>' . $title . '</li>';
+    }
+}
 ?>
 
     </ul></p>
   </fieldset>
 
-  <p><?php echo osc_draw_hidden_field('modules', implode(',', $activated_modules_array), 'id="modules"') . osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(['priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save')]) . ' ' . osc_draw_button(['href' => osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()]), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel')]); ?></p>
+  <p><?php 
+echo osc_draw_hidden_field('modules', implode(',', $activated_modules_array), 'id="modules"') . osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(['priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::get_def('button_save')]) . ' ' . osc_draw_button(['href' => osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '=' . $_GET[$os_c_template->get_module()]), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::get_def('button_cancel')]);
+?></p>
 
   </form>
 </div>

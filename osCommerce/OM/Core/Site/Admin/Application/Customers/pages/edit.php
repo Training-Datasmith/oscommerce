@@ -1,24 +1,20 @@
 <?php
+
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
-
-use osCommerce\OM\Core\HTML;
-use osCommerce\OM\Core\ObjectInfo;
-use osCommerce\OM\Core\OSCOM;
-use osCommerce\OM\Core\Site\Admin\Application\Customers\Customers;
-
+use Os_Commerce\OM\Core\HTML;
+use Os_Commerce\OM\Core\Object_Info;
+use Os_Commerce\OM\Core\OSCOM;
+use Os_Commerce\OM\Core\Site\Admin\Application\Customers\Customers;
 $new_customer = false;
-
 if (ACCOUNT_GENDER > -1) {
-    $gender_array = [['id' => 'm', 'text' => OSCOM::getDef('gender_male')],
-                          ['id' => 'f', 'text' => OSCOM::getDef('gender_female')]];
+    $gender_array = [['id' => 'm', 'text' => OSCOM::get_def('gender_male')], ['id' => 'f', 'text' => OSCOM::get_def('gender_female')]];
 }
-
-$OSCOM_ObjectInfo = new ObjectInfo(Customers::get($_GET['id']));
+$oscom_object_info = new Object_Info(Customers::get($_GET['id']));
 ?>
 
 <script>
@@ -27,17 +23,21 @@ $(function() {
 });
 </script>
 
-<h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
+<h1><?php 
+echo $OSCOM_Template->get_icon(32) . HTML::link(OSCOM::get_link(), $OSCOM_Template->get_page_title());
+?></h1>
 
-<?php
-  if ($OSCOM_MessageStack->exists()) {
-      echo $OSCOM_MessageStack->get();
-  }
+<?php 
+if ($oscom_message_stack->exists()) {
+    echo $oscom_message_stack->get();
+}
 ?>
 
 <div id="sectionMenuContainer" style="float: left; padding-bottom: 10px;">
   <span class="ui-widget-header ui-corner-all" style="padding: 10px 4px;">
-    <span id="sectionMenu"><?php echo HTML::radioField('sections', [['id' => 'personal', 'text' => OSCOM::getDef('section_personal')], ['id' => 'password', 'text' => OSCOM::getDef('section_password')], ['id' => 'addressBook', 'text' => OSCOM::getDef('section_address_book')], ['id' => 'newsletters', 'text' => OSCOM::getDef('section_newsletters')], ['id' => 'map', 'text' => OSCOM::getDef('section_map')], ['id' => 'social', 'text' => OSCOM::getDef('section_social')]], (isset($_GET['tabIndex']) ? $_GET['tabIndex'] : null), null, ''); ?></span>
+    <span id="sectionMenu"><?php 
+echo HTML::radio_field('sections', [['id' => 'personal', 'text' => OSCOM::get_def('section_personal')], ['id' => 'password', 'text' => OSCOM::get_def('section_password')], ['id' => 'addressBook', 'text' => OSCOM::get_def('section_address_book')], ['id' => 'newsletters', 'text' => OSCOM::get_def('section_newsletters')], ['id' => 'map', 'text' => OSCOM::get_def('section_map')], ['id' => 'social', 'text' => OSCOM::get_def('section_social')]], isset($_GET['tabIndex']) ? $_GET['tabIndex'] : null, null, '');
+?></span>
   </span>
 </div>
 
@@ -47,20 +47,24 @@ $(function() {
 });
 </script>
 
-<form id="cEditForm" name="cEdit" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'Save&Process&id=' . $_GET['id']); ?>" method="post">
+<form id="cEditForm" name="cEdit" class="dataForm" action="<?php 
+echo OSCOM::get_link(null, null, 'Save&Process&id=' . $_GET['id']);
+?>" method="post">
 
-<div id="formButtons" style="float: right;"><?php echo HTML::button(['priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save')]) . ' ' . HTML::button(['type' => 'button', 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'), 'params' => 'onclick="$.safetynet.suppressed(true); window.location.href=\'' . OSCOM::getLink() . '\';"']); ?></div>
+<div id="formButtons" style="float: right;"><?php 
+echo HTML::button(['priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::get_def('button_save')]) . ' ' . HTML::button(['type' => 'button', 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::get_def('button_cancel'), 'params' => 'onclick="$.safetynet.suppressed(true); window.location.href=\'' . OSCOM::get_link() . '\';"']);
+?></div>
 
 <div style="clear: both;"></div>
 
-<?php
+<?php 
 // HPDL Modularize, zack zack!
-  include('section_personal.php');
-include('section_password.php');
-include('section_addressBook.php');
-include('section_newsletters.php');
-include('section_map.php');
-include('section_social.php');
+include 'section_personal.php';
+include 'section_password.php';
+include 'section_addressBook.php';
+include 'section_newsletters.php';
+include 'section_map.php';
+include 'section_social.php';
 ?>
 
 </form>

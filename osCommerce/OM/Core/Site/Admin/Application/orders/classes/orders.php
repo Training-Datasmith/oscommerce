@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /*
   $Id$
 
@@ -13,76 +13,62 @@ declare(strict_types=1);
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
-
-class osC_Orders_Admin
+class Os_C_orders_admin
 {
     public static function delete($id, $restock = false)
     {
-        global $osC_Database;
-
+        global $os_c_database;
         $error = false;
-
-        $osC_Database->startTransaction();
-
+        $os_c_database->start_transaction();
         if ($restock === true) {
-            $Qproducts = $osC_Database->query('select products_id, products_quantity from :table_orders_products where orders_id = :orders_id');
-            $Qproducts->bindTable(':table_orders_products', TABLE_ORDERS_PRODUCTS);
-            $Qproducts->bindInt(':orders_id', $id);
+            $Qproducts = $os_c_database->query('select products_id, products_quantity from :table_orders_products where orders_id = :orders_id');
+            $Qproducts->bind_table(':table_orders_products', TABLE_ORDERS_PRODUCTS);
+            $Qproducts->bind_int(':orders_id', $id);
             $Qproducts->execute();
-
             while ($Qproducts->next()) {
-                $Qupdate = $osC_Database->query('update :table_products set products_quantity = products_quantity + :products_quantity, products_ordered = products_ordered - :products_ordered where products_id = :products_id');
-                $Qupdate->bindTable(':table_products', TABLE_PRODUCTS);
-                $Qupdate->bindInt(':products_quantity', $Qproducts->valueInt('products_quantity'));
-                $Qupdate->bindInt(':products_ordered', $Qproducts->valueInt('products_quantity'));
-                $Qupdate->bindInt(':products_id', $Qproducts->valueInt('products_id'));
-                $Qupdate->setLogging($_SESSION['module'], $id);
+                $Qupdate = $os_c_database->query('update :table_products set products_quantity = products_quantity + :products_quantity, products_ordered = products_ordered - :products_ordered where products_id = :products_id');
+                $Qupdate->bind_table(':table_products', TABLE_PRODUCTS);
+                $Qupdate->bind_int(':products_quantity', $Qproducts->value_int('products_quantity'));
+                $Qupdate->bind_int(':products_ordered', $Qproducts->value_int('products_quantity'));
+                $Qupdate->bind_int(':products_id', $Qproducts->value_int('products_id'));
+                $Qupdate->set_logging($_SESSION['module'], $id);
                 $Qupdate->execute();
-
-                if ($osC_Database->isError() === true) {
+                if ($os_c_database->is_error() === true) {
                     $error = true;
                     break;
                 }
-
-                $Qcheck = $osC_Database->query('select products_quantity from :table_products where products_id = :products_id and products_Status = 0');
-                $Qcheck->bindTable(':table_products', TABLE_PRODUCTS);
-                $Qcheck->bindInt(':products_id', $Qproducts->valueInt('products_id'));
+                $Qcheck = $os_c_database->query('select products_quantity from :table_products where products_id = :products_id and products_Status = 0');
+                $Qcheck->bind_table(':table_products', TABLE_PRODUCTS);
+                $Qcheck->bind_int(':products_id', $Qproducts->value_int('products_id'));
                 $Qcheck->execute();
-
-                if (($Qcheck->numberOfRows() === 1) && ($Qcheck->valueInt('products_quantity') > 0)) {
-                    $Qstatus = $osC_Database->query('update :table_products set products_status = 1 where products_id = :products_id');
-                    $Qstatus->bindTable(':table_products', TABLE_PRODUCTS);
-                    $Qstatus->bindInt(':products_id', $Qproducts->valueInt('products_id'));
-                    $Qstatus->setLogging($_SESSION['module'], $id);
+                if ($Qcheck->number_of_rows() === 1 && $Qcheck->value_int('products_quantity') > 0) {
+                    $Qstatus = $os_c_database->query('update :table_products set products_status = 1 where products_id = :products_id');
+                    $Qstatus->bind_table(':table_products', TABLE_PRODUCTS);
+                    $Qstatus->bind_int(':products_id', $Qproducts->value_int('products_id'));
+                    $Qstatus->set_logging($_SESSION['module'], $id);
                     $Qstatus->execute();
-
-                    if ($osC_Database->isError() === true) {
+                    if ($os_c_database->is_error() === true) {
                         $error = true;
                         break;
                     }
                 }
             }
         }
-
         if ($error === false) {
-            $Qo = $osC_Database->query('delete from :table_orders where orders_id = :orders_id');
-            $Qo->bindTable(':table_orders', TABLE_ORDERS);
-            $Qo->bindInt(':orders_id', $id);
-            $Qo->setLogging($_SESSION['module'], $id);
+            $Qo = $os_c_database->query('delete from :table_orders where orders_id = :orders_id');
+            $Qo->bind_table(':table_orders', TABLE_ORDERS);
+            $Qo->bind_int(':orders_id', $id);
+            $Qo->set_logging($_SESSION['module'], $id);
             $Qo->execute();
-
-            if ($osC_Database->isError() === true) {
+            if ($os_c_database->is_error() === true) {
                 $error = true;
             }
         }
-
         if ($error === false) {
-            $osC_Database->commitTransaction();
-
+            $os_c_database->commit_transaction();
             return true;
         } else {
-            $osC_Database->rollbackTransaction();
-
+            $os_c_database->rollback_transaction();
             return false;
         }
     }

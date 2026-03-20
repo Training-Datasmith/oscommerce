@@ -1,37 +1,31 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
+namespace Os_Commerce\OM\Core\Site\Shop\Application\Account\Action;
 
-namespace osCommerce\OM\Core\Site\Shop\Application\Account\Action;
-
-use osCommerce\OM\Core\ApplicationAbstract;
-use osCommerce\OM\Core\OSCOM;
-use osCommerce\OM\Core\Registry;
-
-class LogOff
+use Os_Commerce\OM\Core\Application_Abstract;
+use Os_Commerce\OM\Core\OSCOM;
+use Os_Commerce\OM\Core\Registry;
+class Log_Off
 {
-    public static function execute(ApplicationAbstract $application)
+    public static function execute(Application_Abstract $application)
     {
         $OSCOM_Service = Registry::get('Service');
         $OSCOM_Breadcrumb = Registry::get('Breadcrumb');
-        $OSCOM_ShoppingCart = Registry::get('ShoppingCart');
+        $oscom_shopping_cart = Registry::get('ShoppingCart');
         $OSCOM_Customer = Registry::get('Customer');
-
-        $application->setPageTitle(OSCOM::getDef('sign_out_heading'));
-        $application->setPageContent('logoff.php');
-
-        if ($OSCOM_Service->isStarted('Breadcrumb')) {
-            $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_sign_out'));
+        $application->set_page_title(OSCOM::get_def('sign_out_heading'));
+        $application->set_page_content('logoff.php');
+        if ($OSCOM_Service->is_started('Breadcrumb')) {
+            $OSCOM_Breadcrumb->add(OSCOM::get_def('breadcrumb_sign_out'));
         }
-
         $OSCOM_Customer->reset();
-
-        $OSCOM_ShoppingCart->reset();
+        $oscom_shopping_cart->reset();
     }
 }

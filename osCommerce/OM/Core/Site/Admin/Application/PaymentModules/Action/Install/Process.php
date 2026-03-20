@@ -1,33 +1,29 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
+namespace Os_Commerce\OM\Core\Site\Admin\Application\Payment_Modules\Action\Install;
 
-namespace osCommerce\OM\Core\Site\Admin\Application\PaymentModules\Action\Install;
-
-use osCommerce\OM\Core\ApplicationAbstract;
-use osCommerce\OM\Core\HTML;
-use osCommerce\OM\Core\OSCOM;
-use osCommerce\OM\Core\Registry;
-use osCommerce\OM\Core\Site\Admin\Application\PaymentModules\PaymentModules;
-
+use Os_Commerce\OM\Core\Application_Abstract;
+use Os_Commerce\OM\Core\HTML;
+use Os_Commerce\OM\Core\OSCOM;
+use Os_Commerce\OM\Core\Registry;
+use Os_Commerce\OM\Core\Site\Admin\Application\Payment_Modules\Payment_Modules;
 class Process
 {
-    public static function execute(ApplicationAbstract $application)
+    public static function execute(Application_Abstract $application)
     {
         $data = HTML::sanitize(basename($_GET['code']));
-
-        if (PaymentModules::install($data)) {
-            OSCOM::redirect(OSCOM::getLink(null, null, 'Save&code=' . $_GET['code']));
+        if (Payment_Modules::install($data)) {
+            OSCOM::redirect(OSCOM::get_link(null, null, 'Save&code=' . $_GET['code']));
         } else {
-            Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
-
-            OSCOM::redirect(OSCOM::getLink());
+            Registry::get('MessageStack')->add(null, OSCOM::get_def('ms_error_action_not_performed'), 'error');
+            OSCOM::redirect(OSCOM::get_link());
         }
     }
 }

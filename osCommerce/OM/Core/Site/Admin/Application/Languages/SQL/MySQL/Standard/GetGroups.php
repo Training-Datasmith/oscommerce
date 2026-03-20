@@ -1,33 +1,26 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
+namespace Os_Commerce\OM\Core\Site\Admin\Application\Languages\SQL\My_Sql\Standard;
 
-namespace osCommerce\OM\Core\Site\Admin\Application\Languages\SQL\MySQL\Standard;
-
-use osCommerce\OM\Core\Registry;
-
-class GetGroups
+use Os_Commerce\OM\Core\Registry;
+class Get_Groups
 {
     public static function execute($data)
     {
         $OSCOM_PDO = Registry::get('PDO');
-
         $result = [];
-
         $Qgroups = $OSCOM_PDO->prepare('select distinct content_group, count(*) as total_entries from :table_languages_definitions where languages_id = :languages_id group by content_group order by content_group');
-        $Qgroups->bindInt(':languages_id', $data['id']);
+        $Qgroups->bind_int(':languages_id', $data['id']);
         $Qgroups->execute();
-
-        $result['entries'] = $Qgroups->fetchAll();
-
+        $result['entries'] = $Qgroups->fetch_all();
         $result['total'] = count($result['entries']);
-
         return $result;
     }
 }

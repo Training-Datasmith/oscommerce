@@ -1,4 +1,5 @@
 <?php
+
 /*
   $Id: $
 
@@ -13,40 +14,56 @@
 */
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php 
+echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module()), $os_c_template->get_page_title());
+?></h1>
 
-<?php
-  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
-      echo $osC_MessageStack->get($osC_Template->getModule());
-  }
+<?php 
+if ($os_c_message_stack->size($os_c_template->get_module()) > 0) {
+    echo $os_c_message_stack->get($os_c_template->get_module());
+}
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('new.png') . ' ' . $osC_Language->get('action_heading_new_group_entry'); ?></div>
+<div class="infoBoxHeading"><?php 
+echo osc_icon('new.png') . ' ' . $os_c_language->get('action_heading_new_group_entry');
+?></div>
 <div class="infoBoxContent">
-  <form name="paeNew" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&action=saveEntry'); ?>" method="post">
+  <form name="paeNew" action="<?php 
+echo osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '=' . $_GET[$os_c_template->get_module()] . '&page=' . $_GET['page'] . '&action=saveEntry');
+?>" method="post">
 
-  <p><?php echo $osC_Language->get('introduction_new_group_entry'); ?></p>
+  <p><?php 
+echo $os_c_language->get('introduction_new_group_entry');
+?></p>
 
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
-      <td width="40%" valign="top"><?php echo '<b>' . $osC_Language->get('field_group_entry_name') . '</b>'; ?></td>
+      <td width="40%" valign="top"><?php 
+echo '<b>' . $os_c_language->get('field_group_entry_name') . '</b>';
+?></td>
       <td width="60%">
 
-<?php
-  foreach ($osC_Language->getAll() as $l) {
-      echo $osC_Language->showImage($l['code']) . '&nbsp;' .  osc_draw_input_field('entry_name[' . $l['id'] . ']') . '<br />';
-  }
+<?php 
+foreach ($os_c_language->get_all() as $l) {
+    echo $os_c_language->show_image($l['code']) . '&nbsp;' . osc_draw_input_field('entry_name[' . $l['id'] . ']') . '<br />';
+}
 ?>
 
       </td>
     </tr>
     <tr>
-      <td width="40%" valign="top"><?php echo '<b>' . $osC_Language->get('field_sort_order') . '</b>'; ?></td>
-      <td width="60%"><?php echo osc_draw_input_field('sort_order'); ?></td>
+      <td width="40%" valign="top"><?php 
+echo '<b>' . $os_c_language->get('field_sort_order') . '</b>';
+?></td>
+      <td width="60%"><?php 
+echo osc_draw_input_field('sort_order');
+?></td>
     </tr>
   </table>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php 
+echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $os_c_language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $os_c_language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '=' . $_GET[$os_c_template->get_module()] . '&page=' . $_GET['page']) . '\';" class="operationButton" />';
+?></p>
 
   </form>
 </div>

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /*
   osCommerce Online Merchant $osCommerce-SIG$
   Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
@@ -9,24 +9,19 @@ declare(strict_types=1);
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
-
-class osC_Application_Product_types_Actions_delete extends osC_Application_Product_types
+class Os_C_application_product_types_actions_delete extends Os_C_application_product_types
 {
     public function __construct()
     {
-        global $osC_MessageStack;
-
+        global $os_c_message_stack;
         parent::__construct();
-
         $this->_page_contents = 'delete.php';
-
-        if (isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm')) {
-            if (osC_ProductTypes_Admin::delete($_GET['tID'])) {
-                $osC_MessageStack->add($this->_module, OSCOM::getDef('ms_success_action_performed'), 'success');
+        if (isset($_POST['subaction']) && $_POST['subaction'] == 'confirm') {
+            if (Os_C_product_Types_admin::delete($_GET['tID'])) {
+                $os_c_message_stack->add($this->_module, OSCOM::get_def('ms_success_action_performed'), 'success');
             } else {
-                $osC_MessageStack->add($this->_module, OSCOM::getDef('ms_error_action_not_performed'), 'error');
+                $os_c_message_stack->add($this->_module, OSCOM::get_def('ms_error_action_not_performed'), 'error');
             }
-
             osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
         }
     }

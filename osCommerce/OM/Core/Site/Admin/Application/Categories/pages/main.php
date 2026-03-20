@@ -1,35 +1,37 @@
 <?php
+
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
-
-use osCommerce\OM\Core\HTML;
-use osCommerce\OM\Core\OSCOM;
-
+use Os_Commerce\OM\Core\HTML;
+use Os_Commerce\OM\Core\OSCOM;
 ?>
 
-<h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
+<h1><?php 
+echo $OSCOM_Template->get_icon(32) . HTML::link(OSCOM::get_link(), $OSCOM_Template->get_page_title());
+?></h1>
 
-<?php
-  if ($OSCOM_MessageStack->exists()) {
-      echo $OSCOM_MessageStack->get();
-  }
+<?php 
+if ($oscom_message_stack->exists()) {
+    echo $oscom_message_stack->get();
+}
 ?>
 
 <form id="liveSearchForm">
-  <?php echo HTML::inputField('search', null, 'id="liveSearchField" class="searchField" placeholder="' . OSCOM::getDef('placeholder_search') . '"') . HTML::button(['type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => OSCOM::getDef('button_reset')]) . '&nbsp;' . HTML::selectMenu('cid', array_merge([['id' => '0', 'text' => OSCOM::getDef('top_category')]], $OSCOM_Application->getCategoryList())); ?>
+  <?php 
+echo HTML::input_field('search', null, 'id="liveSearchField" class="searchField" placeholder="' . OSCOM::get_def('placeholder_search') . '"') . HTML::button(['type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => OSCOM::get_def('button_reset')]) . '&nbsp;' . HTML::select_menu('cid', array_merge([['id' => '0', 'text' => OSCOM::get_def('top_category')]], $OSCOM_Application->get_category_list()));
+?>
 
   <span style="float: right;">
 
-<?php
-  if ($OSCOM_Application->getCurrentCategoryID() > 0) {
-      echo HTML::button(['href' => OSCOM::getLink(null, null, 'cid=' . $OSCOM_CategoryTree->getParentID($OSCOM_Application->getCurrentCategoryID())), 'priority' => 'secondary', 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back')]) . ' ';
-  }
-
-echo HTML::button(['href' => OSCOM::getLink(null, null, 'Save&cid=' . $OSCOM_Application->getCurrentCategoryID()), 'icon' => 'plus', 'title' => OSCOM::getDef('button_insert')]);
+<?php 
+if ($OSCOM_Application->get_current_category_id() > 0) {
+    echo HTML::button(['href' => OSCOM::get_link(null, null, 'cid=' . $oscom_category_tree->get_parent_id($OSCOM_Application->get_current_category_id())), 'priority' => 'secondary', 'icon' => 'triangle-1-w', 'title' => OSCOM::get_def('button_back')]) . ' ';
+}
+echo HTML::button(['href' => OSCOM::get_link(null, null, 'Save&cid=' . $OSCOM_Application->get_current_category_id()), 'icon' => 'plus', 'title' => OSCOM::get_def('button_insert')]);
 ?>
 
   </span>
@@ -38,7 +40,9 @@ echo HTML::button(['href' => OSCOM::getLink(null, null, 'Save&cid=' . $OSCOM_App
 <script>
 $(function() {
   $('#cid').change(function() {
-    window.location.href='<?php echo OSCOM::getLink(null, null, 'cid=CATEGORYID'); ?>'.replace('CATEGORYID', $('#cid option:selected').val());
+    window.location.href='<?php 
+echo OSCOM::get_link(null, null, 'cid=CATEGORYID');
+?>'.replace('CATEGORYID', $('#cid option:selected').val());
   });
 });
 </script>
@@ -53,15 +57,25 @@ $(function() {
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable" id="categoriesDataTable">
   <thead>
     <tr>
-      <th><?php echo OSCOM::getDef('table_heading_categories'); ?></th>
-      <th width="150"><?php echo OSCOM::getDef('table_heading_action'); ?></th>
-      <th align="center" width="20"><?php echo HTML::checkboxField('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
+      <th><?php 
+echo OSCOM::get_def('table_heading_categories');
+?></th>
+      <th width="150"><?php 
+echo OSCOM::get_def('table_heading_action');
+?></th>
+      <th align="center" width="20"><?php 
+echo HTML::checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"');
+?></th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="2"><?php echo HTML::submitImage(HTML::iconRaw('move.png'), OSCOM::getDef('icon_move'), 'onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'BatchMove&cid=' . $OSCOM_Application->getCurrentCategoryID()) . '\';"') . '&nbsp;<a href="#" onclick="$(\'#dialogBatchDeleteConfirm\').dialog(\'open\'); return false;">' . HTML::icon('trash.png') . '</a>'; ?></th>
-      <th align="center" width="20"><?php echo HTML::checkboxField('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
+      <th align="right" colspan="2"><?php 
+echo HTML::submit_image(HTML::icon_raw('move.png'), OSCOM::get_def('icon_move'), 'onclick="document.batch.action=\'' . OSCOM::get_link(null, null, 'BatchMove&cid=' . $OSCOM_Application->get_current_category_id()) . '\';"') . '&nbsp;<a href="#" onclick="$(\'#dialogBatchDeleteConfirm\').dialog(\'open\'); return false;">' . HTML::icon('trash.png') . '</a>';
+?></th>
+      <th align="center" width="20"><?php 
+echo HTML::checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"');
+?></th>
     </tr>
   </tfoot>
   <tbody>
@@ -71,7 +85,9 @@ $(function() {
 </form>
 
 <div style="padding: 2px;">
-  <span id="dataTableLegend"><?php echo '<b>' . OSCOM::getDef('table_action_legend') . '</b> ' . HTML::icon('edit.png') . '&nbsp;' . OSCOM::getDef('icon_edit') . '&nbsp;&nbsp;' . HTML::icon('move.png') . '&nbsp;' . OSCOM::getDef('icon_move') . '&nbsp;&nbsp;' . HTML::icon('trash.png') . '&nbsp;' . OSCOM::getDef('icon_trash'); ?></span>
+  <span id="dataTableLegend"><?php 
+echo '<b>' . OSCOM::get_def('table_action_legend') . '</b> ' . HTML::icon('edit.png') . '&nbsp;' . OSCOM::get_def('icon_edit') . '&nbsp;&nbsp;' . HTML::icon('move.png') . '&nbsp;' . OSCOM::get_def('icon_move') . '&nbsp;&nbsp;' . HTML::icon('trash.png') . '&nbsp;' . OSCOM::get_def('icon_trash');
+?></span>
   <span id="batchPullDownMenu"></span>
 </div>
 
@@ -88,17 +104,31 @@ $(function() {
   }
 
   var dataTableName = 'categoriesDataTable';
-  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'GetAll&cid=' . $OSCOM_Application->getCurrentCategoryID()); ?>';
+  var dataTableDataURL = '<?php 
+echo OSCOM::get_rpc_link(null, null, 'GetAll&cid=' . $OSCOM_Application->get_current_category_id());
+?>';
 
-  var dragIcon = '<?php echo HTML::icon('drag.png', null, null, 'class="dragIcon"'); ?>';
+  var dragIcon = '<?php 
+echo HTML::icon('drag.png', null, null, 'class="dragIcon"');
+?>';
 
-  var categoryLink = '<?php echo OSCOM::getLink(null, null, 'cid=CATEGORYID'); ?>';
-  var categoryLinkIcon = '<?php echo HTML::icon('folder.png'); ?>';
+  var categoryLink = '<?php 
+echo OSCOM::get_link(null, null, 'cid=CATEGORYID');
+?>';
+  var categoryLinkIcon = '<?php 
+echo HTML::icon('folder.png');
+?>';
 
-  var categoryEditLink = '<?php echo OSCOM::getLink(null, null, 'Save&id=CATEGORYID'); ?>';
-  var categoryEditLinkIcon = '<?php echo HTML::icon('edit.png'); ?>';
+  var categoryEditLink = '<?php 
+echo OSCOM::get_link(null, null, 'Save&id=CATEGORYID');
+?>';
+  var categoryEditLinkIcon = '<?php 
+echo HTML::icon('edit.png');
+?>';
 
-  var categoryDeleteLinkIcon = '<?php echo HTML::icon('trash.png'); ?>';
+  var categoryDeleteLinkIcon = '<?php 
+echo HTML::icon('trash.png');
+?>';
 
   var osC_DataTable = new osC_DataTable();
   osC_DataTable.load();
@@ -146,7 +176,9 @@ $(function() {
 
       $('#batchTotalPages').html(batchIconProgress + '&nbsp;Updating&hellip;');
 
-      $.getJSON('<?php echo OSCOM::getRPCLink(null, null, 'SaveSortOrder'); ?>', $('#categoriesDataTable tbody').sortable('serialize'), function (response) {
+      $.getJSON('<?php 
+echo OSCOM::get_rpc_link(null, null, 'SaveSortOrder');
+?>', $('#categoriesDataTable tbody').sortable('serialize'), function (response) {
         if ( response.rpcStatus == 1 ) {
           $('#batchTotalPages').html(sortStatus);
         } else {
@@ -157,12 +189,20 @@ $(function() {
   });
 </script>
 
-<div id="dialogDeleteConfirm" title="<?php echo HTML::output(OSCOM::getDef('dialog_delete_category_title')); ?>">
-  <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span><?php echo OSCOM::getDef('dialog_delete_category_desc'); ?></p>
+<div id="dialogDeleteConfirm" title="<?php 
+echo HTML::output(OSCOM::get_def('dialog_delete_category_title'));
+?>">
+  <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span><?php 
+echo OSCOM::get_def('dialog_delete_category_desc');
+?></p>
 </div>
 
-<div id="dialogBatchDeleteConfirm" title="<?php echo HTML::output(OSCOM::getDef('dialog_batch_delete_category_title')); ?>">
-  <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span><?php echo OSCOM::getDef('dialog_batch_delete_category_desc'); ?></p>
+<div id="dialogBatchDeleteConfirm" title="<?php 
+echo HTML::output(OSCOM::get_def('dialog_batch_delete_category_title'));
+?>">
+  <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span><?php 
+echo OSCOM::get_def('dialog_batch_delete_category_desc');
+?></p>
 </div>
 
 <script>
@@ -172,10 +212,16 @@ $(function() {
     resizable: false,
     modal: true,
     buttons: {
-      '<?php echo addslashes(OSCOM::getDef('button_delete')); ?>': function() {
-        window.location.href='<?php echo OSCOM::getLink(null, null, 'Delete&Process&id=CATEGORYID'); ?>'.replace('CATEGORYID', $(this).data('id'));
+      '<?php 
+echo addslashes(OSCOM::get_def('button_delete'));
+?>': function() {
+        window.location.href='<?php 
+echo OSCOM::get_link(null, null, 'Delete&Process&id=CATEGORYID');
+?>'.replace('CATEGORYID', $(this).data('id'));
       },
-      '<?php echo addslashes(OSCOM::getDef('button_cancel')); ?>': function() {
+      '<?php 
+echo addslashes(OSCOM::get_def('button_cancel'));
+?>': function() {
         $(this).dialog('close');
       }
     }
@@ -186,11 +232,17 @@ $(function() {
     resizable: false,
     modal: true,
     buttons: {
-      '<?php echo addslashes(OSCOM::getDef('button_delete')); ?>': function() {
-        document.batch.action='<?php echo OSCOM::getLink(null, null, 'BatchDelete&Process&cid=' . $OSCOM_Application->getCurrentCategoryID()); ?>';
+      '<?php 
+echo addslashes(OSCOM::get_def('button_delete'));
+?>': function() {
+        document.batch.action='<?php 
+echo OSCOM::get_link(null, null, 'BatchDelete&Process&cid=' . $OSCOM_Application->get_current_category_id());
+?>';
         document.batch.submit();
       },
-      '<?php echo addslashes(OSCOM::getDef('button_cancel')); ?>': function() {
+      '<?php 
+echo addslashes(OSCOM::get_def('button_cancel'));
+?>': function() {
         $(this).dialog('close');
       }
     }

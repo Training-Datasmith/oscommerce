@@ -1,30 +1,25 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
+namespace Os_Commerce\OM\Core\Site\Admin\Application\Currencies\Model;
 
-namespace osCommerce\OM\Core\Site\Admin\Application\Currencies\Model;
-
-use osCommerce\OM\Core\Cache;
-use osCommerce\OM\Core\OSCOM;
-
+use Os_Commerce\OM\Core\Cache;
+use Os_Commerce\OM\Core\OSCOM;
 class delete
 {
     public static function execute($id)
     {
         $data = ['id' => $id];
-
-        if (OSCOM::callDB('Admin\Currencies\Delete', $data)) {
+        if (OSCOM::call_db('Admin\Currencies\Delete', $data)) {
             Cache::clear('currencies');
-
             return true;
         }
-
         return false;
     }
 }

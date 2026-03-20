@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /*
   $Id: $
 
@@ -13,13 +13,11 @@ declare(strict_types=1);
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
-
-class osC_Application_Products_Actions_preview extends osC_Application_Products
+class Os_C_application_products_actions_preview extends Os_C_application_products
 {
     public function __construct()
     {
         parent::__construct();
-
         if (isset($_GET[$this->_module]) && is_numeric($_GET[$this->_module])) {
             $this->_page_contents = 'preview.php';
         }

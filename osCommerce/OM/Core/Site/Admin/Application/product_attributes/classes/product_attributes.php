@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /*
   $Id: $
 
@@ -13,101 +13,78 @@ declare(strict_types=1);
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
-
-abstract class osC_ProductAttributes_Admin
+abstract class Os_C_product_Attributes_admin
 {
     protected $_title;
-
-    abstract public function setFunction($value);
-
+    abstract public function set_function($value);
     public function __construct()
     {
-        global $osC_Language;
-
-        $osC_Language->loadIniFile('modules/product_attributes/' . $this->getCode() . '.php');
-
-        $this->_title = $osC_Language->get('product_attributes_' . $this->getCode() . '_title');
+        global $os_c_language;
+        $os_c_language->load_ini_file('modules/product_attributes/' . $this->get_code() . '.php');
+        $this->_title = $os_c_language->get('product_attributes_' . $this->get_code() . '_title');
     }
-
-    public function getID()
+    public function get_id()
     {
-        global $osC_Database;
-
-        $Qmodule = $osC_Database->query('select id from :table_templates_boxes where code = :code and modules_group = :modules_group');
-        $Qmodule->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
-        $Qmodule->bindValue(':code', $this->getCode());
-        $Qmodule->bindValue(':modules_group', 'product_attributes');
+        global $os_c_database;
+        $Qmodule = $os_c_database->query('select id from :table_templates_boxes where code = :code and modules_group = :modules_group');
+        $Qmodule->bind_table(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
+        $Qmodule->bind_value(':code', $this->get_code());
+        $Qmodule->bind_value(':modules_group', 'product_attributes');
         $Qmodule->execute();
-
-        return ($Qmodule->numberOfRows() === 1) ? $Qmodule->valueInt('id') : 0;
+        return $Qmodule->number_of_rows() === 1 ? $Qmodule->value_int('id') : 0;
     }
-
-    public function getCode()
+    public function get_code()
     {
         return substr(get_class($this), 22);
     }
-
-    public function getTitle()
+    public function get_title()
     {
         return $this->_title;
     }
-
-    public function isInstalled()
+    public function is_installed()
     {
-        return ($this->getID() > 0);
+        return $this->get_id() > 0;
     }
-
     public function install()
     {
-        global $osC_Database;
-
-        $Qinstall = $osC_Database->query('insert into :table_templates_boxes (title, code, author_name, author_www, modules_group) values (:title, :code, :author_name, :author_www, :modules_group)');
-        $Qinstall->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
-        $Qinstall->bindValue(':title', $this->getTitle());
-        $Qinstall->bindValue(':code', $this->getCode());
-        $Qinstall->bindValue(':author_name', '');
-        $Qinstall->bindValue(':author_www', '');
-        $Qinstall->bindValue(':modules_group', 'product_attributes');
+        global $os_c_database;
+        $Qinstall = $os_c_database->query('insert into :table_templates_boxes (title, code, author_name, author_www, modules_group) values (:title, :code, :author_name, :author_www, :modules_group)');
+        $Qinstall->bind_table(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
+        $Qinstall->bind_value(':title', $this->get_title());
+        $Qinstall->bind_value(':code', $this->get_code());
+        $Qinstall->bind_value(':author_name', '');
+        $Qinstall->bind_value(':author_www', '');
+        $Qinstall->bind_value(':modules_group', 'product_attributes');
         $Qinstall->execute();
-
-        return ($osC_Database->isError() === false);
+        return $os_c_database->is_error() === false;
     }
-
     public function uninstall()
     {
-        global $osC_Database;
-
+        global $os_c_database;
         $error = false;
-
-        $osC_Database->startTransaction();
-
-        $Qdelete = $osC_Database->query('delete from :table_product_attributes where id = :id');
-        $Qdelete->bindTable(':table_product_attributes', TABLE_PRODUCT_ATTRIBUTES);
-        $Qdelete->bindInt(':id', $this->getID());
+        $os_c_database->start_transaction();
+        $Qdelete = $os_c_database->query('delete from :table_product_attributes where id = :id');
+        $Qdelete->bind_table(':table_product_attributes', TABLE_PRODUCT_ATTRIBUTES);
+        $Qdelete->bind_int(':id', $this->get_id());
         $Qdelete->execute();
-
-        if ($osC_Database->isError()) {
+        if ($os_c_database->is_error()) {
             $error = true;
         }
-
         if ($error === false) {
-            $Quninstall = $osC_Database->query('delete from :table_templates_boxes where code = :code and modules_group = :modules_group');
-            $Quninstall->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
-            $Quninstall->bindValue(':code', $this->getCode());
-            $Quninstall->bindValue(':modules_group', 'product_attributes');
+            $Quninstall = $os_c_database->query('delete from :table_templates_boxes where code = :code and modules_group = :modules_group');
+            $Quninstall->bind_table(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
+            $Quninstall->bind_value(':code', $this->get_code());
+            $Quninstall->bind_value(':modules_group', 'product_attributes');
             $Quninstall->execute();
-
-            if ($osC_Database->isError()) {
+            if ($os_c_database->is_error()) {
                 $error = true;
             }
         }
-
         if ($error === false) {
-            $osC_Database->commitTransaction();
+            $os_c_database->commit_transaction();
         } else {
-            $osC_Database->rollbackTransaction();
+            $os_c_database->rollback_transaction();
         }
-
-        return ($error === false);
+        return $error === false;
     }
 }

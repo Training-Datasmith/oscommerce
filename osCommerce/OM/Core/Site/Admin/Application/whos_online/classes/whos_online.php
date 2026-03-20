@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /*
   $Id: $
 
@@ -13,40 +13,30 @@ declare(strict_types=1);
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
-
-class osC_WhosOnline_Admin
+class Os_C_whos_Online_admin
 {
-    public static function getData($id)
+    public static function get_data($id)
     {
-        global $osC_Database;
-
-        $Qwho = $osC_Database->query('select * from :table_whos_online where session_id = :session_id');
-        $Qwho->bindTable(':table_whos_online', TABLE_WHOS_ONLINE);
-        $Qwho->bindValue(':session_id', $id);
+        global $os_c_database;
+        $Qwho = $os_c_database->query('select * from :table_whos_online where session_id = :session_id');
+        $Qwho->bind_table(':table_whos_online', TABLE_WHOS_ONLINE);
+        $Qwho->bind_value(':session_id', $id);
         $Qwho->execute();
-
-        $data = $Qwho->toArray();
-
-        $Qwho->freeResult();
-
+        $data = $Qwho->to_array();
+        $Qwho->free_result();
         return $data;
     }
-
     public static function delete($id)
     {
-        global $osC_Database;
-
+        global $os_c_database;
         OSCOM_Registry::get('Session')->delete($id);
-
-        $Qwho = $osC_Database->query('delete from :table_whos_online where session_id = :session_id');
-        $Qwho->bindTable(':table_whos_online', TABLE_WHOS_ONLINE);
-        $Qwho->bindValue(':session_id', $id);
+        $Qwho = $os_c_database->query('delete from :table_whos_online where session_id = :session_id');
+        $Qwho->bind_table(':table_whos_online', TABLE_WHOS_ONLINE);
+        $Qwho->bind_value(':session_id', $id);
         $Qwho->execute();
-
-        if (!$osC_Database->isError()) {
+        if (!$os_c_database->is_error()) {
             return true;
         }
-
         return false;
     }
 }

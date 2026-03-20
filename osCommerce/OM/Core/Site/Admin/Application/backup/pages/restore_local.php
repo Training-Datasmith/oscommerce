@@ -1,4 +1,5 @@
 <?php
+
 /*
   $Id: $
 
@@ -13,23 +14,35 @@
 */
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php 
+echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module()), $os_c_template->get_page_title());
+?></h1>
 
-<?php
-  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
-      echo $osC_MessageStack->get($osC_Template->getModule());
-  }
+<?php 
+if ($os_c_message_stack->size($os_c_template->get_module()) > 0) {
+    echo $os_c_message_stack->get($os_c_template->get_module());
+}
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('new.png') . ' ' . $osC_Language->get('action_heading_restore_local_file'); ?></div>
+<div class="infoBoxHeading"><?php 
+echo osc_icon('new.png') . ' ' . $os_c_language->get('action_heading_restore_local_file');
+?></div>
 <div class="infoBoxContent">
-  <form name="bRestoreLocal" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=restoreLocal'); ?>" method="post" enctype="multipart/form-data">
+  <form name="bRestoreLocal" action="<?php 
+echo osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '&action=restoreLocal');
+?>" method="post" enctype="multipart/form-data">
 
-  <p><?php echo $osC_Language->get('introduction_restore_local_file'); ?></p>
+  <p><?php 
+echo $os_c_language->get('introduction_restore_local_file');
+?></p>
 
-  <p><?php echo osc_draw_file_field('sql_file', true); ?></p>
+  <p><?php 
+echo osc_draw_file_field('sql_file', true);
+?></p>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_restore') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php 
+echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $os_c_language->get('button_restore') . '" class="operationButton" /> <input type="button" value="' . $os_c_language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module()) . '\';" class="operationButton" />';
+?></p>
 
   </form>
 </div>

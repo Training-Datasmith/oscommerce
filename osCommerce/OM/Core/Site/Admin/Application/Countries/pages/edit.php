@@ -1,42 +1,67 @@
 <?php
+
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
-
-use osCommerce\OM\Core\HTML;
-use osCommerce\OM\Core\ObjectInfo;
-use osCommerce\OM\Core\OSCOM;
-use osCommerce\OM\Core\Site\Admin\Application\Countries\Countries;
-
-$OSCOM_ObjectInfo = new ObjectInfo(Countries::get($_GET['id']));
+use Os_Commerce\OM\Core\HTML;
+use Os_Commerce\OM\Core\Object_Info;
+use Os_Commerce\OM\Core\OSCOM;
+use Os_Commerce\OM\Core\Site\Admin\Application\Countries\Countries;
+$oscom_object_info = new Object_Info(Countries::get($_GET['id']));
 ?>
 
-<h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
+<h1><?php 
+echo $OSCOM_Template->get_icon(32) . HTML::link(OSCOM::get_link(), $OSCOM_Template->get_page_title());
+?></h1>
 
-<?php
-  if ($OSCOM_MessageStack->exists()) {
-      echo $OSCOM_MessageStack->get();
-  }
+<?php 
+if ($oscom_message_stack->exists()) {
+    echo $oscom_message_stack->get();
+}
 ?>
 
 <div class="infoBox">
-  <h3><?php echo HTML::icon('edit.png') . ' ' . $OSCOM_ObjectInfo->getProtected('countries_name'); ?></h3>
+  <h3><?php 
+echo HTML::icon('edit.png') . ' ' . $oscom_object_info->get_protected('countries_name');
+?></h3>
 
-  <form name="cEdit" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'Save&Process&id=' . $_GET['id']); ?>" method="post">
+  <form name="cEdit" class="dataForm" action="<?php 
+echo OSCOM::get_link(null, null, 'Save&Process&id=' . $_GET['id']);
+?>" method="post">
 
-  <p><?php echo OSCOM::getDef('introduction_edit_country'); ?></p>
+  <p><?php 
+echo OSCOM::get_def('introduction_edit_country');
+?></p>
 
   <fieldset>
-    <p><label for="countries_name"><?php echo OSCOM::getDef('field_name'); ?></label><?php echo HTML::inputField('countries_name', $OSCOM_ObjectInfo->get('countries_name')); ?></p>
-    <p><label for="countries_iso_code_2"><?php echo OSCOM::getDef('field_iso_code_2'); ?></label><?php echo HTML::inputField('countries_iso_code_2', $OSCOM_ObjectInfo->get('countries_iso_code_2')); ?></p>
-    <p><label for="countries_iso_code_3"><?php echo OSCOM::getDef('field_iso_code_3'); ?></label><?php echo HTML::inputField('countries_iso_code_3', $OSCOM_ObjectInfo->get('countries_iso_code_3')); ?></p>
-    <p><label for="address_format"><?php echo OSCOM::getDef('field_address_format'); ?></label><?php echo HTML::textareaField('address_format', $OSCOM_ObjectInfo->get('address_format')); ?><br /><i>:name</i>, <i>:street_address</i>, <i>:suburb</i>, <i>:city</i>, <i>:postcode</i>, <i>:state</i>, <i>:state_code</i>, <i>:country</i></p>
+    <p><label for="countries_name"><?php 
+echo OSCOM::get_def('field_name');
+?></label><?php 
+echo HTML::input_field('countries_name', $oscom_object_info->get('countries_name'));
+?></p>
+    <p><label for="countries_iso_code_2"><?php 
+echo OSCOM::get_def('field_iso_code_2');
+?></label><?php 
+echo HTML::input_field('countries_iso_code_2', $oscom_object_info->get('countries_iso_code_2'));
+?></p>
+    <p><label for="countries_iso_code_3"><?php 
+echo OSCOM::get_def('field_iso_code_3');
+?></label><?php 
+echo HTML::input_field('countries_iso_code_3', $oscom_object_info->get('countries_iso_code_3'));
+?></p>
+    <p><label for="address_format"><?php 
+echo OSCOM::get_def('field_address_format');
+?></label><?php 
+echo HTML::textarea_field('address_format', $oscom_object_info->get('address_format'));
+?><br /><i>:name</i>, <i>:street_address</i>, <i>:suburb</i>, <i>:city</i>, <i>:postcode</i>, <i>:state</i>, <i>:state_code</i>, <i>:country</i></p>
   </fieldset>
 
-  <p><?php echo HTML::button(['priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save')]) . ' ' . HTML::button(['href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel')]); ?></p>
+  <p><?php 
+echo HTML::button(['priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::get_def('button_save')]) . ' ' . HTML::button(['href' => OSCOM::get_link(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::get_def('button_cancel')]);
+?></p>
 
   </form>
 </div>

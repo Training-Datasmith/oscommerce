@@ -1,49 +1,35 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
+namespace Os_Commerce\OM\Core\Site\Admin\Module\Service;
 
-namespace osCommerce\OM\Core\Site\Admin\Module\Service;
-
-use osCommerce\OM\Core\OSCOM;
-
+use Os_Commerce\OM\Core\OSCOM;
 /**
  * @since v3.0.2
  */
-
-class WhosOnline extends \osCommerce\OM\Core\Site\Admin\ServiceAbstract
+class Whos_Online extends \Os_Commerce\OM\Core\Site\Admin\Service_Abstract
 {
     public $depends = ['Session', 'Core'];
-
     protected function initialize()
     {
-        $this->title = OSCOM::getDef('services_whos_online_title');
-        $this->description = OSCOM::getDef('services_whos_online_description');
+        $this->title = OSCOM::get_def('services_whos_online_title');
+        $this->description = OSCOM::get_def('services_whos_online_description');
     }
-
     public function install()
     {
-        $data = ['title' => 'Detect Search Engine Spider Robots',
-                      'key' => 'SERVICE_WHOS_ONLINE_SPIDER_DETECTION',
-                      'value' => '1',
-                      'description' => 'Detect search engine spider robots (GoogleBot, Yahoo, etc).',
-                      'group_id' => '6',
-                      'use_function' => 'osc_cfg_use_get_boolean_value',
-                      'set_function' => 'osc_cfg_set_boolean_value(array(1, -1))'];
-
-        OSCOM::callDB('Admin\InsertConfigurationParameters', $data, 'Site');
+        $data = ['title' => 'Detect Search Engine Spider Robots', 'key' => 'SERVICE_WHOS_ONLINE_SPIDER_DETECTION', 'value' => '1', 'description' => 'Detect search engine spider robots (GoogleBot, Yahoo, etc).', 'group_id' => '6', 'use_function' => 'osc_cfg_use_get_boolean_value', 'set_function' => 'osc_cfg_set_boolean_value(array(1, -1))'];
+        OSCOM::call_db('Admin\InsertConfigurationParameters', $data, 'Site');
     }
-
     public function remove()
     {
-        OSCOM::callDB('Admin\DeleteConfigurationParameters', $this->keys(), 'Site');
+        OSCOM::call_db('Admin\DeleteConfigurationParameters', $this->keys(), 'Site');
     }
-
     public function keys()
     {
         return ['SERVICE_WHOS_ONLINE_SPIDER_DETECTION'];

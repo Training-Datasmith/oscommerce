@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /*
   $Id: $
 
@@ -13,245 +13,177 @@ declare(strict_types=1);
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
-
-require('includes/applications/products/classes/products.php');
-require('includes/classes/category_tree.php');
-require('includes/classes/image.php');
-require('../includes/classes/currencies.php');
-
-class osC_Products_Admin_rpc
+require 'includes/applications/products/classes/products.php';
+require 'includes/classes/category_tree.php';
+require 'includes/classes/image.php';
+require '../includes/classes/currencies.php';
+class Os_C_products_admin_rpc
 {
-    public static function getAll()
+    public static function get_all()
     {
-        global $_module, $osC_Currencies;
-
+        global $_module, $os_c_currencies;
         if (!isset($_GET['cID'])) {
             $_GET['cID'] = '0';
         }
-
         if (!isset($_GET['search'])) {
             $_GET['search'] = '';
         }
-
         if (!isset($_GET['page']) || !is_numeric($_GET['page'])) {
             $_GET['page'] = 1;
         }
-
-        $osC_Currencies = new osC_Currencies();
-
+        $os_c_currencies = new Os_C_currencies();
         if (!empty($_GET['search'])) {
-            $result = osC_Products_Admin::find($_GET['search'], $_GET['cID'], $_GET['page']);
+            $result = Os_C_products_admin::find($_GET['search'], $_GET['cID'], $_GET['page']);
         } else {
-            $result = osC_Products_Admin::getAll($_GET['cID'], $_GET['page']);
+            $result = Os_C_products_admin::get_all($_GET['cID'], $_GET['page']);
         }
-
         $result['rpcStatus'] = RPC_STATUS_SUCCESS;
-
         echo json_encode($result);
     }
-
-    public static function getImages()
+    public static function get_images()
     {
-        global $osC_Database, $_module;
-
-        $osC_Image = new osC_Image_Admin();
-
+        global $os_c_database, $_module;
+        $os_c_image = new Os_C_image_admin();
         $result = ['entries' => []];
-
-        $Qimages = $osC_Database->query('select id, image, default_flag from :table_products_images where products_id = :products_id order by sort_order');
-        $Qimages->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
-        $Qimages->bindInt(':products_id', $_GET[$_module]);
+        $Qimages = $os_c_database->query('select id, image, default_flag from :table_products_images where products_id = :products_id order by sort_order');
+        $Qimages->bind_table(':table_products_images', TABLE_PRODUCTS_IMAGES);
+        $Qimages->bind_int(':products_id', $_GET[$_module]);
         $Qimages->execute();
-
         while ($Qimages->next()) {
-            foreach ($osC_Image->getGroups() as $group) {
+            foreach ($os_c_image->get_groups() as $group) {
                 $pass = true;
-
-                if (isset($_GET['filter']) && (($_GET['filter'] == 'originals') && ($group['id'] != '1'))) {
+                if (isset($_GET['filter']) && ($_GET['filter'] == 'originals' && $group['id'] != '1')) {
                     $pass = false;
-                } elseif (isset($_GET['filter']) && (($_GET['filter'] == 'others') && ($group['id'] == '1'))) {
+                } elseif (isset($_GET['filter']) && ($_GET['filter'] == 'others' && $group['id'] == '1')) {
                     $pass = false;
                 }
-
                 if ($pass === true) {
-                    $result['entries'][] = [$Qimages->valueInt('id'),
-                                                 $group['id'],
-                                                 $Qimages->value('image'),
-                                                 $group['code'],
-                                                 osc_href_link($osC_Image->getAddress($Qimages->value('image'), $group['code']), null, 'NONSSL', false, false, true),
-                                                 number_format(@filesize(DIR_FS_CATALOG . DIR_WS_IMAGES . 'products/' . $group['code'] . '/' . $Qimages->value('image'))),
-                                                 $Qimages->valueInt('default_flag')];
+                    $result['entries'][] = [$Qimages->value_int('id'), $group['id'], $Qimages->value('image'), $group['code'], osc_href_link($os_c_image->get_address($Qimages->value('image'), $group['code']), null, 'NONSSL', false, false, true), number_format(@filesize(DIR_FS_CATALOG . DIR_WS_IMAGES . 'products/' . $group['code'] . '/' . $Qimages->value('image'))), $Qimages->value_int('default_flag')];
                 }
             }
         }
-
         $result['rpcStatus'] = RPC_STATUS_SUCCESS;
-
         echo json_encode($result);
     }
-
-    public static function getLocalImages()
+    public static function get_local_images()
     {
-        $osC_DirectoryListing = new osC_DirectoryListing('../images/products/_upload', true);
-        $osC_DirectoryListing->setCheckExtension('gif');
-        $osC_DirectoryListing->setCheckExtension('jpg');
-        $osC_DirectoryListing->setCheckExtension('png');
-        $osC_DirectoryListing->setIncludeDirectories(false);
-
+        $os_c_directory_listing = new Os_C_directory_Listing('../images/products/_upload', true);
+        $os_c_directory_listing->set_check_extension('gif');
+        $os_c_directory_listing->set_check_extension('jpg');
+        $os_c_directory_listing->set_check_extension('png');
+        $os_c_directory_listing->set_include_directories(false);
         $result = ['entries' => []];
-
-        foreach ($osC_DirectoryListing->getFiles() as $file) {
+        foreach ($os_c_directory_listing->get_files() as $file) {
             $result['entries'][] = $file['name'];
         }
-
         $result['rpcStatus'] = RPC_STATUS_SUCCESS;
-
         echo json_encode($result);
     }
-
-    public static function assignLocalImages()
+    public static function assign_local_images()
     {
-        global $osC_Database, $_module;
-
-        $osC_Image = new osC_Image_Admin();
-
+        global $os_c_database, $_module;
+        $os_c_image = new Os_C_image_admin();
         if (is_numeric($_GET[$_module]) && isset($_GET['files'])) {
             $default_flag = 1;
-
-            $Qcheck = $osC_Database->query('select id from :table_products_images where products_id = :products_id and default_flag = :default_flag limit 1');
-            $Qcheck->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
-            $Qcheck->bindInt(':products_id', $_GET[$_module]);
-            $Qcheck->bindInt(':default_flag', 1);
+            $Qcheck = $os_c_database->query('select id from :table_products_images where products_id = :products_id and default_flag = :default_flag limit 1');
+            $Qcheck->bind_table(':table_products_images', TABLE_PRODUCTS_IMAGES);
+            $Qcheck->bind_int(':products_id', $_GET[$_module]);
+            $Qcheck->bind_int(':default_flag', 1);
             $Qcheck->execute();
-
-            if ($Qcheck->numberOfRows() === 1) {
+            if ($Qcheck->number_of_rows() === 1) {
                 $default_flag = 0;
             }
-
             foreach ($_GET['files'] as $file) {
                 $file = basename($file);
-
                 if (file_exists('../images/products/_upload/' . $file)) {
                     copy('../images/products/_upload/' . $file, '../images/products/originals/' . $file);
                     @unlink('../images/products/_upload/' . $file);
-
                     if (is_numeric($_GET[$_module])) {
-                        $Qimage = $osC_Database->query('insert into :table_products_images (products_id, image, default_flag, sort_order, date_added) values (:products_id, :image, :default_flag, :sort_order, :date_added)');
-                        $Qimage->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
-                        $Qimage->bindInt(':products_id', $_GET[$_module]);
-                        $Qimage->bindValue(':image', $file);
-                        $Qimage->bindInt(':default_flag', $default_flag);
-                        $Qimage->bindInt(':sort_order', 0);
-                        $Qimage->bindRaw(':date_added', 'now()');
-                        $Qimage->setLogging($_SESSION['module'], $_GET[$_module]);
+                        $Qimage = $os_c_database->query('insert into :table_products_images (products_id, image, default_flag, sort_order, date_added) values (:products_id, :image, :default_flag, :sort_order, :date_added)');
+                        $Qimage->bind_table(':table_products_images', TABLE_PRODUCTS_IMAGES);
+                        $Qimage->bind_int(':products_id', $_GET[$_module]);
+                        $Qimage->bind_value(':image', $file);
+                        $Qimage->bind_int(':default_flag', $default_flag);
+                        $Qimage->bind_int(':sort_order', 0);
+                        $Qimage->bind_raw(':date_added', 'now()');
+                        $Qimage->set_logging($_SESSION['module'], $_GET[$_module]);
                         $Qimage->execute();
-
-                        foreach ($osC_Image->getGroups() as $group) {
+                        foreach ($os_c_image->get_groups() as $group) {
                             if ($group['id'] != '1') {
-                                $osC_Image->resize($file, $group['id']);
+                                $os_c_image->resize($file, $group['id']);
                             }
                         }
                     }
                 }
             }
         }
-
-        $result = ['result' => 1,
-                        'rpcStatus' => RPC_STATUS_SUCCESS];
-
+        $result = ['result' => 1, 'rpcStatus' => RPC_STATUS_SUCCESS];
         echo json_encode($result);
     }
-
-    public static function setDefaultImage()
+    public static function set_default_image()
     {
-        $osC_Image = new osC_Image_Admin();
-
+        $os_c_image = new Os_C_image_admin();
         if (isset($_GET['image'])) {
-            $osC_Image->setAsDefault($_GET['image']);
+            $os_c_image->set_as_default($_GET['image']);
         }
-
-        $result = ['result' => 1,
-                        'rpcStatus' => RPC_STATUS_SUCCESS];
-
+        $result = ['result' => 1, 'rpcStatus' => RPC_STATUS_SUCCESS];
         echo json_encode($result);
     }
-
-    public static function deleteProductImage()
+    public static function delete_product_image()
     {
-        $osC_Image = new osC_Image_Admin();
-
+        $os_c_image = new Os_C_image_admin();
         if (isset($_GET['image'])) {
-            $osC_Image->delete($_GET['image']);
+            $os_c_image->delete($_GET['image']);
         }
-
-        $result = ['result' => 1,
-                        'rpcStatus' => RPC_STATUS_SUCCESS];
-
+        $result = ['result' => 1, 'rpcStatus' => RPC_STATUS_SUCCESS];
         echo json_encode($result);
     }
-
-    public static function reorderImages()
+    public static function reorder_images()
     {
-        $osC_Image = new osC_Image_Admin();
-
+        $os_c_image = new Os_C_image_admin();
         if (isset($_GET['image'])) {
-            $osC_Image->reorderImages($_GET['image']);
+            $os_c_image->reorder_images($_GET['image']);
         }
-
-        $result = ['result' => 1,
-                        'rpcStatus' => RPC_STATUS_SUCCESS];
-
+        $result = ['result' => 1, 'rpcStatus' => RPC_STATUS_SUCCESS];
         echo json_encode($result);
     }
-
-    public static function fileUpload()
+    public static function file_upload()
     {
-        global $osC_Database, $_module;
-
-        $osC_Image = new osC_Image_Admin();
-
+        global $os_c_database, $_module;
+        $os_c_image = new Os_C_image_admin();
         if (is_numeric($_GET[$_module])) {
             $products_image = new upload('products_image');
             $products_image->set_extensions(['gif', 'jpg', 'jpeg', 'png']);
-
             if ($products_image->exists()) {
                 $products_image->set_destination(realpath('../images/products/originals'));
-
                 if ($products_image->parse() && $products_image->save()) {
                     $default_flag = 1;
-
-                    $Qcheck = $osC_Database->query('select id from :table_products_images where products_id = :products_id and default_flag = :default_flag limit 1');
-                    $Qcheck->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
-                    $Qcheck->bindInt(':products_id', $_GET[$_module]);
-                    $Qcheck->bindInt(':default_flag', 1);
+                    $Qcheck = $os_c_database->query('select id from :table_products_images where products_id = :products_id and default_flag = :default_flag limit 1');
+                    $Qcheck->bind_table(':table_products_images', TABLE_PRODUCTS_IMAGES);
+                    $Qcheck->bind_int(':products_id', $_GET[$_module]);
+                    $Qcheck->bind_int(':default_flag', 1);
                     $Qcheck->execute();
-
-                    if ($Qcheck->numberOfRows() === 1) {
+                    if ($Qcheck->number_of_rows() === 1) {
                         $default_flag = 0;
                     }
-
-                    $Qimage = $osC_Database->query('insert into :table_products_images (products_id, image, default_flag, sort_order, date_added) values (:products_id, :image, :default_flag, :sort_order, :date_added)');
-                    $Qimage->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
-                    $Qimage->bindInt(':products_id', $_GET[$_module]);
-                    $Qimage->bindValue(':image', $products_image->filename);
-                    $Qimage->bindInt(':default_flag', $default_flag);
-                    $Qimage->bindInt(':sort_order', 0);
-                    $Qimage->bindRaw(':date_added', 'now()');
-                    $Qimage->setLogging($_SESSION['module'], $_GET[$_module]);
+                    $Qimage = $os_c_database->query('insert into :table_products_images (products_id, image, default_flag, sort_order, date_added) values (:products_id, :image, :default_flag, :sort_order, :date_added)');
+                    $Qimage->bind_table(':table_products_images', TABLE_PRODUCTS_IMAGES);
+                    $Qimage->bind_int(':products_id', $_GET[$_module]);
+                    $Qimage->bind_value(':image', $products_image->filename);
+                    $Qimage->bind_int(':default_flag', $default_flag);
+                    $Qimage->bind_int(':sort_order', 0);
+                    $Qimage->bind_raw(':date_added', 'now()');
+                    $Qimage->set_logging($_SESSION['module'], $_GET[$_module]);
                     $Qimage->execute();
-
-                    foreach ($osC_Image->getGroups() as $group) {
+                    foreach ($os_c_image->get_groups() as $group) {
                         if ($group['id'] != '1') {
-                            $osC_Image->resize($products_image->filename, $group['id']);
+                            $os_c_image->resize($products_image->filename, $group['id']);
                         }
                     }
                 }
             }
         }
-
-        $result = ['result' => 1,
-                        'rpcStatus' => RPC_STATUS_SUCCESS];
-
+        $result = ['result' => 1, 'rpcStatus' => RPC_STATUS_SUCCESS];
         echo json_encode($result);
     }
 }

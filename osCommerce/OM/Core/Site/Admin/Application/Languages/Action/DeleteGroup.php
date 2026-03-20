@@ -1,24 +1,22 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
+namespace Os_Commerce\OM\Core\Site\Admin\Application\Languages\Action;
 
-namespace osCommerce\OM\Core\Site\Admin\Application\Languages\Action;
-
-use osCommerce\OM\Core\ApplicationAbstract;
-use osCommerce\OM\Core\Site\Admin\Application\Languages\Languages;
-
-class DeleteGroup
+use Os_Commerce\OM\Core\Application_Abstract;
+use Os_Commerce\OM\Core\Site\Admin\Application\Languages\Languages;
+class Delete_Group
 {
-    public static function execute(ApplicationAbstract $application)
+    public static function execute(Application_Abstract $application)
     {
-        if (Languages::isGroup($_GET['id'], $_GET['group'])) {
-            $application->setPageContent('groups_delete.php');
+        if (Languages::is_group($_GET['id'], $_GET['group'])) {
+            $application->set_page_content('groups_delete.php');
         }
     }
 }

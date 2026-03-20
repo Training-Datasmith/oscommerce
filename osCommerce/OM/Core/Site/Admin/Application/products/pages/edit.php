@@ -1,4 +1,5 @@
 <?php
+
 /*
   $Id: $
 
@@ -18,7 +19,9 @@
 tinyMCE.init({
   mode : "none",
   theme : "advanced",
-  language : "<?php echo substr($osC_Language->getCode(), 0, 2); ?>",
+  language : "<?php 
+echo substr($os_c_language->get_code(), 0, 2);
+?>",
   height : "400",
   theme_advanced_toolbar_align : "left",
   theme_advanced_toolbar_location : "top",
@@ -39,53 +42,41 @@ function toggleEditor(id) {
 }
 </script>
 
-<?php
-  if (is_numeric($_GET[$osC_Template->getModule()])) {
-      $osC_ObjectInfo = new osC_ObjectInfo(osC_Products_Admin::get($_GET[$osC_Template->getModule()]));
-      $attributes = $osC_ObjectInfo->get('attributes');
-
-      $Qpd = $osC_Database->query('select products_name, products_description, products_keyword, products_tags, products_url, language_id from :table_products_description where products_id = :products_id');
-      $Qpd->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
-      $Qpd->bindInt(':products_id', $osC_ObjectInfo->getInt('products_id'));
-      $Qpd->execute();
-
-      $products_name = [];
-      $products_description = [];
-      $products_keyword = [];
-      $products_tags = [];
-      $products_url = [];
-
-      while ($Qpd->next()) {
-          $products_name[$Qpd->valueInt('language_id')] = $Qpd->value('products_name');
-          $products_description[$Qpd->valueInt('language_id')] = $Qpd->value('products_description');
-          $products_keyword[$Qpd->valueInt('language_id')] = $Qpd->value('products_keyword');
-          $products_tags[$Qpd->valueInt('language_id')] = $Qpd->value('products_tags');
-          $products_url[$Qpd->valueInt('language_id')] = $Qpd->value('products_url');
-      }
-  }
-
-$Qtc = $osC_Database->query('select tax_class_id, tax_class_title from :table_tax_class order by tax_class_title');
-$Qtc->bindTable(':table_tax_class', TABLE_TAX_CLASS);
-$Qtc->execute();
-
-$tax_class_array = [['id' => '0',
-                               'text' => $osC_Language->get('none')]];
-
-while ($Qtc->next()) {
-    $tax_class_array[] = ['id' => $Qtc->valueInt('tax_class_id'),
-                               'text' => $Qtc->value('tax_class_title')];
+<?php 
+if (is_numeric($_GET[$os_c_template->get_module()])) {
+    $os_c_object_info = new Os_C_object_Info(Os_C_products_admin::get($_GET[$os_c_template->get_module()]));
+    $attributes = $os_c_object_info->get('attributes');
+    $Qpd = $os_c_database->query('select products_name, products_description, products_keyword, products_tags, products_url, language_id from :table_products_description where products_id = :products_id');
+    $Qpd->bind_table(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
+    $Qpd->bind_int(':products_id', $os_c_object_info->get_int('products_id'));
+    $Qpd->execute();
+    $products_name = [];
+    $products_description = [];
+    $products_keyword = [];
+    $products_tags = [];
+    $products_url = [];
+    while ($Qpd->next()) {
+        $products_name[$Qpd->value_int('language_id')] = $Qpd->value('products_name');
+        $products_description[$Qpd->value_int('language_id')] = $Qpd->value('products_description');
+        $products_keyword[$Qpd->value_int('language_id')] = $Qpd->value('products_keyword');
+        $products_tags[$Qpd->value_int('language_id')] = $Qpd->value('products_tags');
+        $products_url[$Qpd->value_int('language_id')] = $Qpd->value('products_url');
+    }
 }
-
-$Qwc = $osC_Database->query('select weight_class_id, weight_class_title from :table_weight_class where language_id = :language_id order by weight_class_title');
-$Qwc->bindTable(':table_weight_class', TABLE_WEIGHT_CLASS);
-$Qwc->bindInt(':language_id', $osC_Language->getID());
+$Qtc = $os_c_database->query('select tax_class_id, tax_class_title from :table_tax_class order by tax_class_title');
+$Qtc->bind_table(':table_tax_class', TABLE_TAX_CLASS);
+$Qtc->execute();
+$tax_class_array = [['id' => '0', 'text' => $os_c_language->get('none')]];
+while ($Qtc->next()) {
+    $tax_class_array[] = ['id' => $Qtc->value_int('tax_class_id'), 'text' => $Qtc->value('tax_class_title')];
+}
+$Qwc = $os_c_database->query('select weight_class_id, weight_class_title from :table_weight_class where language_id = :language_id order by weight_class_title');
+$Qwc->bind_table(':table_weight_class', TABLE_WEIGHT_CLASS);
+$Qwc->bind_int(':language_id', $os_c_language->get_id());
 $Qwc->execute();
-
 $weight_class_array = [];
-
 while ($Qwc->next()) {
-    $weight_class_array[] = ['id' => $Qwc->valueInt('weight_class_id'),
-                                  'text' => $Qwc->value('weight_class_title')];
+    $weight_class_array[] = ['id' => $Qwc->value_int('weight_class_id'), 'text' => $Qwc->value('weight_class_title')];
 }
 ?>
 
@@ -104,12 +95,12 @@ while ($Qwc->next()) {
 <script type="text/javascript"><!--
   var tax_rates = new Array();
 
-<?php
-  foreach ($tax_class_array as $tc_entry) {
-      if ($tc_entry['id'] > 0) {
-          echo '  tax_rates["' . $tc_entry['id'] . '"] = ' . $osC_Tax->getTaxRate($tc_entry['id']) . ';' . "\n";
-      }
-  }
+<?php 
+foreach ($tax_class_array as $tc_entry) {
+    if ($tc_entry['id'] > 0) {
+        echo '  tax_rates["' . $tc_entry['id'] . '"] = ' . $os_c_tax->get_tax_rate($tc_entry['id']) . ';' . "\n";
+    }
+}
 ?>
 
   function doRound(x, places) {
@@ -156,25 +147,20 @@ while ($Qwc->next()) {
   var variants_groups = new Array();
   var variants_values = new Array();
 
-<?php
-  $Qvgroups = $osC_Database->query('select id, title, module from :table_products_variants_groups where languages_id = :languages_id order by sort_order, title');
-$Qvgroups->bindTable(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
-$Qvgroups->bindInt(':languages_id', $osC_Language->getID());
+<?php 
+$Qvgroups = $os_c_database->query('select id, title, module from :table_products_variants_groups where languages_id = :languages_id order by sort_order, title');
+$Qvgroups->bind_table(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
+$Qvgroups->bind_int(':languages_id', $os_c_language->get_id());
 $Qvgroups->execute();
-
 while ($Qvgroups->next()) {
-    echo 'variants_groups[' . $Qvgroups->valueInt('id') . '] = new Array();' .
-         'variants_groups[' . $Qvgroups->valueInt('id') . '][\'title\'] = \'' . $Qvgroups->valueProtected('title') . '\';' .
-         'variants_groups[' . $Qvgroups->valueInt('id') . '][\'multiple\'] = ' . (osC_Variants::allowsMultipleValues($Qvgroups->value('module')) ? 'true' : 'false') . ';';
+    echo 'variants_groups[' . $Qvgroups->value_int('id') . '] = new Array();' . 'variants_groups[' . $Qvgroups->value_int('id') . '][\'title\'] = \'' . $Qvgroups->value_protected('title') . '\';' . 'variants_groups[' . $Qvgroups->value_int('id') . '][\'multiple\'] = ' . (Os_C_variants::allows_multiple_values($Qvgroups->value('module')) ? 'true' : 'false') . ';';
 }
-
-$Qvvalues = $osC_Database->query('select id, title from :table_products_variants_values where languages_id = :languages_id order by sort_order, title');
-$Qvvalues->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
-$Qvvalues->bindInt(':languages_id', $osC_Language->getID());
+$Qvvalues = $os_c_database->query('select id, title from :table_products_variants_values where languages_id = :languages_id order by sort_order, title');
+$Qvvalues->bind_table(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
+$Qvvalues->bind_int(':languages_id', $os_c_language->get_id());
 $Qvvalues->execute();
-
 while ($Qvvalues->next()) {
-    echo 'variants_values[' . $Qvvalues->valueInt('id') . '] = \'' . $Qvvalues->valueProtected('title') . '\';';
+    echo 'variants_values[' . $Qvvalues->value_int('id') . '] = \'' . $Qvvalues->value_protected('title') . '\';';
 }
 ?>
 
@@ -219,7 +205,9 @@ while ($Qvvalues->next()) {
       variant_combo_string = variant_combo_string.substring(0, variant_combo_string.length-1);
     }
 
-    spanFields[0].innerHTML = '<?php echo osc_icon('attach.png') . '&nbsp;'; ?>' + variant_string;
+    spanFields[0].innerHTML = '<?php 
+echo osc_icon('attach.png') . '&nbsp;';
+?>' + variant_string;
 
     document.getElementById('variants_combo_' + variant_selected).value = variant_combo_string;
   }
@@ -337,19 +325,23 @@ while ($Qvvalues->next()) {
     if ( id != variants_default_combo ) {
       document.getElementById('variants_default_combo').value = id;
 
-      document.getElementById('vdc' + id).src = "<?php echo osc_icon_raw('default.png'); ?>";
+      document.getElementById('vdc' + id).src = "<?php 
+echo osc_icon_raw('default.png');
+?>";
 
       if (variants_default_combo != null) {
-        document.getElementById('vdc' + variants_default_combo).src = "<?php echo osc_icon_raw('default_grey.png'); ?>";
+        document.getElementById('vdc' + variants_default_combo).src = "<?php 
+echo osc_icon_raw('default_grey.png');
+?>";
       }
 
       variants_default_combo = id;
     }
   }
 
-<?php
-  if (isset($osC_ObjectInfo)) {
-      ?>
+<?php 
+if (isset($os_c_object_info)) {
+    ?>
 
   function removeImage(id) {
     $('#deleteImageDialog').dialog('option', 'buttons', {
@@ -359,7 +351,9 @@ while ($Qvvalues->next()) {
       "Ok": function() {
         var image = id.split('_');
 
-        $.getJSON('<?php echo osc_href_link_admin('rpc.php', $osC_Template->getModule() . '=' . $osC_ObjectInfo->getInt('products_id') . '&action=deleteProductImage'); ?>' + '&image=' + image[1],
+        $.getJSON('<?php 
+    echo osc_href_link_admin('rpc.php', $os_c_template->get_module() . '=' . $os_c_object_info->get_int('products_id') . '&action=deleteProductImage');
+    ?>' + '&image=' + image[1],
           function (data) {
             getImages();
           }
@@ -375,7 +369,9 @@ while ($Qvvalues->next()) {
   function setDefaultImage(id) {
     var image = id.split('_');
 
-    $.getJSON('<?php echo osc_href_link_admin('rpc.php', $osC_Template->getModule() . '=' . $osC_ObjectInfo->getInt('products_id') . '&action=setDefaultImage'); ?>' + '&image=' + image[1],
+    $.getJSON('<?php 
+    echo osc_href_link_admin('rpc.php', $os_c_template->get_module() . '=' . $os_c_object_info->get_int('products_id') . '&action=setDefaultImage');
+    ?>' + '&image=' + image[1],
       function (data) {
         getImagesOriginals();
       }
@@ -386,10 +382,14 @@ while ($Qvvalues->next()) {
     for ( i=0; i<data.entries.length; i++ ) {
       var entry = data.entries[i];
 
-      var style = 'width: <?php echo $osC_Image->getWidth('mini') + 20; ?>px; padding: 10px; float: left; text-align: center;';
+      var style = 'width: <?php 
+    echo $os_c_image->get_width('mini') + 20;
+    ?>px; padding: 10px; float: left; text-align: center;';
 
       if ( entry[1] == '1' ) { // original (products_images_groups_id)
-        var onmouseover = 'this.style.backgroundColor=\'#EFEBDE\'; this.style.backgroundImage=\'url(<?php echo osc_href_link_admin('templates/' . $osC_Template->getCode() . '/images/icons/16x16/drag.png'); ?>)\'; this.style.backgroundRepeat=\'no-repeat\'; this.style.backgroundPosition=\'0 0\';';
+        var onmouseover = 'this.style.backgroundColor=\'#EFEBDE\'; this.style.backgroundImage=\'url(<?php 
+    echo osc_href_link_admin('templates/' . $os_c_template->get_code() . '/images/icons/16x16/drag.png');
+    ?>)\'; this.style.backgroundRepeat=\'no-repeat\'; this.style.backgroundPosition=\'0 0\';';
 
         if ( entry[6] == '1' ) { // default_flag
           style += ' background-color: #E5EFE5;';
@@ -404,16 +404,28 @@ while ($Qvvalues->next()) {
       }
 
       var newdiv = '<span id="image_' + entry[0] + '" style="' + style + '" onmouseover="' + onmouseover + '" onmouseout="' + onmouseout + '">';
-      newdiv += '<a href="' + entry[4] + '" target="_blank"><img src="<?php echo DIR_WS_HTTP_CATALOG . 'images/products/mini/'; ?>' + entry[2] + '" border="0" height="<?php echo $osC_Image->getHeight('mini'); ?>" alt="' + entry[2] + '" title="' + entry[2] + '" style="max-width: <?php echo $osC_Image->getWidth('mini') + 20; ?>px;" /></a><br />' + entry[3] + '<br />' + entry[5] + ' bytes<br />';
+      newdiv += '<a href="' + entry[4] + '" target="_blank"><img src="<?php 
+    echo DIR_WS_HTTP_CATALOG . 'images/products/mini/';
+    ?>' + entry[2] + '" border="0" height="<?php 
+    echo $os_c_image->get_height('mini');
+    ?>" alt="' + entry[2] + '" title="' + entry[2] + '" style="max-width: <?php 
+    echo $os_c_image->get_width('mini') + 20;
+    ?>px;" /></a><br />' + entry[3] + '<br />' + entry[5] + ' bytes<br />';
 
       if ( entry[1] == '1' ) {
         if ( entry[6] == '1' ) {
-          newdiv += '<?php echo osc_icon('default.png'); ?>&nbsp;';
+          newdiv += '<?php 
+    echo osc_icon('default.png');
+    ?>&nbsp;';
         } else {
-          newdiv += '<a href="#" onclick="setDefaultImage(\'image_' + entry[0] + '\');"><?php echo osc_icon('default_grey.png'); ?></a>&nbsp;';
+          newdiv += '<a href="#" onclick="setDefaultImage(\'image_' + entry[0] + '\');"><?php 
+    echo osc_icon('default_grey.png');
+    ?></a>&nbsp;';
         }
 
-        newdiv += '<a href="#" onclick="removeImage(\'image_' + entry[0] + '\');"><?php echo osc_icon('trash.png'); ?></a>';
+        newdiv += '<a href="#" onclick="removeImage(\'image_' + entry[0] + '\');"><?php 
+    echo osc_icon('trash.png');
+    ?></a>';
       }
 
       newdiv += '</span>';
@@ -427,7 +439,9 @@ while ($Qvvalues->next()) {
 
     $('#imagesOriginal').sortable( {
       update: function(event, ui) {
-        $.getJSON('<?php echo osc_href_link_admin('rpc.php', $osC_Template->getModule() . '=' . $osC_ObjectInfo->getInt('products_id') . '&action=reorderImages'); ?>' + '&' + $(this).sortable('serialize'),
+        $.getJSON('<?php 
+    echo osc_href_link_admin('rpc.php', $os_c_template->get_module() . '=' . $os_c_object_info->get_int('products_id') . '&action=reorderImages');
+    ?>' + '&' + $(this).sortable('serialize'),
           function (data) {
             getImagesOthers();
           }
@@ -448,7 +462,9 @@ while ($Qvvalues->next()) {
     getImagesOriginals(false);
     getImagesOthers(false);
 
-    $.getJSON('<?php echo osc_href_link_admin('rpc.php', $osC_Template->getModule() . '=' . $osC_ObjectInfo->getInt('products_id') . '&action=getImages'); ?>',
+    $.getJSON('<?php 
+    echo osc_href_link_admin('rpc.php', $os_c_template->get_module() . '=' . $os_c_object_info->get_int('products_id') . '&action=getImages');
+    ?>',
       function (data) {
         showImages(data);
       }
@@ -456,10 +472,14 @@ while ($Qvvalues->next()) {
   }
 
   function getImagesOriginals(makeCall) {
-    $('#imagesOriginal').html('<div id="showProgressOriginal" style="float: left; padding-left: 10px;"><?php echo osc_icon('progress_ani.gif') . '&nbsp;' . $osC_Language->get('images_loading_from_server'); ?></div>');
+    $('#imagesOriginal').html('<div id="showProgressOriginal" style="float: left; padding-left: 10px;"><?php 
+    echo osc_icon('progress_ani.gif') . '&nbsp;' . $os_c_language->get('images_loading_from_server');
+    ?></div>');
 
     if ( makeCall != false ) {
-      $.getJSON('<?php echo osc_href_link_admin('rpc.php', $osC_Template->getModule() . '=' . $osC_ObjectInfo->getInt('products_id') . '&action=getImages&filter=originals'); ?>',
+      $.getJSON('<?php 
+    echo osc_href_link_admin('rpc.php', $os_c_template->get_module() . '=' . $os_c_object_info->get_int('products_id') . '&action=getImages&filter=originals');
+    ?>',
         function (data) {
           showImages(data);
         }
@@ -468,10 +488,14 @@ while ($Qvvalues->next()) {
   }
 
   function getImagesOthers(makeCall) {
-    $('#imagesOther').html('<div id="showProgressOther" style="float: left; padding-left: 10px;"><?php echo osc_icon('progress_ani.gif') . '&nbsp;' . $osC_Language->get('images_loading_from_server'); ?></div>');
+    $('#imagesOther').html('<div id="showProgressOther" style="float: left; padding-left: 10px;"><?php 
+    echo osc_icon('progress_ani.gif') . '&nbsp;' . $os_c_language->get('images_loading_from_server');
+    ?></div>');
 
     if ( makeCall != false ) {
-      $.getJSON('<?php echo osc_href_link_admin('rpc.php', $osC_Template->getModule() . '=' . $osC_ObjectInfo->getInt('products_id') . '&action=getImages&filter=others'); ?>',
+      $.getJSON('<?php 
+    echo osc_href_link_admin('rpc.php', $os_c_template->get_module() . '=' . $os_c_object_info->get_int('products_id') . '&action=getImages&filter=others');
+    ?>',
         function (data) {
           showImages(data);
         }
@@ -488,7 +512,9 @@ while ($Qvvalues->next()) {
       selectedFiles += 'files[]=' + $(selected).text() + '&';
     });
 
-    $.getJSON('<?php echo osc_href_link_admin('rpc.php', $osC_Template->getModule() . '=' . $osC_ObjectInfo->getInt('products_id') . '&action=assignLocalImages'); ?>' + '&' + selectedFiles,
+    $.getJSON('<?php 
+    echo osc_href_link_admin('rpc.php', $os_c_template->get_module() . '=' . $os_c_object_info->get_int('products_id') . '&action=assignLocalImages');
+    ?>' + '&' + selectedFiles,
       function (data) {
         $('#showProgressAssigningLocalImages').css('display', 'none');
         getLocalImages();
@@ -497,14 +523,16 @@ while ($Qvvalues->next()) {
     );
   }
 
-<?php
-  }
+<?php 
+}
 ?>
 
   function getLocalImages() {
     $('#showProgressGetLocalImages').css('display', 'inline');
 
-    $.getJSON('<?php echo osc_href_link_admin('rpc.php', $osC_Template->getModule() . '&action=getLocalImages'); ?>',
+    $.getJSON('<?php 
+echo osc_href_link_admin('rpc.php', $os_c_template->get_module() . '&action=getLocalImages');
+?>',
       function (data) {
         var i = 0;
         var selectList = document.getElementById('localImagesSelection');
@@ -547,7 +575,11 @@ while ($Qvvalues->next()) {
   }
 //--></script>
 
-<div id="deleteImageDialog" title="<?php echo $osC_Language->get('action_heading_delete_image'); ?>"><p><?php echo $osC_Language->get('introduction_delete_image'); ?></p></div>
+<div id="deleteImageDialog" title="<?php 
+echo $os_c_language->get('action_heading_delete_image');
+?>"><p><?php 
+echo $os_c_language->get('introduction_delete_image');
+?></p></div>
 
 <script type="text/javascript">
   $(document).ready(function() {
@@ -559,12 +591,14 @@ while ($Qvvalues->next()) {
   });
 </script>
 
-<h1><?php echo (isset($osC_ObjectInfo) && isset($products_name[$osC_Language->getID()])) ? $products_name[$osC_Language->getID()] : $osC_Language->get('heading_title_new_product'); ?></h1>
+<h1><?php 
+echo isset($os_c_object_info) && isset($products_name[$os_c_language->get_id()]) ? $products_name[$os_c_language->get_id()] : $os_c_language->get('heading_title_new_product');
+?></h1>
 
-<?php
-  if ($osC_MessageStack->exists($osC_Template->getModule())) {
-      echo $osC_MessageStack->get($osC_Template->getModule());
-  }
+<?php 
+if ($os_c_message_stack->exists($os_c_template->get_module())) {
+    echo $os_c_message_stack->get($os_c_template->get_module());
+}
 ?>
 
 <script type="text/javascript">
@@ -574,45 +608,91 @@ $(document).ready(function(){
 });
 </script>
 
-<form name="product" class="dataForm" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . (isset($osC_ObjectInfo) ? $osC_ObjectInfo->getInt('products_id') : '') . '&cID=' . $_GET['cID'] . '&action=save'); ?>" method="post" enctype="multipart/form-data">
+<form name="product" class="dataForm" action="<?php 
+echo osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '=' . (isset($os_c_object_info) ? $os_c_object_info->get_int('products_id') : '') . '&cID=' . $_GET['cID'] . '&action=save');
+?>" method="post" enctype="multipart/form-data">
 
 <div id="mainTabs">
   <ul>
-    <li><?php echo osc_link_object('#section_general_content', $osC_Language->get('section_general')); ?></li>
-    <li><?php echo osc_link_object('#section_data_content', $osC_Language->get('section_data')); ?></li>
-    <li><?php echo osc_link_object('#section_images_content', $osC_Language->get('section_images')); ?></li>
-    <li><?php echo osc_link_object('#section_variants_content', $osC_Language->get('section_variants')); ?></li>
-    <li><?php echo osc_link_object('#section_categories_content', $osC_Language->get('section_categories')); ?></li>
+    <li><?php 
+echo osc_link_object('#section_general_content', $os_c_language->get('section_general'));
+?></li>
+    <li><?php 
+echo osc_link_object('#section_data_content', $os_c_language->get('section_data'));
+?></li>
+    <li><?php 
+echo osc_link_object('#section_images_content', $os_c_language->get('section_images'));
+?></li>
+    <li><?php 
+echo osc_link_object('#section_variants_content', $os_c_language->get('section_variants'));
+?></li>
+    <li><?php 
+echo osc_link_object('#section_categories_content', $os_c_language->get('section_categories'));
+?></li>
   </ul>
 
   <div id="section_general_content">
     <div id="languageTabs">
       <ul>
 
-<?php
-  foreach ($osC_Language->getAll() as $l) {
-      echo '<li>' . osc_link_object('#languageTabs_' . $l['code'], $osC_Language->showImage($l['code']) . '&nbsp;' . $l['name']) . '</li>';
-  }
+<?php 
+foreach ($os_c_language->get_all() as $l) {
+    echo '<li>' . osc_link_object('#languageTabs_' . $l['code'], $os_c_language->show_image($l['code']) . '&nbsp;' . $l['name']) . '</li>';
+}
 ?>
 
       </ul>
 
-<?php
-  foreach ($osC_Language->getAll() as $l) {
-      ?>
+<?php 
+foreach ($os_c_language->get_all() as $l) {
+    ?>
 
-      <div id="languageTabs_<?php echo $l['code']; ?>">
+      <div id="languageTabs_<?php 
+    echo $l['code'];
+    ?>">
         <fieldset>
-          <div><label for="<?php echo 'products_name[' . $l['id'] . ']'; ?>"><?php echo $osC_Language->get('field_name'); ?></label><?php echo osc_draw_input_field('products_name[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_name[$l['id']]) ? $products_name[$l['id']] : null)); ?></div>
-          <div><label for="<?php echo 'products_description[' . $l['id'] . ']'; ?>"><?php echo $osC_Language->get('field_description'); ?></label><?php echo osc_draw_textarea_field('products_description[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_description[$l['id']]) ? $products_description[$l['id']] : null)); ?><div style="width: 58.5%; text-align: right;"><?php echo '<a href="javascript:toggleEditor(\'products_description[' . $l['id'] . ']\');">' . $osC_Language->get('toggle_html_editor') . '</a>'; ?></div></div>
-          <div><label for="<?php echo 'products_keyword[' . $l['id'] . ']'; ?>"><?php echo $osC_Language->get('field_keyword'); ?></label><?php echo osc_draw_input_field('products_keyword[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_keyword[$l['id']]) ? $products_keyword[$l['id']] : null)); ?></div>
-          <div><label for="<?php echo 'products_tags[' . $l['id'] . ']'; ?>"><?php echo $osC_Language->get('field_tags'); ?></label><?php echo osc_draw_input_field('products_tags[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_tags[$l['id']]) ? $products_tags[$l['id']] : null)); ?></div>
-          <div><label for="<?php echo 'products_url[' . $l['id'] . ']'; ?>"><?php echo $osC_Language->get('field_url'); ?></label><?php echo osc_draw_input_field('products_url[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_url[$l['id']]) ? $products_url[$l['id']] : null)); ?></div>
+          <div><label for="<?php 
+    echo 'products_name[' . $l['id'] . ']';
+    ?>"><?php 
+    echo $os_c_language->get('field_name');
+    ?></label><?php 
+    echo osc_draw_input_field('products_name[' . $l['id'] . ']', isset($os_c_object_info) && isset($products_name[$l['id']]) ? $products_name[$l['id']] : null);
+    ?></div>
+          <div><label for="<?php 
+    echo 'products_description[' . $l['id'] . ']';
+    ?>"><?php 
+    echo $os_c_language->get('field_description');
+    ?></label><?php 
+    echo osc_draw_textarea_field('products_description[' . $l['id'] . ']', isset($os_c_object_info) && isset($products_description[$l['id']]) ? $products_description[$l['id']] : null);
+    ?><div style="width: 58.5%; text-align: right;"><?php 
+    echo '<a href="javascript:toggleEditor(\'products_description[' . $l['id'] . ']\');">' . $os_c_language->get('toggle_html_editor') . '</a>';
+    ?></div></div>
+          <div><label for="<?php 
+    echo 'products_keyword[' . $l['id'] . ']';
+    ?>"><?php 
+    echo $os_c_language->get('field_keyword');
+    ?></label><?php 
+    echo osc_draw_input_field('products_keyword[' . $l['id'] . ']', isset($os_c_object_info) && isset($products_keyword[$l['id']]) ? $products_keyword[$l['id']] : null);
+    ?></div>
+          <div><label for="<?php 
+    echo 'products_tags[' . $l['id'] . ']';
+    ?>"><?php 
+    echo $os_c_language->get('field_tags');
+    ?></label><?php 
+    echo osc_draw_input_field('products_tags[' . $l['id'] . ']', isset($os_c_object_info) && isset($products_tags[$l['id']]) ? $products_tags[$l['id']] : null);
+    ?></div>
+          <div><label for="<?php 
+    echo 'products_url[' . $l['id'] . ']';
+    ?>"><?php 
+    echo $os_c_language->get('field_url');
+    ?></label><?php 
+    echo osc_draw_input_field('products_url[' . $l['id'] . ']', isset($os_c_object_info) && isset($products_url[$l['id']]) ? $products_url[$l['id']] : null);
+    ?></div>
         </fieldset>
       </div>
 
-<?php
-  }
+<?php 
+}
 ?>
 
     </div>
@@ -622,19 +702,34 @@ $(document).ready(function(){
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
 
-<?php
-  $data_width = (isset($osC_ObjectInfo) && ((int)$osC_ObjectInfo->get('has_children') === 1)) ? '100%' : '50%';
-
-if (!isset($osC_ObjectInfo) || (isset($osC_ObjectInfo) && ($osC_ObjectInfo->getInt('has_children') !== 1))) {
+<?php 
+$data_width = isset($os_c_object_info) && (int) $os_c_object_info->get('has_children') === 1 ? '100%' : '50%';
+if (!isset($os_c_object_info) || isset($os_c_object_info) && $os_c_object_info->get_int('has_children') !== 1) {
     ?>
 
-        <td width="<?php echo $data_width;?>" height="100%" valign="top">
+        <td width="<?php 
+    echo $data_width;
+    ?>" height="100%" valign="top">
           <fieldset style="height: 100%;">
-            <legend><?php echo $osC_Language->get('subsection_price'); ?></legend>
+            <legend><?php 
+    echo $os_c_language->get('subsection_price');
+    ?></legend>
 
-            <div><label for="tax_class0"><?php echo $osC_Language->get('field_tax_class'); ?></label><?php echo osc_draw_pull_down_menu('products_tax_class_id', $tax_class_array, (isset($osC_ObjectInfo) ? $osC_ObjectInfo->getInt('products_tax_class_id') : null), 'id="tax_class0" onchange="updateGross(\'products_price0\');"'); ?></div>
-            <div><label for="products_price0"><?php echo $osC_Language->get('field_price_net'); ?></label><?php echo osc_draw_input_field('products_price', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_price') : null), 'id="products_price0" onkeyup="updateGross(\'products_price0\')"'); ?></div>
-            <div><label for="products_price0_gross"><?php echo $osC_Language->get('field_price_gross'); ?></label><?php echo osc_draw_input_field('products_price_gross', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_price') : null), 'id="products_price0_gross" onkeyup="updateNet(\'products_price0\')"'); ?></div>
+            <div><label for="tax_class0"><?php 
+    echo $os_c_language->get('field_tax_class');
+    ?></label><?php 
+    echo osc_draw_pull_down_menu('products_tax_class_id', $tax_class_array, isset($os_c_object_info) ? $os_c_object_info->get_int('products_tax_class_id') : null, 'id="tax_class0" onchange="updateGross(\'products_price0\');"');
+    ?></div>
+            <div><label for="products_price0"><?php 
+    echo $os_c_language->get('field_price_net');
+    ?></label><?php 
+    echo osc_draw_input_field('products_price', isset($os_c_object_info) ? $os_c_object_info->get('products_price') : null, 'id="products_price0" onkeyup="updateGross(\'products_price0\')"');
+    ?></div>
+            <div><label for="products_price0_gross"><?php 
+    echo $os_c_language->get('field_price_gross');
+    ?></label><?php 
+    echo osc_draw_input_field('products_price_gross', isset($os_c_object_info) ? $os_c_object_info->get('products_price') : null, 'id="products_price0_gross" onkeyup="updateNet(\'products_price0\')"');
+    ?></div>
           </fieldset>
 
 <script type="text/javascript"><!--
@@ -642,26 +737,46 @@ if (!isset($osC_ObjectInfo) || (isset($osC_ObjectInfo) && ($osC_ObjectInfo->getI
 //--></script>
         </td>
 
-<?php
+<?php 
 }
 ?>
 
-        <td width="<?php echo $data_width;?>" height="100%" valign="top">
+        <td width="<?php 
+echo $data_width;
+?>" height="100%" valign="top">
           <fieldset style="height: 100%;">
-            <legend><?php echo $osC_Language->get('subsection_data'); ?></legend>
+            <legend><?php 
+echo $os_c_language->get('subsection_data');
+?></legend>
 
-            <div><label for="products_status"><?php echo $osC_Language->get('field_status'); ?></label><?php echo osc_draw_radio_field('products_status', [['id' => '1', 'text' => $osC_Language->get('status_enabled')], ['id' => '0', 'text' => $osC_Language->get('status_disabled')]], (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_status') : '0')); ?></div>
+            <div><label for="products_status"><?php 
+echo $os_c_language->get('field_status');
+?></label><?php 
+echo osc_draw_radio_field('products_status', [['id' => '1', 'text' => $os_c_language->get('status_enabled')], ['id' => '0', 'text' => $os_c_language->get('status_disabled')]], isset($os_c_object_info) ? $os_c_object_info->get('products_status') : '0');
+?></div>
 
-<?php
-  if (isset($osC_ObjectInfo) && ($osC_ObjectInfo->getInt('has_children') !== 1)) {
-      ?>
+<?php 
+if (isset($os_c_object_info) && $os_c_object_info->get_int('has_children') !== 1) {
+    ?>
 
-            <div><label for="products_model"><?php echo $osC_Language->get('field_model'); ?></label><?php echo osc_draw_input_field('products_model', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_model') : null)); ?></div>
-            <div><label for="products_quantity"><?php echo $osC_Language->get('field_quantity'); ?></label><?php echo osc_draw_input_field('products_quantity', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_quantity') : null)); ?></div>
-            <div><label for="products_weight"><?php echo $osC_Language->get('field_weight'); ?></label><?php echo osc_draw_input_field('products_weight', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_weight') : null)) . osc_draw_pull_down_menu('products_weight_class', $weight_class_array, (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_weight_class') : SHIPPING_WEIGHT_UNIT)); ?></div>
+            <div><label for="products_model"><?php 
+    echo $os_c_language->get('field_model');
+    ?></label><?php 
+    echo osc_draw_input_field('products_model', isset($os_c_object_info) ? $os_c_object_info->get('products_model') : null);
+    ?></div>
+            <div><label for="products_quantity"><?php 
+    echo $os_c_language->get('field_quantity');
+    ?></label><?php 
+    echo osc_draw_input_field('products_quantity', isset($os_c_object_info) ? $os_c_object_info->get('products_quantity') : null);
+    ?></div>
+            <div><label for="products_weight"><?php 
+    echo $os_c_language->get('field_weight');
+    ?></label><?php 
+    echo osc_draw_input_field('products_weight', isset($os_c_object_info) ? $os_c_object_info->get('products_weight') : null) . osc_draw_pull_down_menu('products_weight_class', $weight_class_array, isset($os_c_object_info) ? $os_c_object_info->get('products_weight_class') : SHIPPING_WEIGHT_UNIT);
+    ?></div>
 
-<?php
-  }
+<?php 
+}
 ?>
 
           </fieldset>
@@ -669,10 +784,10 @@ if (!isset($osC_ObjectInfo) || (isset($osC_ObjectInfo) && ($osC_ObjectInfo->getI
       </tr>
     </table>
 
-<?php
-  if (isset($osC_ObjectInfo) && ($osC_ObjectInfo->getInt('has_children') === 1)) {
-      echo osc_draw_hidden_field('products_tax_class_id', 0) . osc_draw_hidden_field('products_price', 0) . osc_draw_hidden_field('products_model') . osc_draw_hidden_field('products_quantity', 0), osc_draw_hidden_field('products_weight', 0), osc_draw_hidden_field('products_weight_class', 0);
-  }
+<?php 
+if (isset($os_c_object_info) && $os_c_object_info->get_int('has_children') === 1) {
+    echo osc_draw_hidden_field('products_tax_class_id', 0) . osc_draw_hidden_field('products_price', 0) . osc_draw_hidden_field('products_model') . osc_draw_hidden_field('products_quantity', 0), osc_draw_hidden_field('products_weight', 0), osc_draw_hidden_field('products_weight_class', 0);
+}
 ?>
 
     <fieldset>
@@ -680,32 +795,33 @@ if (!isset($osC_ObjectInfo) || (isset($osC_ObjectInfo) && ($osC_ObjectInfo->getI
 
       <table border="0" width="100%" cellspacing="0" cellpadding="2">
 
-<?php
-  $Qattributes = $osC_Database->query('select id, code from :table_templates_boxes where modules_group = :modules_group order by code');
-$Qattributes->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
-$Qattributes->bindValue(':modules_group', 'product_attributes');
+<?php 
+$Qattributes = $os_c_database->query('select id, code from :table_templates_boxes where modules_group = :modules_group order by code');
+$Qattributes->bind_table(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
+$Qattributes->bind_value(':modules_group', 'product_attributes');
 $Qattributes->execute();
-
 while ($Qattributes->next()) {
     $module = basename($Qattributes->value('code'));
-
     if (!class_exists('osC_ProductAttributes_' . $module)) {
         if (file_exists(DIR_FS_CATALOG . 'admin/includes/modules/product_attributes/' . $module . '.php')) {
-            include(DIR_FS_CATALOG . 'admin/includes/modules/product_attributes/' . $module . '.php');
+            include DIR_FS_CATALOG . 'admin/includes/modules/product_attributes/' . $module . '.php';
         }
     }
-
     if (class_exists('osC_ProductAttributes_' . $module)) {
         $module = 'osC_ProductAttributes_' . $module;
         $module = new $module();
         ?>
 
         <tr>
-          <td width="100px"><?php echo $module->getTitle() . ':'; ?></td>
-          <td><?php echo $module->setFunction((isset($attributes[$Qattributes->valueInt('id')]) ? $attributes[$Qattributes->valueInt('id')] : null)); ?></td>
+          <td width="100px"><?php 
+        echo $module->get_title() . ':';
+        ?></td>
+          <td><?php 
+        echo $module->set_function(isset($attributes[$Qattributes->value_int('id')]) ? $attributes[$Qattributes->value_int('id')] : null);
+        ?></td>
         </tr>
 
-<?php
+<?php 
     }
 }
 ?>
@@ -718,34 +834,42 @@ while ($Qattributes->next()) {
       <tr>
         <td width="100%" height="100%" valign="top">
           <fieldset style="height: 100%;">
-            <legend><?php echo $osC_Language->get('subsection_new_image'); ?></legend>
+            <legend><?php 
+echo $os_c_language->get('subsection_new_image');
+?></legend>
 
             <div style="float: right;">
-              <a href="#" id="remoteFilesLink" onclick="switchImageFilesView('remote');" style="background-color: #E5EFE5;"><?php echo $osC_Language->get('image_remote_upload'); ?></a> | <a href="#" id="localFilesLink" onclick="switchImageFilesView('local');"><?php echo $osC_Language->get('image_local_files'); ?></a>
+              <a href="#" id="remoteFilesLink" onclick="switchImageFilesView('remote');" style="background-color: #E5EFE5;"><?php 
+echo $os_c_language->get('image_remote_upload');
+?></a> | <a href="#" id="localFilesLink" onclick="switchImageFilesView('local');"><?php 
+echo $os_c_language->get('image_local_files');
+?></a>
             </div>
 
             <div id="remoteFiles">
               <span id="fileUploadField"></span>
 
-<?php
-    if (isset($osC_ObjectInfo)) {
-        echo '<input type="button" id="uploadFile" value="' . $osC_Language->get('button_send_to_server') . '" class="operationButton" /><div id="showProgress" style="display: none; padding-left: 10px;">' . osc_icon('progress_ani.gif') . '&nbsp;' . $osC_Language->get('image_upload_progress') . '</div>';
-    } else {
-        echo osc_draw_file_field('products_image');
-    }
+<?php 
+if (isset($os_c_object_info)) {
+    echo '<input type="button" id="uploadFile" value="' . $os_c_language->get('button_send_to_server') . '" class="operationButton" /><div id="showProgress" style="display: none; padding-left: 10px;">' . osc_icon('progress_ani.gif') . '&nbsp;' . $os_c_language->get('image_upload_progress') . '</div>';
+} else {
+    echo osc_draw_file_field('products_image');
+}
 ?>
             </div>
 
-<?php
-    if (isset($osC_ObjectInfo)) {
-        ?>
+<?php 
+if (isset($os_c_object_info)) {
+    ?>
 
 <script type="text/javascript"><!--
   $('#uploadFile').upload( {
     name: 'products_image',
     method: 'post',
     enctype: 'multipart/form-data',
-    action: '<?php echo osc_href_link_admin('rpc.php', $osC_Template->getModule() . '=' . $osC_ObjectInfo->getInt('products_id') . '&action=fileUpload'); ?>',
+    action: '<?php 
+    echo osc_href_link_admin('rpc.php', $os_c_template->get_module() . '=' . $os_c_object_info->get_int('products_id') . '&action=fileUpload');
+    ?>',
     onSubmit: function() {
       $('#showProgress').css('display', 'inline');
     },
@@ -756,23 +880,29 @@ while ($Qattributes->next()) {
   } );
 //--></script>
 
-<?php
-    }
+<?php 
+}
 ?>
 
             <div id="localFiles" style="display: none;">
-              <p><?php echo $osC_Language->get('introduction_select_local_images'); ?></p>
+              <p><?php 
+echo $os_c_language->get('introduction_select_local_images');
+?></p>
 
               <select id="localImagesSelection" name="localimages[]" size="5" multiple="multiple" style="width: 100%;"></select>
 
-              <div id="showProgressGetLocalImages" style="display: none; float: right; padding-right: 10px;"><?php echo osc_icon('progress_ani.gif') . '&nbsp;' . $osC_Language->get('image_retrieving_local_files'); ?></div>
+              <div id="showProgressGetLocalImages" style="display: none; float: right; padding-right: 10px;"><?php 
+echo osc_icon('progress_ani.gif') . '&nbsp;' . $os_c_language->get('image_retrieving_local_files');
+?></div>
 
-              <p><?php echo realpath('../images/products/_upload'); ?></p>
+              <p><?php 
+echo realpath('../images/products/_upload');
+?></p>
 
-<?php
-    if (isset($osC_ObjectInfo)) {
-        echo '<input type="button" value="Assign To Product" class="operationButton" onclick="assignLocalImages();" /><div id="showProgressAssigningLocalImages" style="display: none; padding-left: 10px;">' . osc_icon('progress_ani.gif') . '&nbsp;' . $osC_Language->get('image_multiple_upload_progress') . '</div>';
-    }
+<?php 
+if (isset($os_c_object_info)) {
+    echo '<input type="button" value="Assign To Product" class="operationButton" onclick="assignLocalImages();" /><div id="showProgressAssigningLocalImages" style="display: none; padding-left: 10px;">' . osc_icon('progress_ani.gif') . '&nbsp;' . $os_c_language->get('image_multiple_upload_progress') . '</div>';
+}
 ?>
 
             </div>
@@ -782,18 +912,22 @@ while ($Qattributes->next()) {
   getLocalImages();
 //--></script>
 
-<?php
-    if (isset($osC_ObjectInfo)) {
-        ?>
+<?php 
+if (isset($os_c_object_info)) {
+    ?>
 
           <fieldset style="height: 100%;">
-            <legend><?php echo $osC_Language->get('subsection_original_images'); ?></legend>
+            <legend><?php 
+    echo $os_c_language->get('subsection_original_images');
+    ?></legend>
 
             <div id="imagesOriginal" style="overflow: auto;"></div>
           </fieldset>
 
           <fieldset style="height: 100%;">
-            <legend><?php echo $osC_Language->get('subsection_images'); ?></legend>
+            <legend><?php 
+    echo $os_c_language->get('subsection_images');
+    ?></legend>
 
             <div id="imagesOther" style="overflow: auto;"></div>
           </fieldset>
@@ -802,8 +936,8 @@ while ($Qattributes->next()) {
   getImages();
 //--></script>
 
-<?php
-    }
+<?php 
+}
 ?>
 
         </td>
@@ -820,47 +954,39 @@ while ($Qattributes->next()) {
         <td width="30%" valign="top">
           <select name="variantGroups" ondblclick="moreFields();" size="20" style="width: 100%;">
 
-<?php
-  $Qvgroups = $osC_Database->query('select id, title, module from :table_products_variants_groups where languages_id = :languages_id order by sort_order, title');
-$Qvgroups->bindTable(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
-$Qvgroups->bindInt(':languages_id', $osC_Language->getID());
+<?php 
+$Qvgroups = $os_c_database->query('select id, title, module from :table_products_variants_groups where languages_id = :languages_id order by sort_order, title');
+$Qvgroups->bind_table(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
+$Qvgroups->bind_int(':languages_id', $os_c_language->get_id());
 $Qvgroups->execute();
-
 $has_multiple_value_groups = false;
-
 while ($Qvgroups->next()) {
     $vgroup_title = $Qvgroups->value('title');
-
-    if (osC_Variants::allowsMultipleValues($Qvgroups->value('module'))) {
+    if (Os_C_variants::allows_multiple_values($Qvgroups->value('module'))) {
         if ($has_multiple_value_groups === false) {
             $has_multiple_value_groups = true;
         }
-
         $vgroup_title .= ' (*)';
     }
-
-    echo '          <optgroup label="' . $vgroup_title . '" id="' . $Qvgroups->valueInt('id') . '">' . "\n";
-
-    $Qvvalues = $osC_Database->query('select id, title from :table_products_variants_values where products_variants_groups_id = :products_variants_groups_id and languages_id = :languages_id order by sort_order, title');
-    $Qvvalues->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
-    $Qvvalues->bindInt(':products_variants_groups_id', $Qvgroups->valueInt('id'));
-    $Qvvalues->bindInt(':languages_id', $osC_Language->getID());
+    echo '          <optgroup label="' . $vgroup_title . '" id="' . $Qvgroups->value_int('id') . '">' . "\n";
+    $Qvvalues = $os_c_database->query('select id, title from :table_products_variants_values where products_variants_groups_id = :products_variants_groups_id and languages_id = :languages_id order by sort_order, title');
+    $Qvvalues->bind_table(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
+    $Qvvalues->bind_int(':products_variants_groups_id', $Qvgroups->value_int('id'));
+    $Qvvalues->bind_int(':languages_id', $os_c_language->get_id());
     $Qvvalues->execute();
-
     while ($Qvvalues->next()) {
-        echo '            <option value="' . $Qvvalues->valueInt('id') . '">' . $Qvvalues->value('title') . '</option>' . "\n";
+        echo '            <option value="' . $Qvvalues->value_int('id') . '">' . $Qvvalues->value('title') . '</option>' . "\n";
     }
-
     echo '          </optgroup>' . "\n";
 }
 ?>
 
           </select>
 
-<?php
-  if ($has_multiple_value_groups === true) {
-      echo '<div style="text-align: center; font-style: italic;">(*) Multiple values can be assiged to the same product variant</div>';
-  }
+<?php 
+if ($has_multiple_value_groups === true) {
+    echo '<div style="text-align: center; font-style: italic;">(*) Multiple values can be assiged to the same product variant</div>';
+}
 ?>
 
         </td>
@@ -869,117 +995,173 @@ while ($Qvgroups->next()) {
         </td>
         <td width="65%" valign="top">
           <fieldset>
-            <legend><?php echo $osC_Language->get('subsection_assigned_variants'); ?></legend>
+            <legend><?php 
+echo $os_c_language->get('subsection_assigned_variants');
+?></legend>
 
             <span id="writeroot">
 
-<?php
-  $variants_default_combo = null;
-
-if (isset($osC_ObjectInfo)) {
-    $Qvariants = $osC_Database->query('select * from :table_products where parent_id = :parent_id');
-    $Qvariants->bindTable(':table_products', TABLE_PRODUCTS);
-    $Qvariants->bindInt(':parent_id', $osC_ObjectInfo->getInt('products_id'));
+<?php 
+$variants_default_combo = null;
+if (isset($os_c_object_info)) {
+    $Qvariants = $os_c_database->query('select * from :table_products where parent_id = :parent_id');
+    $Qvariants->bind_table(':table_products', TABLE_PRODUCTS);
+    $Qvariants->bind_int(':parent_id', $os_c_object_info->get_int('products_id'));
     $Qvariants->execute();
-
     $counter = 1;
-
     while ($Qvariants->next()) {
-        $Qcombos = $osC_Database->query('select pv.default_combo, pvg.id as group_id, pvg.title as group_title, pvv.id as value_id, pvv.title as value_title from :table_products_variants pv, :table_products_variants_groups pvg, :table_products_variants_values pvv where pv.products_id = :products_id and pv.products_variants_values_id = pvv.id and pvv.languages_id = :languages_id and pvv.products_variants_groups_id = pvg.id and pvg.languages_id = :languages_id order by pvg.sort_order, pvg.title');
-        $Qcombos->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
-        $Qcombos->bindTable(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
-        $Qcombos->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
-        $Qcombos->bindInt(':products_id', $Qvariants->valueInt('products_id'));
-        $Qcombos->bindInt(':languages_id', $osC_Language->getID());
-        $Qcombos->bindInt(':languages_id', $osC_Language->getID());
+        $Qcombos = $os_c_database->query('select pv.default_combo, pvg.id as group_id, pvg.title as group_title, pvv.id as value_id, pvv.title as value_title from :table_products_variants pv, :table_products_variants_groups pvg, :table_products_variants_values pvv where pv.products_id = :products_id and pv.products_variants_values_id = pvv.id and pvv.languages_id = :languages_id and pvv.products_variants_groups_id = pvg.id and pvg.languages_id = :languages_id order by pvg.sort_order, pvg.title');
+        $Qcombos->bind_table(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
+        $Qcombos->bind_table(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
+        $Qcombos->bind_table(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
+        $Qcombos->bind_int(':products_id', $Qvariants->value_int('products_id'));
+        $Qcombos->bind_int(':languages_id', $os_c_language->get_id());
+        $Qcombos->bind_int(':languages_id', $os_c_language->get_id());
         $Qcombos->execute();
-
         $variants_string = '';
         $variants_combo_string = '';
-
         ?>
 
 <script type="text/javascript">
-  variants[<?php echo $counter; ?>] = new Array();
+  variants[<?php 
+        echo $counter;
+        ?>] = new Array();
 </script>
 
-<?php
-              while ($Qcombos->next()) {
-                  if (($variants_default_combo === null) && ($Qcombos->valueInt('default_combo') === 1)) {
-                      $variants_default_combo = $counter;
-                  }
-
-                  $variants_string .= $Qcombos->value('group_title') . ': ' . $Qcombos->value('value_title') . ', ';
-
-                  $variants_combo_string .= $Qcombos->valueInt('group_id') . '_' . $Qcombos->valueInt('value_id') . ';';
-                  ?>
+<?php 
+        while ($Qcombos->next()) {
+            if ($variants_default_combo === null && $Qcombos->value_int('default_combo') === 1) {
+                $variants_default_combo = $counter;
+            }
+            $variants_string .= $Qcombos->value('group_title') . ': ' . $Qcombos->value('value_title') . ', ';
+            $variants_combo_string .= $Qcombos->value_int('group_id') . '_' . $Qcombos->value_int('value_id') . ';';
+            ?>
 
 <script type="text/javascript">
-  if (variants[<?php echo $counter; ?>][<?php echo $Qcombos->valueInt('group_id'); ?>] == undefined) {
-    variants[<?php echo $counter; ?>][<?php echo $Qcombos->valueInt('group_id'); ?>] = new Array();
+  if (variants[<?php 
+            echo $counter;
+            ?>][<?php 
+            echo $Qcombos->value_int('group_id');
+            ?>] == undefined) {
+    variants[<?php 
+            echo $counter;
+            ?>][<?php 
+            echo $Qcombos->value_int('group_id');
+            ?>] = new Array();
   }
 
-  variants[<?php echo $counter; ?>][<?php echo $Qcombos->valueInt('group_id'); ?>][<?php echo $Qcombos->valueInt('value_id'); ?>] = <?php echo $Qcombos->valueInt('value_id'); ?>;
+  variants[<?php 
+            echo $counter;
+            ?>][<?php 
+            echo $Qcombos->value_int('group_id');
+            ?>][<?php 
+            echo $Qcombos->value_int('value_id');
+            ?>] = <?php 
+            echo $Qcombos->value_int('value_id');
+            ?>;
 </script>
 
-<?php
-              }
-
+<?php 
+        }
         $variants_string = substr($variants_string, 0, -2);
         $variants_combo_string = substr($variants_combo_string, 0, -1);
         ?>
 
 
-            <div id="variant<?php echo $counter; ?>" class="attributeAdd" onclick="activateVariant(this);">
+            <div id="variant<?php 
+        echo $counter;
+        ?>" class="attributeAdd" onclick="activateVariant(this);">
               <table border="0" width="100%" cellspacing="0" cellpadding="2">
                 <tr>
-                  <td colspan="2"><div style="float: right;"><?php echo '<a href="javascript:setDefaultVariant(\'' . $counter . '\');">' . osc_icon((($variants_default_combo === $counter) ? 'default.png' : 'default_grey.png'), null, null, 'id="vdc' . $counter . '"') . '</a>'; ?>&nbsp;<a href="javascript:removeVariant('variant<?php echo $counter; ?>');"><?php echo osc_icon('trash.png'); ?></a></div><span style="font-weight: bold;"><?php echo osc_icon('attach.png') . '&nbsp;' . $variants_string; ?></span></td>
+                  <td colspan="2"><div style="float: right;"><?php 
+        echo '<a href="javascript:setDefaultVariant(\'' . $counter . '\');">' . osc_icon($variants_default_combo === $counter ? 'default.png' : 'default_grey.png', null, null, 'id="vdc' . $counter . '"') . '</a>';
+        ?>&nbsp;<a href="javascript:removeVariant('variant<?php 
+        echo $counter;
+        ?>');"><?php 
+        echo osc_icon('trash.png');
+        ?></a></div><span style="font-weight: bold;"><?php 
+        echo osc_icon('attach.png') . '&nbsp;' . $variants_string;
+        ?></span></td>
                 </tr>
                 <tr>
                   <td width="50%" height="100%" valign="top">
                     <fieldset style="height: 100%;">
-                      <legend><?php echo $osC_Language->get('subsection_price'); ?></legend>
+                      <legend><?php 
+        echo $os_c_language->get('subsection_price');
+        ?></legend>
 
                       <table border="0" width="100%" cellspacing="0" cellpadding="2">
                         <tr>
-                          <td><?php echo $osC_Language->get('field_tax_class'); ?></td>
-                          <td><?php echo osc_draw_pull_down_menu('variants_tax_class_id[' . $counter . ']', $tax_class_array, $Qvariants->valueInt('products_tax_class_id'), 'id="tax_class' . $counter . '" onchange="updateGross(\'variants_price' . $counter . '\');"'); ?></td>
+                          <td><?php 
+        echo $os_c_language->get('field_tax_class');
+        ?></td>
+                          <td><?php 
+        echo osc_draw_pull_down_menu('variants_tax_class_id[' . $counter . ']', $tax_class_array, $Qvariants->value_int('products_tax_class_id'), 'id="tax_class' . $counter . '" onchange="updateGross(\'variants_price' . $counter . '\');"');
+        ?></td>
                         </tr>
                         <tr>
-                          <td><?php echo $osC_Language->get('field_price_net'); ?></td>
-                          <td><?php echo osc_draw_input_field('variants_price[' . $counter . ']', $Qvariants->value('products_price'), 'id="variants_price' . $counter . '" onkeyup="updateGross(\'variants_price' . $counter . '\')"'); ?></td>
+                          <td><?php 
+        echo $os_c_language->get('field_price_net');
+        ?></td>
+                          <td><?php 
+        echo osc_draw_input_field('variants_price[' . $counter . ']', $Qvariants->value('products_price'), 'id="variants_price' . $counter . '" onkeyup="updateGross(\'variants_price' . $counter . '\')"');
+        ?></td>
                         </tr>
                         <tr>
-                          <td><?php echo $osC_Language->get('field_price_gross'); ?></td>
-                          <td><?php echo osc_draw_input_field('variants_price_gross[' . $counter . ']', $Qvariants->value('products_price'), 'id="variants_price' . $counter . '_gross" onkeyup="updateNet(\'variants_price' . $counter . '\')"'); ?></td>
+                          <td><?php 
+        echo $os_c_language->get('field_price_gross');
+        ?></td>
+                          <td><?php 
+        echo osc_draw_input_field('variants_price_gross[' . $counter . ']', $Qvariants->value('products_price'), 'id="variants_price' . $counter . '_gross" onkeyup="updateNet(\'variants_price' . $counter . '\')"');
+        ?></td>
                         </tr>
                       </table>
 
                       <script type="text/javascript"><!--
-                        updateGross('variants_price<?php echo $counter; ?>');
+                        updateGross('variants_price<?php 
+        echo $counter;
+        ?>');
                       //--></script>
                     </fieldset>
                   </td>
                   <td width="50%" height="100%" valign="top">
                     <fieldset style="height: 100%;">
-                      <legend><?php echo $osC_Language->get('subsection_data'); ?></legend>
+                      <legend><?php 
+        echo $os_c_language->get('subsection_data');
+        ?></legend>
 
                       <table border="0" width="100%" cellspacing="0" cellpadding="2">
                         <tr>
-                          <td><?php echo $osC_Language->get('field_model'); ?></td>
-                          <td><?php echo osc_draw_input_field('variants_model[' . $counter . ']', $Qvariants->value('products_model')); ?></td>
+                          <td><?php 
+        echo $os_c_language->get('field_model');
+        ?></td>
+                          <td><?php 
+        echo osc_draw_input_field('variants_model[' . $counter . ']', $Qvariants->value('products_model'));
+        ?></td>
                         </tr>
                         <tr>
-                          <td><?php echo $osC_Language->get('field_quantity'); ?></td>
-                          <td><?php echo osc_draw_input_field('variants_quantity[' . $counter . ']', $Qvariants->value('products_quantity')) . osc_draw_hidden_field('variants_combo[' . $counter . ']', $variants_combo_string, 'id="variants_combo_' . $counter . '"') . osc_draw_hidden_field('variants_combo_db[' . $counter . ']', $Qvariants->valueInt('products_id')); ?></td>
+                          <td><?php 
+        echo $os_c_language->get('field_quantity');
+        ?></td>
+                          <td><?php 
+        echo osc_draw_input_field('variants_quantity[' . $counter . ']', $Qvariants->value('products_quantity')) . osc_draw_hidden_field('variants_combo[' . $counter . ']', $variants_combo_string, 'id="variants_combo_' . $counter . '"') . osc_draw_hidden_field('variants_combo_db[' . $counter . ']', $Qvariants->value_int('products_id'));
+        ?></td>
                         </tr>
                         <tr>
-                          <td><?php echo $osC_Language->get('field_weight'); ?></td>
-                          <td><?php echo osc_draw_input_field('variants_weight[' . $counter . ']', $Qvariants->value('products_weight'), 'size="6"'). '&nbsp;' . osc_draw_pull_down_menu('variants_weight_class[' . $counter . ']', $weight_class_array, $Qvariants->value('products_weight_class')); ?></td>
+                          <td><?php 
+        echo $os_c_language->get('field_weight');
+        ?></td>
+                          <td><?php 
+        echo osc_draw_input_field('variants_weight[' . $counter . ']', $Qvariants->value('products_weight'), 'size="6"') . '&nbsp;' . osc_draw_pull_down_menu('variants_weight_class[' . $counter . ']', $weight_class_array, $Qvariants->value('products_weight_class'));
+        ?></td>
                         </tr>
                         <tr>
-                          <td><?php echo $osC_Language->get('field_status'); ?></td>
-                          <td><?php echo osc_draw_radio_field('variants_status[' . $counter . ']', [['id' => '1', 'text' => $osC_Language->get('status_enabled')], ['id' => '0', 'text' => $osC_Language->get('status_disabled')]], $Qvariants->value('products_status')); ?></td>
+                          <td><?php 
+        echo $os_c_language->get('field_status');
+        ?></td>
+                          <td><?php 
+        echo osc_draw_radio_field('variants_status[' . $counter . ']', [['id' => '1', 'text' => $os_c_language->get('status_enabled')], ['id' => '0', 'text' => $os_c_language->get('status_disabled')]], $Qvariants->value('products_status'));
+        ?></td>
                         </tr>
                       </table>
                     </fieldset>
@@ -988,84 +1170,124 @@ if (isset($osC_ObjectInfo)) {
               </table>
             </div>
 
-<?php
-              $counter++;
+<?php 
+        $counter++;
     }
-
     if ($counter > 0) {
         ?>
 
 <script type="text/javascript">
-  variants_counter = <?php echo $counter; ?>;
+  variants_counter = <?php 
+        echo $counter;
+        ?>;
 </script>
 
-<?php
+<?php 
     }
 }
 ?>
 
             </span>
 
-<?php
-  echo osc_draw_hidden_field('variants_default_combo', $variants_default_combo, 'id="variants_default_combo"');
-
+<?php 
+echo osc_draw_hidden_field('variants_default_combo', $variants_default_combo, 'id="variants_default_combo"');
 if (is_numeric($variants_default_combo)) {
     ?>
 
 <script type="text/javascript">
-  variants_default_combo = <?php echo $variants_default_combo; ?>;
+  variants_default_combo = <?php 
+    echo $variants_default_combo;
+    ?>;
 </script>
 
-<?php
+<?php 
 }
 ?>
 
             <div id="readroot" style="display: none" class="attributeAdd" onclick="activateVariant(this);">
               <table border="0" width="100%" cellspacing="0" cellpadding="2">
                 <tr>
-                  <td colspan="2"><div style="float: right;"><a href="#" name="default"><?php echo osc_icon('default_grey.png', null, null, 'name="vdcnew"'); ?></a>&nbsp;<a href="#" name="trash"><?php echo osc_icon('trash.png'); ?></a></div><span style="font-weight: bold;"><?php echo osc_icon('attach.png') . '&nbsp;'; ?></span></td>
+                  <td colspan="2"><div style="float: right;"><a href="#" name="default"><?php 
+echo osc_icon('default_grey.png', null, null, 'name="vdcnew"');
+?></a>&nbsp;<a href="#" name="trash"><?php 
+echo osc_icon('trash.png');
+?></a></div><span style="font-weight: bold;"><?php 
+echo osc_icon('attach.png') . '&nbsp;';
+?></span></td>
                 </tr>
                 <tr>
                   <td width="50%" height="100%" valign="top">
                     <fieldset style="height: 100%;">
-                      <legend><?php echo $osC_Language->get('subsection_price'); ?></legend>
+                      <legend><?php 
+echo $os_c_language->get('subsection_price');
+?></legend>
 
                       <table border="0" width="100%" cellspacing="0" cellpadding="2">
                         <tr>
-                          <td><?php echo $osC_Language->get('field_tax_class'); ?></td>
-                          <td><?php echo osc_draw_pull_down_menu('new_variants_tax_class_id', $tax_class_array, null, 'disabled="disabled"'); ?></td>
+                          <td><?php 
+echo $os_c_language->get('field_tax_class');
+?></td>
+                          <td><?php 
+echo osc_draw_pull_down_menu('new_variants_tax_class_id', $tax_class_array, null, 'disabled="disabled"');
+?></td>
                         </tr>
                         <tr>
-                          <td><?php echo $osC_Language->get('field_price_net'); ?></td>
-                          <td><?php echo osc_draw_input_field('new_variants_price', null, 'disabled="disabled"'); ?></td>
+                          <td><?php 
+echo $os_c_language->get('field_price_net');
+?></td>
+                          <td><?php 
+echo osc_draw_input_field('new_variants_price', null, 'disabled="disabled"');
+?></td>
                         </tr>
                         <tr>
-                          <td><?php echo $osC_Language->get('field_price_gross'); ?></td>
-                          <td><?php echo osc_draw_input_field('new_variants_price_gross', null, 'disabled="disabled"'); ?></td>
+                          <td><?php 
+echo $os_c_language->get('field_price_gross');
+?></td>
+                          <td><?php 
+echo osc_draw_input_field('new_variants_price_gross', null, 'disabled="disabled"');
+?></td>
                         </tr>
                       </table>
                     </fieldset>
                   </td>
                   <td width="50%" height="100%" valign="top">
                     <fieldset style="height: 100%;">
-                      <legend><?php echo $osC_Language->get('subsection_data'); ?></legend>
+                      <legend><?php 
+echo $os_c_language->get('subsection_data');
+?></legend>
 
                       <table border="0" width="100%" cellspacing="0" cellpadding="2">
                         <tr>
-                          <td><?php echo $osC_Language->get('field_model'); ?></td>
-                          <td><?php echo osc_draw_input_field('new_variants_model', null, 'disabled="disabled"'); ?></td>
+                          <td><?php 
+echo $os_c_language->get('field_model');
+?></td>
+                          <td><?php 
+echo osc_draw_input_field('new_variants_model', null, 'disabled="disabled"');
+?></td>
                         </tr>
                         <tr>
-                          <td><?php echo $osC_Language->get('field_quantity'); ?></td>
-                          <td><?php echo osc_draw_input_field('new_variants_quantity', null, 'disabled="disabled"') . osc_draw_hidden_field('new_variants_combo', null, 'disabled="disabled"'); ?></td>
+                          <td><?php 
+echo $os_c_language->get('field_quantity');
+?></td>
+                          <td><?php 
+echo osc_draw_input_field('new_variants_quantity', null, 'disabled="disabled"') . osc_draw_hidden_field('new_variants_combo', null, 'disabled="disabled"');
+?></td>
                         </tr>
                         <tr>
-                          <td><?php echo $osC_Language->get('field_weight'); ?></td>
-                          <td><?php echo osc_draw_input_field('new_variants_weight', null, 'size="6" disabled="disabled"'). '&nbsp;' . osc_draw_pull_down_menu('new_variants_weight_class', $weight_class_array, SHIPPING_WEIGHT_UNIT, 'disabled="disabled"'); ?></td>
+                          <td><?php 
+echo $os_c_language->get('field_weight');
+?></td>
+                          <td><?php 
+echo osc_draw_input_field('new_variants_weight', null, 'size="6" disabled="disabled"') . '&nbsp;' . osc_draw_pull_down_menu('new_variants_weight_class', $weight_class_array, SHIPPING_WEIGHT_UNIT, 'disabled="disabled"');
+?></td>
                         </tr>
                         <tr>
-                          <td><?php echo $osC_Language->get('field_status'); ?></td>
-                          <td><?php echo osc_draw_radio_field('new_variants_status', [['id' => '1', 'text' => $osC_Language->get('status_enabled')], ['id' => '0', 'text' => $osC_Language->get('status_disabled')]], '0', 'disabled="disabled"'); ?></td>
+                          <td><?php 
+echo $os_c_language->get('field_status');
+?></td>
+                          <td><?php 
+echo osc_draw_radio_field('new_variants_status', [['id' => '1', 'text' => $os_c_language->get('status_enabled')], ['id' => '0', 'text' => $os_c_language->get('status_disabled')]], '0', 'disabled="disabled"');
+?></td>
                         </tr>
                       </table>
                     </fieldset>
@@ -1086,33 +1308,28 @@ if (is_numeric($variants_default_combo)) {
           <thead>
             <tr>
               <th width="20">&nbsp;</th>
-              <th><?php echo $osC_Language->get('table_heading_categories'); ?></th>
+              <th><?php 
+echo $os_c_language->get('table_heading_categories');
+?></th>
             </tr>
           </thead>
           <tbody>
-<?php
-  $product_categories_array = [];
-
-if (isset($osC_ObjectInfo)) {
-    $Qcategories = $osC_Database->query('select categories_id from :table_products_to_categories where products_id = :products_id');
-    $Qcategories->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
-    $Qcategories->bindInt(':products_id', $osC_ObjectInfo->getInt('products_id'));
+<?php 
+$product_categories_array = [];
+if (isset($os_c_object_info)) {
+    $Qcategories = $os_c_database->query('select categories_id from :table_products_to_categories where products_id = :products_id');
+    $Qcategories->bind_table(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
+    $Qcategories->bind_int(':products_id', $os_c_object_info->get_int('products_id'));
     $Qcategories->execute();
-
     while ($Qcategories->next()) {
-        $product_categories_array[] = $Qcategories->valueInt('categories_id');
+        $product_categories_array[] = $Qcategories->value_int('categories_id');
     }
 }
-
-$assignedCategoryTree = new osC_CategoryTree();
-$assignedCategoryTree->setBreadcrumbUsage(false);
-$assignedCategoryTree->setSpacerString('&nbsp;', 5);
-
-foreach ($assignedCategoryTree->getArray() as $value) {
-    echo '          <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' . "\n" .
-         '            <td>' . osc_draw_checkbox_field('categories[]', $value['id'], in_array($value['id'], $product_categories_array), 'id="categories_' . $value['id'] . '"') . '</td>' . "\n" .
-         '            <td><a href="#" onclick="document.product.categories_' . $value['id'] . '.checked=!document.product.categories_' . $value['id'] . '.checked;">' . $value['title'] . '</a></td>' . "\n" .
-         '          </tr>' . "\n";
+$assigned_category_tree = new Os_C_category_Tree();
+$assigned_category_tree->set_breadcrumb_usage(false);
+$assigned_category_tree->set_spacer_string('&nbsp;', 5);
+foreach ($assigned_category_tree->get_array() as $value) {
+    echo '          <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' . "\n" . '            <td>' . osc_draw_checkbox_field('categories[]', $value['id'], in_array($value['id'], $product_categories_array), 'id="categories_' . $value['id'] . '"') . '</td>' . "\n" . '            <td><a href="#" onclick="document.product.categories_' . $value['id'] . '.checked=!document.product.categories_' . $value['id'] . '.checked;">' . $value['title'] . '</a></td>' . "\n" . '          </tr>' . "\n";
 }
 ?>
         </table></td>
@@ -1121,6 +1338,8 @@ foreach ($assignedCategoryTree->getArray() as $value) {
   </div>
 </div>
 
-<p align="right"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $_GET['cID']) . '\';" class="operationButton" />'; ?></p>
+<p align="right"><?php 
+echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $os_c_language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $os_c_language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '&cID=' . $_GET['cID']) . '\';" class="operationButton" />';
+?></p>
 
 </form>

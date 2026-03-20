@@ -1,19 +1,17 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
-
-namespace osCommerce\OM\Core\Site\Admin\Application\Customers;
+namespace Os_Commerce\OM\Core\Site\Admin\Application\Customers;
 
 /**
  * @since v3.0.2
  */
-
-class Customers extends \osCommerce\OM\Core\ApplicationModelAbstract
+class Customers extends \Os_Commerce\OM\Core\Application_Model_Abstract
 {
 }

@@ -1,42 +1,35 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
+namespace Os_Commerce\OM\Core\Site\Shop\Application\Account\Action\Address_Book;
 
-namespace osCommerce\OM\Core\Site\Shop\Application\Account\Action\AddressBook;
-
-use osCommerce\OM\Core\ApplicationAbstract;
-use osCommerce\OM\Core\OSCOM;
-use osCommerce\OM\Core\Registry;
-use osCommerce\OM\Core\Site\Shop\AddressBook;
-
+use Os_Commerce\OM\Core\Application_Abstract;
+use Os_Commerce\OM\Core\OSCOM;
+use Os_Commerce\OM\Core\Registry;
+use Os_Commerce\OM\Core\Site\Shop\Address_Book;
 class Edit
 {
-    public static function execute(ApplicationAbstract $application)
+    public static function execute(Application_Abstract $application)
     {
-        $OSCOM_MessageStack = Registry::get('MessageStack');
+        $oscom_message_stack = Registry::get('MessageStack');
         $OSCOM_Service = Registry::get('Service');
         $OSCOM_Breadcrumb = Registry::get('Breadcrumb');
         $OSCOM_Template = Registry::get('Template');
-
-        if (AddressBook::checkEntry($_GET['Edit']) === false) {
-            $OSCOM_MessageStack->add('AddressBook', OSCOM::getDef('error_address_book_entry_non_existing'), 'error');
-
-            OSCOM::redirect(OSCOM::getLink(null, null, 'AddressBook', 'SSL'));
+        if (Address_Book::check_entry($_GET['Edit']) === false) {
+            $oscom_message_stack->add('AddressBook', OSCOM::get_def('error_address_book_entry_non_existing'), 'error');
+            OSCOM::redirect(OSCOM::get_link(null, null, 'AddressBook', 'SSL'));
         }
-
-        if ($OSCOM_Service->isStarted('Breadcrumb')) {
-            $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_address_book_edit_entry'), OSCOM::getLink(null, null, 'AddressBook&Edit=' . $_GET['Edit'], 'SSL'));
+        if ($OSCOM_Service->is_started('Breadcrumb')) {
+            $OSCOM_Breadcrumb->add(OSCOM::get_def('breadcrumb_address_book_edit_entry'), OSCOM::get_link(null, null, 'AddressBook&Edit=' . $_GET['Edit'], 'SSL'));
         }
-
-        $application->setPageTitle(OSCOM::getDef('address_book_edit_entry_heading'));
-        $application->setPageContent('address_book_process.php');
-
-        $OSCOM_Template->addJavascriptPhpFilename(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/assets/form_check.js.php');
+        $application->set_page_title(OSCOM::get_def('address_book_edit_entry_heading'));
+        $application->set_page_content('address_book_process.php');
+        $OSCOM_Template->add_javascript_php_filename(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/assets/form_check.js.php');
     }
 }

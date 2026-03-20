@@ -1,42 +1,35 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
+namespace Os_Commerce\OM\Core\Site\Shop\Application\Account\Action;
 
-namespace osCommerce\OM\Core\Site\Shop\Application\Account\Action;
-
-use osCommerce\OM\Core\ApplicationAbstract;
-use osCommerce\OM\Core\OSCOM;
-use osCommerce\OM\Core\Registry;
-
+use Os_Commerce\OM\Core\Application_Abstract;
+use Os_Commerce\OM\Core\OSCOM;
+use Os_Commerce\OM\Core\Registry;
 class Password
 {
-    public static function execute(ApplicationAbstract $application)
+    public static function execute(Application_Abstract $application)
     {
         $OSCOM_Customer = Registry::get('Customer');
-        $OSCOM_NavigationHistory = Registry::get('NavigationHistory');
+        $oscom_navigation_history = Registry::get('NavigationHistory');
         $OSCOM_Template = Registry::get('Template');
         $OSCOM_Service = Registry::get('Service');
         $OSCOM_Breadcrumb = Registry::get('Breadcrumb');
-
-        if ($OSCOM_Customer->isLoggedOn() === false) {
-            $OSCOM_NavigationHistory->setSnapshot();
-
-            OSCOM::redirect(OSCOM::getLink(null, null, 'LogIn', 'SSL'));
+        if ($OSCOM_Customer->is_logged_on() === false) {
+            $oscom_navigation_history->set_snapshot();
+            OSCOM::redirect(OSCOM::get_link(null, null, 'LogIn', 'SSL'));
         }
-
-        $application->setPageTitle(OSCOM::getDef('account_password_heading'));
-        $application->setPageContent('password.php');
-
-        $OSCOM_Template->addJavascriptPhpFilename(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/assets/form_check.js.php');
-
-        if ($OSCOM_Service->isStarted('Breadcrumb')) {
-            $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_edit_password'), OSCOM::getLink(null, null, 'Password', 'SSL'));
+        $application->set_page_title(OSCOM::get_def('account_password_heading'));
+        $application->set_page_content('password.php');
+        $OSCOM_Template->add_javascript_php_filename(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/assets/form_check.js.php');
+        if ($OSCOM_Service->is_started('Breadcrumb')) {
+            $OSCOM_Breadcrumb->add(OSCOM::get_def('breadcrumb_edit_password'), OSCOM::get_link(null, null, 'Password', 'SSL'));
         }
     }
 }

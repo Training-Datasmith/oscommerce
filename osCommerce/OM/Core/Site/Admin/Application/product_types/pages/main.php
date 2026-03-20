@@ -1,4 +1,5 @@
 <?php
+
 /*
   osCommerce Online Merchant $osCommerce-SIG$
   Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
@@ -9,17 +10,23 @@
 */
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php 
+echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module()), $os_c_template->get_page_title());
+?></h1>
 
-<?php
-  if ($osC_MessageStack->exists($osC_Template->getModule())) {
-      echo $osC_MessageStack->get($osC_Template->getModule());
-  }
+<?php 
+if ($os_c_message_stack->exists($os_c_template->get_module())) {
+    echo $os_c_message_stack->get($os_c_template->get_module());
+}
 ?>
 
 <div>
-  <span style="float: left;"><form id="liveSearchForm"><input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><?php echo osc_draw_button(['type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => 'Reset', 'radius' => 'right']); ?></form></span>
-  <span style="float: right;"><?php echo osc_draw_button(['href' => osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=save'), 'icon' => 'plus', 'title' => OSCOM::getDef('button_insert')]); ?></span>
+  <span style="float: left;"><form id="liveSearchForm"><input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><?php 
+echo osc_draw_button(['type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => 'Reset', 'radius' => 'right']);
+?></form></span>
+  <span style="float: right;"><?php 
+echo osc_draw_button(['href' => osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '&action=save'), 'icon' => 'plus', 'title' => OSCOM::get_def('button_insert')]);
+?></span>
 </div>
 
 <div class="dataTableHeader">
@@ -32,15 +39,25 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable" id="productTypesDataTable">
   <thead>
     <tr>
-      <th><?php echo OSCOM::getDef('table_heading_product_types'); ?></th>
-      <th width="150"><?php echo OSCOM::getDef('table_heading_action'); ?></th>
-      <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
+      <th><?php 
+echo OSCOM::get_def('table_heading_product_types');
+?></th>
+      <th width="150"><?php 
+echo OSCOM::get_def('table_heading_action');
+?></th>
+      <th align="center" width="20"><?php 
+echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"');
+?></th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="2"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . OSCOM::getDef('icon_trash') . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=batchDelete') . '\';" />'; ?></th>
-      <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
+      <th align="right" colspan="2"><?php 
+echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . OSCOM::get_def('icon_trash') . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '&action=batchDelete') . '\';" />';
+?></th>
+      <th align="center" width="20"><?php 
+echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"');
+?></th>
     </tr>
   </tfoot>
   <tbody>
@@ -50,7 +67,9 @@
 </form>
 
 <div class="dataTableFooter">
-  <span id="dataTableLegend"><?php echo '<b>' . OSCOM::getDef('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . OSCOM::getDef('icon_edit') . '&nbsp;&nbsp;' . osc_icon('trash.png') . '&nbsp;' . OSCOM::getDef('icon_trash'); ?></span>
+  <span id="dataTableLegend"><?php 
+echo '<b>' . OSCOM::get_def('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . OSCOM::get_def('icon_edit') . '&nbsp;&nbsp;' . osc_icon('trash.png') . '&nbsp;' . OSCOM::get_def('icon_trash');
+?></span>
   <span id="batchPullDownMenu"></span>
 </div>
 
@@ -68,16 +87,30 @@
   }
 
   var dataTableName = 'productTypesDataTable';
-  var dataTableDataURL = '<?php echo osc_href_link_admin('rpc.php', $osC_Template->getModule() . '&action=getAll'); ?>';
+  var dataTableDataURL = '<?php 
+echo osc_href_link_admin('rpc.php', $os_c_template->get_module() . '&action=getAll');
+?>';
 
-  var typeLink = '<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=TYPEID'); ?>';
-  var typeLinkIcon = '<?php echo osc_icon('folder.png'); ?>';
+  var typeLink = '<?php 
+echo osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '=TYPEID');
+?>';
+  var typeLinkIcon = '<?php 
+echo osc_icon('folder.png');
+?>';
 
-  var typeEditLink = '<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&tID=TYPEID&action=save'); ?>';
-  var typeEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';
+  var typeEditLink = '<?php 
+echo osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '&tID=TYPEID&action=save');
+?>';
+  var typeEditLinkIcon = '<?php 
+echo osc_icon('edit.png');
+?>';
 
-  var typeDeleteLink = '<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&tID=TYPEID&action=delete'); ?>';
-  var typeDeleteLinkIcon = '<?php echo osc_icon('trash.png'); ?>';
+  var typeDeleteLink = '<?php 
+echo osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '&tID=TYPEID&action=delete');
+?>';
+  var typeDeleteLinkIcon = '<?php 
+echo osc_icon('trash.png');
+?>';
 
   var osC_DataTable = new osC_DataTable();
   osC_DataTable.load();

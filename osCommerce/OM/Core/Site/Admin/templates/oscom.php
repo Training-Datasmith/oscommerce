@@ -1,28 +1,37 @@
 <?php
+
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
-
-use osCommerce\OM\Core\HTML;
-use osCommerce\OM\Core\OSCOM;
-use osCommerce\OM\Core\Registry;
-
+use Os_Commerce\OM\Core\HTML;
+use Os_Commerce\OM\Core\OSCOM;
+use Os_Commerce\OM\Core\Registry;
 ?>
 
 <!doctype html>
 
-<html dir="<?php echo $OSCOM_Language->getTextDirection(); ?>" lang="<?php echo $OSCOM_Language->getCode(); ?>">
+<html dir="<?php 
+echo $OSCOM_Language->get_text_direction();
+?>" lang="<?php 
+echo $OSCOM_Language->get_code();
+?>">
 
 <head>
 
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $OSCOM_Language->getCharacterSet(); ?>" />
+<meta http-equiv="Content-Type" content="text/html; charset=<?php 
+echo $OSCOM_Language->get_character_set();
+?>" />
 
-<title><?php echo STORE_NAME . ': ' . OSCOM::getDef('administration_title') . ($OSCOM_Template->hasPageTitle() ? ': ' . $OSCOM_Template->getPageTitle() : ''); ?></title>
+<title><?php 
+echo STORE_NAME . ': ' . OSCOM::get_def('administration_title') . ($OSCOM_Template->has_page_title() ? ': ' . $OSCOM_Template->get_page_title() : '');
+?></title>
 
-<link rel="icon" type="image/png" href="<?php echo OSCOM::getPublicSiteLink('images/oscommerce_icon.png'); ?>" />
+<link rel="icon" type="image/png" href="<?php 
+echo OSCOM::get_public_site_link('images/oscommerce_icon.png');
+?>" />
 
 <meta name="generator" value="osCommerce Online Merchant" />
 <meta name="robots" content="noindex,nofollow" />
@@ -56,66 +65,99 @@ use osCommerce\OM\Core\Registry;
 
 <script type="text/javascript" src="public/external/alexei/sprintf.js"></script>
 
-<script type="text/javascript" src="<?php echo OSCOM::getPublicSiteLink('javascript/general.js'); ?>"></script>
-<script type="text/javascript" src="<?php echo OSCOM::getPublicSiteLink('javascript/datatable.js'); ?>"></script>
+<script type="text/javascript" src="<?php 
+echo OSCOM::get_public_site_link('javascript/general.js');
+?>"></script>
+<script type="text/javascript" src="<?php 
+echo OSCOM::get_public_site_link('javascript/datatable.js');
+?>"></script>
 
-<link rel="stylesheet" type="text/css" href="<?php echo OSCOM::getPublicSiteLink('templates/oscom/stylesheets/general.css'); ?>" />
+<link rel="stylesheet" type="text/css" href="<?php 
+echo OSCOM::get_public_site_link('templates/oscom/stylesheets/general.css');
+?>" />
 
 <script type="text/javascript">
-  var pageURL = '<?php echo OSCOM::getLink(); ?>';
-  var pageModule = '<?php echo OSCOM::getSiteApplication(); ?>';
+  var pageURL = '<?php 
+echo OSCOM::get_link();
+?>';
+  var pageModule = '<?php 
+echo OSCOM::get_site_application();
+?>';
 
-  var batchSize = parseInt('<?php echo MAX_DISPLAY_SEARCH_RESULTS; ?>');
-  var batchTotalPagesText = '<?php echo addslashes(OSCOM::getDef('batch_results_number_of_entries')); ?>';
-  var batchCurrentPageset = '<?php echo addslashes(OSCOM::getDef('result_set_current_page')); ?>';
-  var batchIconNavigationBack = '<?php echo HTML::icon('nav_back.png'); ?>';
-  var batchIconNavigationBackGrey = '<?php echo HTML::icon('nav_back_grey.png'); ?>';
-  var batchIconNavigationForward = '<?php echo HTML::icon('nav_forward.png'); ?>';
-  var batchIconNavigationForwardGrey = '<?php echo HTML::icon('nav_forward_grey.png'); ?>';
-  var batchIconNavigationReload = '<?php echo HTML::icon('reload.png'); ?>';
-  var batchIconProgress = '<?php echo HTML::icon('progress_ani.gif'); ?>';
+  var batchSize = parseInt('<?php 
+echo MAX_DISPLAY_SEARCH_RESULTS;
+?>');
+  var batchTotalPagesText = '<?php 
+echo addslashes(OSCOM::get_def('batch_results_number_of_entries'));
+?>';
+  var batchCurrentPageset = '<?php 
+echo addslashes(OSCOM::get_def('result_set_current_page'));
+?>';
+  var batchIconNavigationBack = '<?php 
+echo HTML::icon('nav_back.png');
+?>';
+  var batchIconNavigationBackGrey = '<?php 
+echo HTML::icon('nav_back_grey.png');
+?>';
+  var batchIconNavigationForward = '<?php 
+echo HTML::icon('nav_forward.png');
+?>';
+  var batchIconNavigationForwardGrey = '<?php 
+echo HTML::icon('nav_forward_grey.png');
+?>';
+  var batchIconNavigationReload = '<?php 
+echo HTML::icon('reload.png');
+?>';
+  var batchIconProgress = '<?php 
+echo HTML::icon('progress_ani.gif');
+?>';
 
-  var taxDecimalPlaces = parseInt('<?php echo TAX_DECIMAL_PLACES; ?>');
+  var taxDecimalPlaces = parseInt('<?php 
+echo TAX_DECIMAL_PLACES;
+?>');
 </script>
 
 <meta name="application-name" content="osCommerce Dashboard" />
 <meta name="msapplication-tooltip" content="osCommerce Administration Dashboard" />
 <meta name="msapplication-window" content="width=1024;height=768" />
 <meta name="msapplication-navbutton-color" content="#ff7900" />
-<meta name="msapplication-starturl" content="<?php echo OSCOM::getLink(null, OSCOM::getDefaultSiteApplication(), null, 'SSL', false); ?>" />
+<meta name="msapplication-starturl" content="<?php 
+echo OSCOM::get_link(null, OSCOM::get_default_site_application(), null, 'SSL', false);
+?>" />
 
 </head>
 
 <body>
 
-<?php
-  if ($OSCOM_Template->hasPageHeader()) {
-      include($OSCOM_Template->getTemplateFile('header.php'));
-  }
+<?php 
+if ($OSCOM_Template->has_page_header()) {
+    include $OSCOM_Template->get_template_file('header.php');
+}
 ?>
 
 <div id="appContent">
 
-<?php
-  if (Registry::get('MessageStack')->exists('header')) {
-      echo Registry::get('MessageStack')->get('header');
-  }
-
-require($OSCOM_Template->getPageContentsFile());
+<?php 
+if (Registry::get('MessageStack')->exists('header')) {
+    echo Registry::get('MessageStack')->get('header');
+}
+require $OSCOM_Template->get_page_contents_file();
 ?>
 
 </div>
 
-<?php
-  if ($OSCOM_Template->hasPageFooter()) {
-      ?>
+<?php 
+if ($OSCOM_Template->has_page_footer()) {
+    ?>
 
 <div id="footer">
-  <?php include($OSCOM_Template->getTemplateFile('footer.php')); ?>
+  <?php 
+    include $OSCOM_Template->get_template_file('footer.php');
+    ?>
 </div>
 
-<?php
-  }
+<?php 
+}
 ?>
 
 </body>

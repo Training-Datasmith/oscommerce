@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /*
   $Id: $
 
@@ -13,114 +13,89 @@ declare(strict_types=1);
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
-
-class osC_ImageGroups_Admin
+class Os_C_image_Groups_admin
 {
-    public static function getData($id)
+    public static function get_data($id)
     {
-        global $osC_Database, $osC_Language;
-
-        $Qgroup = $osC_Database->query('select * from :table_products_images_groups where id = :id and language_id = :language_id');
-        $Qgroup->bindTable(':table_products_images_groups', TABLE_PRODUCTS_IMAGES_GROUPS);
-        $Qgroup->bindInt(':id', $id);
-        $Qgroup->bindInt(':language_id', $osC_Language->getID());
+        global $os_c_database, $os_c_language;
+        $Qgroup = $os_c_database->query('select * from :table_products_images_groups where id = :id and language_id = :language_id');
+        $Qgroup->bind_table(':table_products_images_groups', TABLE_PRODUCTS_IMAGES_GROUPS);
+        $Qgroup->bind_int(':id', $id);
+        $Qgroup->bind_int(':language_id', $os_c_language->get_id());
         $Qgroup->execute();
-
-        $data = $Qgroup->toArray();
-
-        $Qgroup->freeResult();
-
+        $data = $Qgroup->to_array();
+        $Qgroup->free_result();
         return $data;
     }
-
     public static function save($id = null, $data, $default = false)
     {
-        global $osC_Database, $osC_Language;
-
+        global $os_c_database, $os_c_language;
         if (is_numeric($id)) {
             $group_id = $id;
         } else {
-            $Qgroup = $osC_Database->query('select max(id) as id from :table_products_images_groups');
-            $Qgroup->bindTable(':table_products_images_groups', TABLE_PRODUCTS_IMAGES_GROUPS);
+            $Qgroup = $os_c_database->query('select max(id) as id from :table_products_images_groups');
+            $Qgroup->bind_table(':table_products_images_groups', TABLE_PRODUCTS_IMAGES_GROUPS);
             $Qgroup->execute();
-
-            $group_id = $Qgroup->valueInt('id') + 1;
+            $group_id = $Qgroup->value_int('id') + 1;
         }
-
         $error = false;
-
-        $osC_Database->startTransaction();
-
-        foreach ($osC_Language->getAll() as $l) {
+        $os_c_database->start_transaction();
+        foreach ($os_c_language->get_all() as $l) {
             if (is_numeric($id)) {
-                $Qgroup = $osC_Database->query('update :table_products_images_groups set title = :title, code = :code, size_width = :size_width, size_height = :size_height, force_size = :force_size where id = :id and language_id = :language_id');
+                $Qgroup = $os_c_database->query('update :table_products_images_groups set title = :title, code = :code, size_width = :size_width, size_height = :size_height, force_size = :force_size where id = :id and language_id = :language_id');
             } else {
-                $Qgroup = $osC_Database->query('insert into :table_products_images_groups (id, language_id, title, code, size_width, size_height, force_size) values (:id, :language_id, :title, :code, :size_width, :size_height, :force_size)');
+                $Qgroup = $os_c_database->query('insert into :table_products_images_groups (id, language_id, title, code, size_width, size_height, force_size) values (:id, :language_id, :title, :code, :size_width, :size_height, :force_size)');
             }
-
-            $Qgroup->bindTable(':table_products_images_groups', TABLE_PRODUCTS_IMAGES_GROUPS);
-            $Qgroup->bindInt(':id', $group_id);
-            $Qgroup->bindValue(':title', $data['title'][$l['id']]);
-            $Qgroup->bindValue(':code', $data['code']);
-            $Qgroup->bindInt(':size_width', $data['width']);
-            $Qgroup->bindInt(':size_height', $data['height']);
-            $Qgroup->bindInt(':force_size', ($data['force_size'] === true) ? 1 : 0);
-            $Qgroup->bindInt(':language_id', $l['id']);
-            $Qgroup->setLogging($_SESSION['module'], $group_id);
+            $Qgroup->bind_table(':table_products_images_groups', TABLE_PRODUCTS_IMAGES_GROUPS);
+            $Qgroup->bind_int(':id', $group_id);
+            $Qgroup->bind_value(':title', $data['title'][$l['id']]);
+            $Qgroup->bind_value(':code', $data['code']);
+            $Qgroup->bind_int(':size_width', $data['width']);
+            $Qgroup->bind_int(':size_height', $data['height']);
+            $Qgroup->bind_int(':force_size', $data['force_size'] === true ? 1 : 0);
+            $Qgroup->bind_int(':language_id', $l['id']);
+            $Qgroup->set_logging($_SESSION['module'], $group_id);
             $Qgroup->execute();
-
-            if ($osC_Database->isError()) {
+            if ($os_c_database->is_error()) {
                 $error = true;
                 break;
             }
         }
-
         if ($error === false) {
             if ($default === true) {
-                $Qupdate = $osC_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
-                $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
-                $Qupdate->bindInt(':configuration_value', $group_id);
-                $Qupdate->bindValue(':configuration_key', 'DEFAULT_IMAGE_GROUP_ID');
-                $Qupdate->setLogging($_SESSION['module'], $group_id);
+                $Qupdate = $os_c_database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
+                $Qupdate->bind_table(':table_configuration', TABLE_CONFIGURATION);
+                $Qupdate->bind_int(':configuration_value', $group_id);
+                $Qupdate->bind_value(':configuration_key', 'DEFAULT_IMAGE_GROUP_ID');
+                $Qupdate->set_logging($_SESSION['module'], $group_id);
                 $Qupdate->execute();
-
-                if ($osC_Database->isError()) {
+                if ($os_c_database->is_error()) {
                     $error = true;
                 }
             }
         }
-
         if ($error === false) {
-            $osC_Database->commitTransaction();
-
-            osC_Cache::clear('images_groups');
-
+            $os_c_database->commit_transaction();
+            Os_C_cache::clear('images_groups');
             if ($default === true) {
-                osC_Cache::clear('configuration');
+                Os_C_cache::clear('configuration');
             }
-
             return true;
         }
-
-        $osC_Database->rollbackTransaction();
-
+        $os_c_database->rollback_transaction();
         return false;
     }
-
     public static function delete($id)
     {
-        global $osC_Database;
-
-        $Qdel = $osC_Database->query('delete from :table_products_images_groups where id = :id');
-        $Qdel->bindTable(':table_products_images_groups', TABLE_PRODUCTS_IMAGES_GROUPS);
-        $Qdel->bindInt(':id', $id);
-        $Qdel->setLogging($_SESSION['module'], $id);
+        global $os_c_database;
+        $Qdel = $os_c_database->query('delete from :table_products_images_groups where id = :id');
+        $Qdel->bind_table(':table_products_images_groups', TABLE_PRODUCTS_IMAGES_GROUPS);
+        $Qdel->bind_int(':id', $id);
+        $Qdel->set_logging($_SESSION['module'], $id);
         $Qdel->execute();
-
-        if (!$osC_Database->isError()) {
+        if (!$os_c_database->is_error()) {
             return true;
         }
-
         return false;
     }
 }

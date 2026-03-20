@@ -1,4 +1,5 @@
 <?php
+
 /*
   $Id$
 
@@ -11,16 +12,19 @@
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
-
-$osC_Order = new osC_Order($_GET['oID']);
+$os_c_order = new Os_C_order($_GET['oID']);
 ?>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
     <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
       <tr>
-        <td class="pageHeading"><?php echo nl2br(STORE_NAME_ADDRESS); ?></td>
-        <td class="pageHeading" align="right"><?php echo osc_image('../images/store_logo.jpg', STORE_NAME); ?></td>
+        <td class="pageHeading"><?php 
+echo nl2br(STORE_NAME_ADDRESS);
+?></td>
+        <td class="pageHeading" align="right"><?php 
+echo osc_image('../images/store_logo.jpg', STORE_NAME);
+?></td>
       </tr>
     </table></td>
   </tr>
@@ -32,27 +36,39 @@ $osC_Order = new osC_Order($_GET['oID']);
       <tr>
         <td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="2">
           <tr>
-            <td><b><?php echo $osC_Language->get('subsection_billing_address'); ?></b></td>
+            <td><b><?php 
+echo $os_c_language->get('subsection_billing_address');
+?></b></td>
           </tr>
           <tr>
-            <td><?php echo osC_Address::format($osC_Order->getBilling(), '<br />'); ?></td>
+            <td><?php 
+echo Os_C_address::format($os_c_order->get_billing(), '<br />');
+?></td>
           </tr>
           <tr>
             <td>&nbsp;</td>
           </tr>
           <tr>
-            <td><?php echo $osC_Order->getCustomer('telephone'); ?></td>
+            <td><?php 
+echo $os_c_order->get_customer('telephone');
+?></td>
           </tr>
           <tr>
-            <td><?php echo '<a href="mailto:' . $osC_Order->getCustomer('email_address') . '"><u>' . $osC_Order->getCustomer('email_address') . '</u></a>'; ?></td>
+            <td><?php 
+echo '<a href="mailto:' . $os_c_order->get_customer('email_address') . '"><u>' . $os_c_order->get_customer('email_address') . '</u></a>';
+?></td>
           </tr>
         </table></td>
         <td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="2">
           <tr>
-            <td><b><?php echo $osC_Language->get('subsection_shipping_address'); ?></b></td>
+            <td><b><?php 
+echo $os_c_language->get('subsection_shipping_address');
+?></b></td>
           </tr>
           <tr>
-            <td><?php echo osC_Address::format($osC_Order->getDelivery(), '<br />'); ?></td>
+            <td><?php 
+echo Os_C_address::format($os_c_order->get_delivery(), '<br />');
+?></td>
           </tr>
         </table></td>
       </tr>
@@ -64,8 +80,12 @@ $osC_Order = new osC_Order($_GET['oID']);
   <tr>
     <td><table border="0" cellspacing="0" cellpadding="2">
       <tr>
-        <td><b><?php echo $osC_Language->get('subsection_payment_method'); ?></b></td>
-        <td><?php echo $osC_Order->getPaymentMethod(); ?></td>
+        <td><b><?php 
+echo $os_c_language->get('subsection_payment_method');
+?></b></td>
+        <td><?php 
+echo $os_c_order->get_payment_method();
+?></td>
       </tr>
     </table></td>
   </tr>
@@ -76,27 +96,26 @@ $osC_Order = new osC_Order($_GET['oID']);
     <td><table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
       <thead>
         <tr>
-          <th colspan="2"><?php echo $osC_Language->get('table_heading_products'); ?></th>
-          <th><?php echo $osC_Language->get('table_heading_product_model'); ?></th>
+          <th colspan="2"><?php 
+echo $os_c_language->get('table_heading_products');
+?></th>
+          <th><?php 
+echo $os_c_language->get('table_heading_product_model');
+?></th>
         </tr>
       </thead>
       <tbody>
-<?php
-    foreach ($osC_Order->getProducts() as $product) {
-        echo '        <tr>' . "\n" .
-             '          <td valign="top" align="right">' . $product['quantity'] . '&nbsp;x</td>' . "\n" .
-             '          <td valign="top">' . $product['name'];
-
-        if (isset($product['attributes']) && (sizeof($product['attributes']) > 0)) {
-            foreach ($product['attributes'] as $attribute) {
-                echo '<br /><nobr>&nbsp;&nbsp;&nbsp;' . $attribute['option'] . ': ' . $attribute['value'] . '</nobr>';
-            }
+<?php 
+foreach ($os_c_order->get_products() as $product) {
+    echo '        <tr>' . "\n" . '          <td valign="top" align="right">' . $product['quantity'] . '&nbsp;x</td>' . "\n" . '          <td valign="top">' . $product['name'];
+    if (isset($product['attributes']) && sizeof($product['attributes']) > 0) {
+        foreach ($product['attributes'] as $attribute) {
+            echo '<br /><nobr>&nbsp;&nbsp;&nbsp;' . $attribute['option'] . ': ' . $attribute['value'] . '</nobr>';
         }
-
-        echo '          </td>' . "\n" .
-             '          <td valign="top">' . $product['model'] . '</td>' . "\n";
-        '        </tr>' . "\n";
     }
+    echo '          </td>' . "\n" . '          <td valign="top">' . $product['model'] . '</td>' . "\n";
+    '        </tr>' . "\n";
+}
 ?>
       </tbody>
     </table></td>

@@ -1,20 +1,18 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
+namespace Os_Commerce\OM\Core\Site\Admin;
 
-namespace osCommerce\OM\Core\Site\Admin;
-
-use osCommerce\OM\Core\Cache;
-use osCommerce\OM\Core\OSCOM;
-use osCommerce\OM\Core\Registry;
-
-abstract class PaymentModuleAbstract
+use Os_Commerce\OM\Core\Cache;
+use Os_Commerce\OM\Core\OSCOM;
+use Os_Commerce\OM\Core\Registry;
+abstract class Payment_Module_Abstract
 {
     protected $_code;
     protected $_title;
@@ -23,93 +21,66 @@ abstract class PaymentModuleAbstract
     protected $_author_www;
     protected $_status;
     protected $_sort_order = 0;
-
     abstract protected function initialize();
-    abstract public function isInstalled();
-
+    abstract public function is_installed();
     public function __construct()
     {
         $module_class = explode('\\', get_called_class());
         $this->_code = end($module_class);
-
         $this->initialize();
     }
-
-    public function isEnabled()
+    public function is_enabled()
     {
         return $this->_status;
     }
-
-    public function getCode()
+    public function get_code()
     {
         return $this->_code;
     }
-
-    public function getTitle()
+    public function get_title()
     {
         return $this->_title;
     }
-
-    public function getSortOrder()
+    public function get_sort_order()
     {
         return $this->_sort_order;
     }
-
-    public function hasKeys()
+    public function has_keys()
     {
-        return (count($this->getKeys()) > 0);
+        return count($this->get_keys()) > 0;
     }
-
-    public function getKeys()
+    public function get_keys()
     {
         return [];
     }
-
     public function install()
     {
         $OSCOM_Language = Registry::get('Language');
-
-        $data = ['title' => $this->_title,
-                      'code' => $this->_code,
-                      'author_name' => $this->_author_name,
-                      'author_www' => $this->_author_www,
-                      'group' => 'Payment'];
-
-        OSCOM::callDB('Admin\InsertModule', $data, 'Site');
-
-        foreach ($OSCOM_Language->getAll() as $key => $value) {
+        $data = ['title' => $this->_title, 'code' => $this->_code, 'author_name' => $this->_author_name, 'author_www' => $this->_author_www, 'group' => 'Payment'];
+        OSCOM::call_db('Admin\InsertModule', $data, 'Site');
+        foreach ($OSCOM_Language->get_all() as $key => $value) {
             if (file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Languages/' . $key . '/modules/payment/' . $this->_code . '.xml')) {
-                foreach ($OSCOM_Language->extractDefinitions($key . '/modules/payment/' . $this->_code . '.xml') as $def) {
+                foreach ($OSCOM_Language->extract_definitions($key . '/modules/payment/' . $this->_code . '.xml') as $def) {
                     $def['id'] = $value['id'];
-
-                    OSCOM::callDB('Admin\InsertLanguageDefinition', $def, 'Site');
+                    OSCOM::call_db('Admin\InsertLanguageDefinition', $def, 'Site');
                 }
             }
         }
-
         Cache::clear('languages');
     }
-
     public function remove()
     {
         $OSCOM_Language = Registry::get('Language');
-
-        $data = ['code' => $this->_code,
-                      'group' => 'Payment'];
-
-        OSCOM::callDB('Admin\DeleteModule', $data, 'Site');
-
-        if ($this->hasKeys()) {
-            OSCOM::callDB('Admin\DeleteConfigurationParameters', $this->getKeys(), 'Site');
-
+        $data = ['code' => $this->_code, 'group' => 'Payment'];
+        OSCOM::call_db('Admin\DeleteModule', $data, 'Site');
+        if ($this->has_keys()) {
+            OSCOM::call_db('Admin\DeleteConfigurationParameters', $this->get_keys(), 'Site');
             Cache::clear('configuration');
         }
-
-        if (file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Languages/' . $OSCOM_Language->getCode() . '/modules/payment/' . $this->_code . '.xml')) {
-            foreach ($OSCOM_Language->extractDefinitions($OSCOM_Language->getCode() . '/modules/payment/' . $this->_code . '.xml') as $def) {
-                OSCOM::callDB('Admin\DeleteLanguageDefinitions', $def, 'Site');
+        if (file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Languages/' . $OSCOM_Language->get_code() . '/modules/payment/' . $this->_code . '.xml')) {
+            foreach ($OSCOM_Language->extract_definitions($OSCOM_Language->get_code() . '/modules/payment/' . $this->_code . '.xml') as $def) {
+                OSCOM::call_db('Admin\DeleteLanguageDefinitions', $def, 'Site');
             }
-
             Cache::clear('languages');
         }
     }

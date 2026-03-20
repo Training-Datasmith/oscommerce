@@ -1,28 +1,24 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
+namespace Os_Commerce\OM\Core\Site\Admin\Application\Dashboard\SQL\My_Sql\Standard;
 
-namespace osCommerce\OM\Core\Site\Admin\Application\Dashboard\SQL\MySQL\Standard;
-
-use osCommerce\OM\Core\Registry;
-
-class SaveShortcut
+use Os_Commerce\OM\Core\Registry;
+class Save_Shortcut
 {
     public static function execute($data)
     {
         $OSCOM_PDO = Registry::get('PDO');
-
         $Qsc = $OSCOM_PDO->prepare('insert into :table_administrator_shortcuts (administrators_id, module, last_viewed) values (:administrators_id, :module, null)');
-        $Qsc->bindInt(':administrators_id', $data['admin_id']);
-        $Qsc->bindValue(':module', $data['application']);
+        $Qsc->bind_int(':administrators_id', $data['admin_id']);
+        $Qsc->bind_value(':module', $data['application']);
         $Qsc->execute();
-
-        return (($Qsc->rowCount() === 1) || !$Qsc->isError());
+        return $Qsc->row_count() === 1 || !$Qsc->is_error();
     }
 }

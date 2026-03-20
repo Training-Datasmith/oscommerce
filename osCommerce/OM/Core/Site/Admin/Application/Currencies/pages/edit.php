@@ -1,62 +1,96 @@
 <?php
+
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
-
-use osCommerce\OM\Core\HTML;
-use osCommerce\OM\Core\ObjectInfo;
-use osCommerce\OM\Core\OSCOM;
-use osCommerce\OM\Core\Site\Admin\Application\Currencies\Currencies;
-
-$OSCOM_ObjectInfo = new ObjectInfo(Currencies::get($_GET['id']));
+use Os_Commerce\OM\Core\HTML;
+use Os_Commerce\OM\Core\Object_Info;
+use Os_Commerce\OM\Core\OSCOM;
+use Os_Commerce\OM\Core\Site\Admin\Application\Currencies\Currencies;
+$oscom_object_info = new Object_Info(Currencies::get($_GET['id']));
 ?>
 
-<h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
+<h1><?php 
+echo $OSCOM_Template->get_icon(32) . HTML::link(OSCOM::get_link(), $OSCOM_Template->get_page_title());
+?></h1>
 
-<?php
-  if ($OSCOM_MessageStack->exists()) {
-      echo $OSCOM_MessageStack->get();
-  }
+<?php 
+if ($oscom_message_stack->exists()) {
+    echo $oscom_message_stack->get();
+}
 ?>
 
 <div class="infoBox">
-  <h3><?php echo HTML::icon('edit.png') . ' ' . $OSCOM_ObjectInfo->getProtected('title'); ?></h3>
+  <h3><?php 
+echo HTML::icon('edit.png') . ' ' . $oscom_object_info->get_protected('title');
+?></h3>
 
-  <form name="cEdit" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'Save&Process&id=' . $_GET['id']); ?>" method="post">
+  <form name="cEdit" class="dataForm" action="<?php 
+echo OSCOM::get_link(null, null, 'Save&Process&id=' . $_GET['id']);
+?>" method="post">
 
-  <p><?php echo OSCOM::getDef('introduction_edit_currency'); ?></p>
+  <p><?php 
+echo OSCOM::get_def('introduction_edit_currency');
+?></p>
 
   <fieldset>
-    <p><label for="title"><?php echo OSCOM::getDef('field_title'); ?></label><?php echo HTML::inputField('title', $OSCOM_ObjectInfo->get('title')); ?></p>
-    <p><label for="code"><?php echo OSCOM::getDef('field_code'); ?></label><?php echo HTML::inputField('code', $OSCOM_ObjectInfo->get('code')); ?></p>
-    <p><label for="symbol_left"><?php echo OSCOM::getDef('field_symbol_left'); ?></label><?php echo HTML::inputField('symbol_left', $OSCOM_ObjectInfo->get('symbol_left')); ?></p>
-    <p><label for="symbol_right"><?php echo OSCOM::getDef('field_symbol_right'); ?></label><?php echo HTML::inputField('symbol_right', $OSCOM_ObjectInfo->get('symbol_right')); ?></p>
-    <p><label for="decimal_places"><?php echo OSCOM::getDef('field_decimal_places'); ?></label><?php echo HTML::inputField('decimal_places', $OSCOM_ObjectInfo->get('decimal_places')); ?></p>
-    <p><label for="value"><?php echo OSCOM::getDef('field_currency_value'); ?></label><?php echo HTML::inputField('value', $OSCOM_ObjectInfo->get('value')); ?></p>
+    <p><label for="title"><?php 
+echo OSCOM::get_def('field_title');
+?></label><?php 
+echo HTML::input_field('title', $oscom_object_info->get('title'));
+?></p>
+    <p><label for="code"><?php 
+echo OSCOM::get_def('field_code');
+?></label><?php 
+echo HTML::input_field('code', $oscom_object_info->get('code'));
+?></p>
+    <p><label for="symbol_left"><?php 
+echo OSCOM::get_def('field_symbol_left');
+?></label><?php 
+echo HTML::input_field('symbol_left', $oscom_object_info->get('symbol_left'));
+?></p>
+    <p><label for="symbol_right"><?php 
+echo OSCOM::get_def('field_symbol_right');
+?></label><?php 
+echo HTML::input_field('symbol_right', $oscom_object_info->get('symbol_right'));
+?></p>
+    <p><label for="decimal_places"><?php 
+echo OSCOM::get_def('field_decimal_places');
+?></label><?php 
+echo HTML::input_field('decimal_places', $oscom_object_info->get('decimal_places'));
+?></p>
+    <p><label for="value"><?php 
+echo OSCOM::get_def('field_currency_value');
+?></label><?php 
+echo HTML::input_field('value', $oscom_object_info->get('value'));
+?></p>
 
-<?php
-    if ($OSCOM_ObjectInfo->get('code') != DEFAULT_CURRENCY) {
-        ?>
+<?php 
+if ($oscom_object_info->get('code') != DEFAULT_CURRENCY) {
+    ?>
 
-    <p><label for="default"><?php echo OSCOM::getDef('field_set_default'); ?></label><?php echo HTML::checkboxField('default'); ?></p>
+    <p><label for="default"><?php 
+    echo OSCOM::get_def('field_set_default');
+    ?></label><?php 
+    echo HTML::checkbox_field('default');
+    ?></p>
 
-<?php
-    }
+<?php 
+}
 ?>
 
   </fieldset>
 
   <p>
 
-<?php
-  if ($OSCOM_ObjectInfo->get('code') == DEFAULT_CURRENCY) {
-      echo HTML::hiddenField('is_default', 'true');
-  }
-
-echo HTML::button(['priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save')]) . ' ' . HTML::button(['href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel')]);
+<?php 
+if ($oscom_object_info->get('code') == DEFAULT_CURRENCY) {
+    echo HTML::hidden_field('is_default', 'true');
+}
+echo HTML::button(['priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::get_def('button_save')]) . ' ' . HTML::button(['href' => OSCOM::get_link(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::get_def('button_cancel')]);
 ?>
 
   </p>

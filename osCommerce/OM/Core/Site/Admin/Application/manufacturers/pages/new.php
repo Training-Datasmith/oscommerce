@@ -1,4 +1,5 @@
 <?php
+
 /*
   $Id: $
 
@@ -13,36 +14,49 @@
 */
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php 
+echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module()), $os_c_template->get_page_title());
+?></h1>
 
-<?php
-  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
-      echo $osC_MessageStack->get($osC_Template->getModule());
-  }
+<?php 
+if ($os_c_message_stack->size($os_c_template->get_module()) > 0) {
+    echo $os_c_message_stack->get($os_c_template->get_module());
+}
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('new.png') . ' ' . $osC_Language->get('action_heading_new_manufacturer'); ?></div>
+<div class="infoBoxHeading"><?php 
+echo osc_icon('new.png') . ' ' . $os_c_language->get('action_heading_new_manufacturer');
+?></div>
 <div class="infoBoxContent">
-  <form name="mNew" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=save'); ?>" method="post" enctype="multipart/form-data">
+  <form name="mNew" action="<?php 
+echo osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '&page=' . $_GET['page'] . '&action=save');
+?>" method="post" enctype="multipart/form-data">
 
-  <p><?php echo $osC_Language->get('introduction_new_manufacturer'); ?></p>
+  <p><?php 
+echo $os_c_language->get('introduction_new_manufacturer');
+?></p>
 
-  <p><?php echo $osC_Language->get('field_name') . '<br />' . osc_draw_input_field('manufacturers_name'); ?></p>
-  <p><?php echo $osC_Language->get('field_image') . '<br />' . osc_draw_file_field('manufacturers_image', true); ?></p>
+  <p><?php 
+echo $os_c_language->get('field_name') . '<br />' . osc_draw_input_field('manufacturers_name');
+?></p>
+  <p><?php 
+echo $os_c_language->get('field_image') . '<br />' . osc_draw_file_field('manufacturers_image', true);
+?></p>
 
   <p>
 
-<?php
-  echo $osC_Language->get('field_url');
-
-foreach ($osC_Language->getAll() as $l) {
-    echo '<br />' . $osC_Language->showImage($l['code']) . '&nbsp;' . osc_draw_input_field('manufacturers_url[' . $l['id'] . ']');
+<?php 
+echo $os_c_language->get('field_url');
+foreach ($os_c_language->get_all() as $l) {
+    echo '<br />' . $os_c_language->show_image($l['code']) . '&nbsp;' . osc_draw_input_field('manufacturers_url[' . $l['id'] . ']');
 }
 ?>
 
   </p>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php 
+echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $os_c_language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $os_c_language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '&page=' . $_GET['page']) . '\';" class="operationButton" />';
+?></p>
 
   </form>
 </div>

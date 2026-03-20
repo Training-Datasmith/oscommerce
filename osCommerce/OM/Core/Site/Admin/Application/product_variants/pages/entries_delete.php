@@ -1,4 +1,5 @@
 <?php
+
 /*
   $Id: $
 
@@ -11,42 +12,57 @@
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
-
-$osC_ObjectInfo = new osC_ObjectInfo(osC_ProductVariants_Admin::getEntry($_GET['paeID']));
+$os_c_object_info = new Os_C_object_Info(Os_C_product_Variants_admin::get_entry($_GET['paeID']));
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php 
+echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module()), $os_c_template->get_page_title());
+?></h1>
 
-<?php
-  if ($osC_MessageStack->exists($osC_Template->getModule())) {
-      echo $osC_MessageStack->get($osC_Template->getModule());
-  }
+<?php 
+if ($os_c_message_stack->exists($os_c_template->get_module())) {
+    echo $os_c_message_stack->get($os_c_template->get_module());
+}
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('trash.png') . ' ' . $osC_ObjectInfo->getProtected('title'); ?></div>
+<div class="infoBoxHeading"><?php 
+echo osc_icon('trash.png') . ' ' . $os_c_object_info->get_protected('title');
+?></div>
 <div class="infoBoxContent">
-  <form name="paeDelete" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&paeID=' . $osC_ObjectInfo->get('id') . '&action=deleteEntry'); ?>" method="post">
+  <form name="paeDelete" action="<?php 
+echo osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '=' . $_GET[$os_c_template->get_module()] . '&page=' . $_GET['page'] . '&paeID=' . $os_c_object_info->get('id') . '&action=deleteEntry');
+?>" method="post">
 
-<?php
-  if ($osC_ObjectInfo->getInt('total_products') > 0) {
-      ?>
+<?php 
+if ($os_c_object_info->get_int('total_products') > 0) {
+    ?>
 
-  <p><?php echo '<b>' . sprintf($osC_Language->get('delete_error_group_entry_in_use'), $osC_ObjectInfo->getInt('total_products')) . '</b>'; ?></p>
+  <p><?php 
+    echo '<b>' . sprintf($os_c_language->get('delete_error_group_entry_in_use'), $os_c_object_info->get_int('total_products')) . '</b>';
+    ?></p>
 
-  <p align="center"><?php echo '<input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php 
+    echo '<input type="button" value="' . $os_c_language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '=' . $_GET[$os_c_template->get_module()] . '&page=' . $_GET['page']) . '\';" class="operationButton" />';
+    ?></p>
 
-<?php
-  } else {
-      ?>
+<?php 
+} else {
+    ?>
 
-  <p><?php echo $osC_Language->get('introduction_delete_group_entry'); ?></p>
+  <p><?php 
+    echo $os_c_language->get('introduction_delete_group_entry');
+    ?></p>
 
-  <p><?php echo '<b>' . $osC_ObjectInfo->getProtected('title') . '</b>'; ?></p>
+  <p><?php 
+    echo '<b>' . $os_c_object_info->get_protected('title') . '</b>';
+    ?></p>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_delete') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php 
+    echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $os_c_language->get('button_delete') . '" class="operationButton" /> <input type="button" value="' . $os_c_language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '=' . $_GET[$os_c_template->get_module()] . '&page=' . $_GET['page']) . '\';" class="operationButton" />';
+    ?></p>
 
-<?php
-  }
+<?php 
+}
 ?>
 
   </form>

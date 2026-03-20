@@ -1,37 +1,48 @@
 <?php
+
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
-
-use osCommerce\OM\Core\HTML;
-use osCommerce\OM\Core\ObjectInfo;
-use osCommerce\OM\Core\OSCOM;
-use osCommerce\OM\Core\Site\Admin\Application\ZoneGroups\ZoneGroups;
-
-$OSCOM_ObjectInfo = new ObjectInfo(ZoneGroups::getEntry($_GET['zID']));
+use Os_Commerce\OM\Core\HTML;
+use Os_Commerce\OM\Core\Object_Info;
+use Os_Commerce\OM\Core\OSCOM;
+use Os_Commerce\OM\Core\Site\Admin\Application\Zone_Groups\Zone_Groups;
+$oscom_object_info = new Object_Info(Zone_Groups::get_entry($_GET['zID']));
 ?>
 
-<h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
+<h1><?php 
+echo $OSCOM_Template->get_icon(32) . HTML::link(OSCOM::get_link(), $OSCOM_Template->get_page_title());
+?></h1>
 
-<?php
-  if ($OSCOM_MessageStack->exists()) {
-      echo $OSCOM_MessageStack->get();
-  }
+<?php 
+if ($oscom_message_stack->exists()) {
+    echo $oscom_message_stack->get();
+}
 ?>
 
 <div class="infoBox">
-  <h3><?php echo HTML::icon('trash.png') . ' ' . $OSCOM_ObjectInfo->getProtected('countries_name') . ': ' . $OSCOM_ObjectInfo->getProtected('zone_name'); ?></h3>
+  <h3><?php 
+echo HTML::icon('trash.png') . ' ' . $oscom_object_info->get_protected('countries_name') . ': ' . $oscom_object_info->get_protected('zone_name');
+?></h3>
 
-  <form name="zDelete" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'EntryDelete&Process&id=' . $_GET['id'] . '&zID=' . $OSCOM_ObjectInfo->getInt('association_id')); ?>" method="post">
+  <form name="zDelete" class="dataForm" action="<?php 
+echo OSCOM::get_link(null, null, 'EntryDelete&Process&id=' . $_GET['id'] . '&zID=' . $oscom_object_info->get_int('association_id'));
+?>" method="post">
 
-  <p><?php echo OSCOM::getDef('introduction_delete_zone_entry'); ?></p>
+  <p><?php 
+echo OSCOM::get_def('introduction_delete_zone_entry');
+?></p>
 
-  <p><?php echo '<b>' . $OSCOM_ObjectInfo->getProtected('countries_name') . ': ' . $OSCOM_ObjectInfo->getProtected('zone_name') . '</b>'; ?></p>
+  <p><?php 
+echo '<b>' . $oscom_object_info->get_protected('countries_name') . ': ' . $oscom_object_info->get_protected('zone_name') . '</b>';
+?></p>
 
-  <p><?php echo HTML::button(['priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete')]) . ' ' . HTML::button(['href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel')]); ?></p>
+  <p><?php 
+echo HTML::button(['priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::get_def('button_delete')]) . ' ' . HTML::button(['href' => OSCOM::get_link(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::get_def('button_cancel')]);
+?></p>
 
   </form>
 </div>

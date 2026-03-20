@@ -1,4 +1,5 @@
 <?php
+
 /*
   $Id: $
 
@@ -13,78 +14,83 @@
 */
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php 
+echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module()), $os_c_template->get_page_title());
+?></h1>
 
-<?php
-  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
-      echo $osC_MessageStack->get($osC_Template->getModule());
-  }
+<?php 
+if ($os_c_message_stack->size($os_c_template->get_module()) > 0) {
+    echo $os_c_message_stack->get($os_c_template->get_module());
+}
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('trash.png') . ' ' . $osC_Language->get('action_heading_batch_delete_attribute_groups'); ?></div>
+<div class="infoBoxHeading"><?php 
+echo osc_icon('trash.png') . ' ' . $os_c_language->get('action_heading_batch_delete_attribute_groups');
+?></div>
 <div class="infoBoxContent">
-  <form name="paDeleteBatch" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchDelete'); ?>" method="post">
+  <form name="paDeleteBatch" action="<?php 
+echo osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '&page=' . $_GET['page'] . '&action=batchDelete');
+?>" method="post">
 
-  <p><?php echo $osC_Language->get('introduction_batch_delete_attribute_groups'); ?></p>
+  <p><?php 
+echo $os_c_language->get('introduction_batch_delete_attribute_groups');
+?></p>
 
-<?php
-  $check_products_flag = [];
-
-$Qgroups = $osC_Database->query('select id, title from :table_products_variants_groups where languages_id = :languages_id and id in (":id") order by title');
-$Qgroups->bindTable(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
-$Qgroups->bindInt(':languages_id', $osC_Language->getID());
-$Qgroups->bindRaw(':id', implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))));
+<?php 
+$check_products_flag = [];
+$Qgroups = $os_c_database->query('select id, title from :table_products_variants_groups where languages_id = :languages_id and id in (":id") order by title');
+$Qgroups->bind_table(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
+$Qgroups->bind_int(':languages_id', $os_c_language->get_id());
+$Qgroups->bind_raw(':id', implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))));
 $Qgroups->execute();
-
 $names_string = '';
-
 while ($Qgroups->next()) {
-    $Qproducts = $osC_Database->query('select count(*) as total_products from :table_products_variants pv, :table_products_variants_values pvv where pvv.products_variants_groups_id = :products_variants_groups_id and pvv.id = pv.products_variants_values_id');
-    $Qproducts->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
-    $Qproducts->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
-    $Qproducts->bindInt(':products_variants_groups_id', $Qgroups->valueInt('id'));
+    $Qproducts = $os_c_database->query('select count(*) as total_products from :table_products_variants pv, :table_products_variants_values pvv where pvv.products_variants_groups_id = :products_variants_groups_id and pvv.id = pv.products_variants_values_id');
+    $Qproducts->bind_table(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
+    $Qproducts->bind_table(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
+    $Qproducts->bind_int(':products_variants_groups_id', $Qgroups->value_int('id'));
     $Qproducts->execute();
-
-    if ($Qproducts->valueInt('total_products') > 0) {
+    if ($Qproducts->value_int('total_products') > 0) {
         $check_products_flag[] = $Qgroups->value('products_options_name');
     }
-
-    $Qentries = $osC_Database->query('select count(*) as total_entries from :table_products_variants_values where products_variants_groups_id = :products_variants_groups_id');
-    $Qentries->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
-    $Qentries->bindInt(':products_variants_groups_id', $Qgroups->valueInt('id'));
+    $Qentries = $os_c_database->query('select count(*) as total_entries from :table_products_variants_values where products_variants_groups_id = :products_variants_groups_id');
+    $Qentries->bind_table(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
+    $Qentries->bind_int(':products_variants_groups_id', $Qgroups->value_int('id'));
     $Qentries->execute();
-
     $group_name = $Qgroups->value('title');
-
-    if ($Qentries->valueInt('total_entries') > 0) {
-        $group_name .= ' (' . sprintf($osC_Language->get('total_entries'), $Qentries->valueInt('total_entries')) . ')';
+    if ($Qentries->value_int('total_entries') > 0) {
+        $group_name .= ' (' . sprintf($os_c_language->get('total_entries'), $Qentries->value_int('total_entries')) . ')';
     }
-
-    $names_string .= osc_draw_hidden_field('batch[]', $Qgroups->valueInt('id')) . '<b>' . $group_name . '</b>, ';
+    $names_string .= osc_draw_hidden_field('batch[]', $Qgroups->value_int('id')) . '<b>' . $group_name . '</b>, ';
 }
-
 if (!empty($names_string)) {
     $names_string = substr($names_string, 0, -2);
 }
-
 echo '<p>' . $names_string . '</p>';
-
 if (empty($check_products_flag)) {
     ?>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_delete') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php 
+    echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $os_c_language->get('button_delete') . '" class="operationButton" /> <input type="button" value="' . $os_c_language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '&page=' . $_GET['page']) . '\';" class="operationButton" />';
+    ?></p>
 
-<?php
+<?php 
 } else {
     ?>
 
-  <p><b><?php echo $osC_Language->get('batch_delete_error_attribute_groups_in_use'); ?></b></p>
+  <p><b><?php 
+    echo $os_c_language->get('batch_delete_error_attribute_groups_in_use');
+    ?></b></p>
 
-  <p><?php echo implode(', ', $check_products_flag); ?></p>
+  <p><?php 
+    echo implode(', ', $check_products_flag);
+    ?></p>
 
-  <p align="center"><?php echo '<input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php 
+    echo '<input type="button" value="' . $os_c_language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '&page=' . $_GET['page']) . '\';" class="operationButton" />';
+    ?></p>
 
-<?php
+<?php 
 }
 ?>
 

@@ -1,25 +1,24 @@
 <?php
+
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
-
-use osCommerce\OM\Core\HTML;
-use osCommerce\OM\Core\OSCOM;
-
+use Os_Commerce\OM\Core\HTML;
+use Os_Commerce\OM\Core\OSCOM;
 ?>
 
 <div id="sectionMenu_map">
   <div class="infoBox">
 
-<?php
-  if ($new_customer) {
-      echo '<h3>' . HTML::icon('new.png') . ' ' . OSCOM::getDef('action_heading_new_customer') . '</h3>';
-  } else {
-      echo '<h3>' . HTML::icon('edit.png') . ' ' . $OSCOM_ObjectInfo->getProtected('customers_name') . '</h3>';
-  }
+<?php 
+if ($new_customer) {
+    echo '<h3>' . HTML::icon('new.png') . ' ' . OSCOM::get_def('action_heading_new_customer') . '</h3>';
+} else {
+    echo '<h3>' . HTML::icon('edit.png') . ' ' . $oscom_object_info->get_protected('customers_name') . '</h3>';
+}
 ?>
 
     <div id="map_canvas" style="height: 400px; width: 75%; margin: 10px;"></div>
@@ -45,7 +44,9 @@ function initializeMap() {
   map = new google.maps.Map(document.getElementById('map_canvas'), myOptions);
   geocoder = new google.maps.Geocoder();
 
-  geocoder.geocode( { 'address': $('#ab_country option[value="<?php echo STORE_COUNTRY; ?>"]').text() }, function(results, status) {
+  geocoder.geocode( { 'address': $('#ab_country option[value="<?php 
+echo STORE_COUNTRY;
+?>"]').text() }, function(results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
       map.setCenter(results[0].geometry.location);
     }

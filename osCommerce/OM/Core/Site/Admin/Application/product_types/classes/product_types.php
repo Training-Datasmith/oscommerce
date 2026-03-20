@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /*
   osCommerce Online Merchant $osCommerce-SIG$
   Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
@@ -9,325 +9,231 @@ declare(strict_types=1);
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
-
-class osC_ProductTypes_Admin
+class Os_C_product_Types_admin
 {
     public static function get($id, $key = null)
     {
-        global $osC_Database;
-
-        $Qtype = $osC_Database->query('select * from :table_product_types where id = :id');
-        $Qtype->bindTable(':table_product_types', TABLE_PRODUCT_TYPES);
-        $Qtype->bindInt(':id', $id);
+        global $os_c_database;
+        $Qtype = $os_c_database->query('select * from :table_product_types where id = :id');
+        $Qtype->bind_table(':table_product_types', TABLE_PRODUCT_TYPES);
+        $Qtype->bind_int(':id', $id);
         $Qtype->execute();
-
-        $Qassignments = $osC_Database->query('select count(distinct action) as total_assignments from :table_product_types_assignments where types_id = :types_id');
-        $Qassignments->bindTable(':table_product_types_assignments', TABLE_PRODUCT_TYPES_ASSIGNMENTS);
-        $Qassignments->bindInt(':types_id', $Qtype->valueInt('id'));
+        $Qassignments = $os_c_database->query('select count(distinct action) as total_assignments from :table_product_types_assignments where types_id = :types_id');
+        $Qassignments->bind_table(':table_product_types_assignments', TABLE_PRODUCT_TYPES_ASSIGNMENTS);
+        $Qassignments->bind_int(':types_id', $Qtype->value_int('id'));
         $Qassignments->execute();
-
-        $Qproducts = $osC_Database->query('select count(*) as total_products from :table_products where products_types_id = :products_types_id');
-        $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
-        $Qproducts->bindInt(':products_types_id', $Qtype->valueInt('id'));
+        $Qproducts = $os_c_database->query('select count(*) as total_products from :table_products where products_types_id = :products_types_id');
+        $Qproducts->bind_table(':table_products', TABLE_PRODUCTS);
+        $Qproducts->bind_int(':products_types_id', $Qtype->value_int('id'));
         $Qproducts->execute();
-
-        $data = array_merge($Qtype->toArray(), $Qassignments->toArray(), $Qproducts->toArray());
-
+        $data = array_merge($Qtype->to_array(), $Qassignments->to_array(), $Qproducts->to_array());
         if (empty($key)) {
             return $data;
         } else {
             return $data[$key];
         }
     }
-
-    public static function getAll($pageset = 1)
+    public static function get_all($pageset = 1)
     {
-        global $osC_Database;
-
-        if (!is_numeric($pageset) || (floor($pageset) != $pageset)) {
+        global $os_c_database;
+        if (!is_numeric($pageset) || floor($pageset) != $pageset) {
             $pageset = 1;
         }
-
         $result = ['entries' => []];
-
-        $Qtypes = $osC_Database->query('select SQL_CALC_FOUND_ROWS * from :table_product_types order by title');
-        $Qtypes->bindTable(':table_product_types', TABLE_PRODUCT_TYPES);
-
+        $Qtypes = $os_c_database->query('select SQL_CALC_FOUND_ROWS * from :table_product_types order by title');
+        $Qtypes->bind_table(':table_product_types', TABLE_PRODUCT_TYPES);
         if ($pageset !== -1) {
-            $Qtypes->setBatchLimit($pageset, MAX_DISPLAY_SEARCH_RESULTS);
+            $Qtypes->set_batch_limit($pageset, MAX_DISPLAY_SEARCH_RESULTS);
         }
-
         $Qtypes->execute();
-
         while ($Qtypes->next()) {
-            $Qassignments = $osC_Database->query('select count(distinct action) as total_assignments from :table_product_types_assignments where types_id = :types_id');
-            $Qassignments->bindTable(':table_product_types_assignments', TABLE_PRODUCT_TYPES_ASSIGNMENTS);
-            $Qassignments->bindInt(':types_id', $Qtypes->valueInt('id'));
+            $Qassignments = $os_c_database->query('select count(distinct action) as total_assignments from :table_product_types_assignments where types_id = :types_id');
+            $Qassignments->bind_table(':table_product_types_assignments', TABLE_PRODUCT_TYPES_ASSIGNMENTS);
+            $Qassignments->bind_int(':types_id', $Qtypes->value_int('id'));
             $Qassignments->execute();
-
-            $result['entries'][] = array_merge($Qtypes->toArray(), $Qassignments->toArray());
+            $result['entries'][] = array_merge($Qtypes->to_array(), $Qassignments->to_array());
         }
-
-        $result['total'] = $Qtypes->getBatchSize();
-
-        if ($Qtypes->numberOfRows() > 0) {
-            $Qassignments->freeResult();
+        $result['total'] = $Qtypes->get_batch_size();
+        if ($Qtypes->number_of_rows() > 0) {
+            $Qassignments->free_result();
         }
-
-        $Qtypes->freeResult();
-
+        $Qtypes->free_result();
         return $result;
     }
-
     public static function save($id = null, $data)
     {
-        global $osC_Database;
-
+        global $os_c_database;
         if (is_numeric($id)) {
-            $Qtype = $osC_Database->query('update :table_product_types set title = :title where id = :id');
-            $Qtype->bindInt(':id', $id);
+            $Qtype = $os_c_database->query('update :table_product_types set title = :title where id = :id');
+            $Qtype->bind_int(':id', $id);
         } else {
-            $Qtype = $osC_Database->query('insert into :table_product_types (title) values (:title)');
+            $Qtype = $os_c_database->query('insert into :table_product_types (title) values (:title)');
         }
-
-        $Qtype->bindTable(':table_product_types', TABLE_PRODUCT_TYPES);
-        $Qtype->bindValue(':title', $data['title']);
-        $Qtype->setLogging($_SESSION['module'], $id);
+        $Qtype->bind_table(':table_product_types', TABLE_PRODUCT_TYPES);
+        $Qtype->bind_value(':title', $data['title']);
+        $Qtype->set_logging($_SESSION['module'], $id);
         $Qtype->execute();
-
-        if (!$osC_Database->isError()) {
+        if (!$os_c_database->is_error()) {
             return true;
         }
-
         return false;
     }
-
     public static function delete($id)
     {
-        global $osC_Database;
-
-        $Qdelete = $osC_Database->query('delete from :table_product_types where id = :id');
-        $Qdelete->bindTable(':table_product_types', TABLE_PRODUCT_TYPES);
-        $Qdelete->bindInt(':id', $id);
-        $Qdelete->setLogging($_SESSION['module'], $id);
+        global $os_c_database;
+        $Qdelete = $os_c_database->query('delete from :table_product_types where id = :id');
+        $Qdelete->bind_table(':table_product_types', TABLE_PRODUCT_TYPES);
+        $Qdelete->bind_int(':id', $id);
+        $Qdelete->set_logging($_SESSION['module'], $id);
         $Qdelete->execute();
-
-        return !$osC_Database->isError();
+        return !$os_c_database->is_error();
     }
-
-    public static function getAssignments($type_id, $action)
+    public static function get_assignments($type_id, $action)
     {
-        global $osC_Database;
-
+        global $os_c_database;
         if (!class_exists('osC_ProductTypes_Actions_' . $action)) {
-            include('../includes/modules/product_types/actions/' . $action . '.php');
+            include '../includes/modules/product_types/actions/' . $action . '.php';
         }
-
         $action_title = call_user_func(['osC_ProductTypes_Actions_' . $action, 'getTitle']);
-
         $action_modules = [];
-
-        $Qmodules = $osC_Database->query('select module from :table_product_types_assignments where types_id = :types_id and action = :action order by sort_order, module');
-        $Qmodules->bindTable(':table_product_types_assignments', TABLE_PRODUCT_TYPES_ASSIGNMENTS);
-        $Qmodules->bindInt(':types_id', $type_id);
-        $Qmodules->bindValue(':action', $action);
+        $Qmodules = $os_c_database->query('select module from :table_product_types_assignments where types_id = :types_id and action = :action order by sort_order, module');
+        $Qmodules->bind_table(':table_product_types_assignments', TABLE_PRODUCT_TYPES_ASSIGNMENTS);
+        $Qmodules->bind_int(':types_id', $type_id);
+        $Qmodules->bind_value(':action', $action);
         $Qmodules->execute();
-
         while ($Qmodules->next()) {
             if (!class_exists('osC_ProductTypes_Modules_' . $Qmodules->value('module'))) {
-                include('../includes/modules/product_types/modules/' . $Qmodules->value('module') . '.php');
+                include '../includes/modules/product_types/modules/' . $Qmodules->value('module') . '.php';
             }
-
             $module_title = call_user_func(['osC_ProductTypes_Modules_' . $Qmodules->value('module'), 'getTitle']);
-
-            $action_modules[] = ['module' => $Qmodules->value('module'),
-                                      'module_title' => $module_title];
+            $action_modules[] = ['module' => $Qmodules->value('module'), 'module_title' => $module_title];
         }
-
-        $result = ['types_id' => $type_id,
-                        'action' => $action,
-                        'action_title' => $action_title,
-                        'modules' => $action_modules];
-
+        $result = ['types_id' => $type_id, 'action' => $action, 'action_title' => $action_title, 'modules' => $action_modules];
         return $result;
     }
-
-    public static function getAllAssignments($type_id)
+    public static function get_all_assignments($type_id)
     {
-        global $osC_Database;
-
+        global $os_c_database;
         $result = ['entries' => []];
-
-        $Qactions = $osC_Database->query('select distinct action from :table_product_types_assignments where types_id = :types_id order by action');
-        $Qactions->bindTable(':table_product_types_assignments', TABLE_PRODUCT_TYPES_ASSIGNMENTS);
-        $Qactions->bindInt(':types_id', $type_id);
+        $Qactions = $os_c_database->query('select distinct action from :table_product_types_assignments where types_id = :types_id order by action');
+        $Qactions->bind_table(':table_product_types_assignments', TABLE_PRODUCT_TYPES_ASSIGNMENTS);
+        $Qactions->bind_int(':types_id', $type_id);
         $Qactions->execute();
-
         while ($Qactions->next()) {
             if (!class_exists('osC_ProductTypes_Actions_' . $Qactions->value('action'))) {
-                include('../includes/modules/product_types/actions/' . $Qactions->value('action') . '.php');
+                include '../includes/modules/product_types/actions/' . $Qactions->value('action') . '.php';
             }
-
             $action_title = call_user_func(['osC_ProductTypes_Actions_' . $Qactions->value('action'), 'getTitle']);
-
             $action_modules = [];
-
-            $Qmodules = $osC_Database->query('select module from :table_product_types_assignments where types_id = :types_id and action = :action order by sort_order, module');
-            $Qmodules->bindTable(':table_product_types_assignments', TABLE_PRODUCT_TYPES_ASSIGNMENTS);
-            $Qmodules->bindInt(':types_id', $type_id);
-            $Qmodules->bindValue(':action', $Qactions->value('action'));
+            $Qmodules = $os_c_database->query('select module from :table_product_types_assignments where types_id = :types_id and action = :action order by sort_order, module');
+            $Qmodules->bind_table(':table_product_types_assignments', TABLE_PRODUCT_TYPES_ASSIGNMENTS);
+            $Qmodules->bind_int(':types_id', $type_id);
+            $Qmodules->bind_value(':action', $Qactions->value('action'));
             $Qmodules->execute();
-
             while ($Qmodules->next()) {
                 if (!class_exists('osC_ProductTypes_Modules_' . $Qmodules->value('module'))) {
-                    include('../includes/modules/product_types/modules/' . $Qmodules->value('module') . '.php');
+                    include '../includes/modules/product_types/modules/' . $Qmodules->value('module') . '.php';
                 }
-
                 $module_title = call_user_func(['osC_ProductTypes_Modules_' . $Qmodules->value('module'), 'getTitle']);
-
-                $action_modules[] = ['module' => $Qmodules->value('module'),
-                                          'module_title' => $module_title];
+                $action_modules[] = ['module' => $Qmodules->value('module'), 'module_title' => $module_title];
             }
-
-            $result['entries'][] = ['types_id' => $type_id,
-                                         'action' => $Qactions->value('action'),
-                                         'action_title' => $action_title,
-                                         'modules' => $action_modules];
+            $result['entries'][] = ['types_id' => $type_id, 'action' => $Qactions->value('action'), 'action_title' => $action_title, 'modules' => $action_modules];
         }
-
-        $result['total'] = $Qactions->numberOfRows();
-
-        $Qactions->freeResult();
-
+        $result['total'] = $Qactions->number_of_rows();
+        $Qactions->free_result();
         return $result;
     }
-
-    public static function saveAssignments($type_id, $action, $data)
+    public static function save_assignments($type_id, $action, $data)
     {
-        global $osC_Database;
-
+        global $os_c_database;
         $error = false;
-
-        $osC_Database->startTransaction();
-
-        $Qdel = $osC_Database->query('delete from :table_product_types_assignments where types_id = :types_id and action = :action');
-        $Qdel->bindTable(':table_product_types_assignments', TABLE_PRODUCT_TYPES_ASSIGNMENTS);
-        $Qdel->bindInt(':types_id', $type_id);
-        $Qdel->bindValue(':action', $action);
-        $Qdel->setLogging($_SESSION['module'], $type_id);
+        $os_c_database->start_transaction();
+        $Qdel = $os_c_database->query('delete from :table_product_types_assignments where types_id = :types_id and action = :action');
+        $Qdel->bind_table(':table_product_types_assignments', TABLE_PRODUCT_TYPES_ASSIGNMENTS);
+        $Qdel->bind_int(':types_id', $type_id);
+        $Qdel->bind_value(':action', $action);
+        $Qdel->set_logging($_SESSION['module'], $type_id);
         $Qdel->execute();
-
         $counter = 1;
-
         foreach ($data['modules'] as $module) {
-            $Qinsert = $osC_Database->query('insert into :table_product_types_assignments (types_id, action, module, sort_order) values (:types_id, :action, :module, :sort_order)');
-            $Qinsert->bindTable(':table_product_types_assignments', TABLE_PRODUCT_TYPES_ASSIGNMENTS);
-            $Qinsert->bindInt(':types_id', $type_id);
-            $Qinsert->bindValue(':action', $action);
-            $Qinsert->bindValue(':module', $module);
-            $Qinsert->bindInt(':sort_order', $counter);
-            $Qinsert->setLogging($_SESSION['module'], $type_id);
+            $Qinsert = $os_c_database->query('insert into :table_product_types_assignments (types_id, action, module, sort_order) values (:types_id, :action, :module, :sort_order)');
+            $Qinsert->bind_table(':table_product_types_assignments', TABLE_PRODUCT_TYPES_ASSIGNMENTS);
+            $Qinsert->bind_int(':types_id', $type_id);
+            $Qinsert->bind_value(':action', $action);
+            $Qinsert->bind_value(':module', $module);
+            $Qinsert->bind_int(':sort_order', $counter);
+            $Qinsert->set_logging($_SESSION['module'], $type_id);
             $Qinsert->execute();
-
-            if ($osC_Database->isError()) {
+            if ($os_c_database->is_error()) {
                 $error = true;
                 break;
             }
-
             $counter++;
         }
-
         if ($error === false) {
-            $osC_Database->commitTransaction();
-
+            $os_c_database->commit_transaction();
             return true;
         }
-
-        $osC_Database->rollbackTransaction();
-
+        $os_c_database->rollback_transaction();
         return false;
     }
-
-    public static function deleteAssignments($type_id, $action)
+    public static function delete_assignments($type_id, $action)
     {
-        global $osC_Database;
-
-        $Qdelete = $osC_Database->query('delete from :table_product_types_assignments where types_id = :types_id and action = :action');
-        $Qdelete->bindTable(':table_product_types_assignments', TABLE_PRODUCT_TYPES_ASSIGNMENTS);
-        $Qdelete->bindInt(':types_id', $type_id);
-        $Qdelete->bindValue(':action', $action);
-        $Qdelete->setLogging($_SESSION['module'], $type_id);
+        global $os_c_database;
+        $Qdelete = $os_c_database->query('delete from :table_product_types_assignments where types_id = :types_id and action = :action');
+        $Qdelete->bind_table(':table_product_types_assignments', TABLE_PRODUCT_TYPES_ASSIGNMENTS);
+        $Qdelete->bind_int(':types_id', $type_id);
+        $Qdelete->bind_value(':action', $action);
+        $Qdelete->set_logging($_SESSION['module'], $type_id);
         $Qdelete->execute();
-
-        if (!$osC_Database->isError()) {
+        if (!$os_c_database->is_error()) {
             return true;
         }
-
         return false;
     }
-
-    public static function getActions($type_id = null)
+    public static function get_actions($type_id = null)
     {
-        global $osC_Database;
-
+        global $os_c_database;
         $filter = [];
-
         if (!empty($type_id)) {
-            $Qactions = $osC_Database->query('select distinct action from :table_product_types_assignments where types_id = :types_id order by action');
-            $Qactions->bindTable(':table_product_types_assignments', TABLE_PRODUCT_TYPES_ASSIGNMENTS);
-            $Qactions->bindInt(':types_id', $type_id);
+            $Qactions = $os_c_database->query('select distinct action from :table_product_types_assignments where types_id = :types_id order by action');
+            $Qactions->bind_table(':table_product_types_assignments', TABLE_PRODUCT_TYPES_ASSIGNMENTS);
+            $Qactions->bind_int(':types_id', $type_id);
             $Qactions->execute();
-
             while ($Qactions->next()) {
                 $filter[] = $Qactions->value('action');
             }
         }
-
-        $osC_DirectoryListing = new osC_DirectoryListing('../includes/modules/product_types/actions');
-        $osC_DirectoryListing->setIncludeDirectories(false);
-        $files = $osC_DirectoryListing->getFiles();
-
+        $os_c_directory_listing = new Os_C_directory_Listing('../includes/modules/product_types/actions');
+        $os_c_directory_listing->set_include_directories(false);
+        $files = $os_c_directory_listing->get_files();
         $actions_array = [];
-
-        foreach ($osC_DirectoryListing->getFiles() as $file) {
+        foreach ($os_c_directory_listing->get_files() as $file) {
             $class = substr($file['name'], 0, strrpos($file['name'], '.'));
-
             if (!in_array($class, $filter)) {
                 if (!class_exists('osC_ProductTypes_Actions_' . ucfirst($class))) {
-                    include('../includes/modules/product_types/actions/' . $file['name']);
+                    include '../includes/modules/product_types/actions/' . $file['name'];
                 }
-
                 $module_title = call_user_func(['osC_ProductTypes_Actions_' . ucfirst($class), 'getTitle']);
-
-                $actions_array[] = ['id' => $class,
-                                         'title' => $module_title];
+                $actions_array[] = ['id' => $class, 'title' => $module_title];
             }
         }
-
         return $actions_array;
     }
-
-    public static function getModules()
+    public static function get_modules()
     {
-        $osC_DirectoryListing = new osC_DirectoryListing('../includes/modules/product_types/modules');
-        $osC_DirectoryListing->setIncludeDirectories(false);
-        $files = $osC_DirectoryListing->getFiles();
-
+        $os_c_directory_listing = new Os_C_directory_Listing('../includes/modules/product_types/modules');
+        $os_c_directory_listing->set_include_directories(false);
+        $files = $os_c_directory_listing->get_files();
         $modules_array = [];
-
-        foreach ($osC_DirectoryListing->getFiles() as $file) {
+        foreach ($os_c_directory_listing->get_files() as $file) {
             $class = substr($file['name'], 0, strrpos($file['name'], '.'));
-
             if (!class_exists('osC_ProductTypes_Modules_' . ucfirst($class))) {
-                include('../includes/modules/product_types/modules/' . $file['name']);
+                include '../includes/modules/product_types/modules/' . $file['name'];
             }
-
             $module_title = call_user_func(['osC_ProductTypes_Modules_' . ucfirst($class), 'getTitle']);
-
-            $modules_array[] = ['id' => $class,
-                                     'title' => $module_title];
+            $modules_array[] = ['id' => $class, 'title' => $module_title];
         }
-
         return $modules_array;
     }
 }

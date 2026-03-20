@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /*
   $Id: $
 
@@ -13,157 +13,111 @@ declare(strict_types=1);
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
-
-class osC_Application_Modules_order_total extends osC_Template_Admin
+class Os_C_application_modules_order_total extends Os_C_template_admin
 {
     /* Protected variables */
-
     protected $_module = 'modules_order_total';
     protected $_page_title;
     protected $_page_contents = 'main.php';
-
     /* Class constructor */
-
     public function __construct()
     {
-        global $osC_Language, $osC_MessageStack;
-
-        $this->_page_title = $osC_Language->get('heading_title');
-
+        global $os_c_language, $os_c_message_stack;
+        $this->_page_title = $os_c_language->get('heading_title');
         if (!isset($_GET['action'])) {
             $_GET['action'] = '';
         }
-
-        include('includes/classes/order_total.php');
-
+        include 'includes/classes/order_total.php';
         if (!empty($_GET['action'])) {
             switch ($_GET['action']) {
                 case 'save':
                     $this->_page_contents = 'edit.php';
-
-                    if (isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm')) {
+                    if (isset($_POST['subaction']) && $_POST['subaction'] == 'confirm') {
                         $data = ['configuration' => $_POST['configuration']];
-
                         if ($this->_save($data)) {
-                            $osC_MessageStack->add($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
+                            $os_c_message_stack->add($this->_module, $os_c_language->get('ms_success_action_performed'), 'success');
                         } else {
-                            $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
+                            $os_c_message_stack->add($this->_module, $os_c_language->get('ms_error_action_not_performed'), 'error');
                         }
-
                         osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
                     }
-
                     break;
-
                 case 'install':
                     if ($this->_install($_GET['module'])) {
-                        $osC_MessageStack->add($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
+                        $os_c_message_stack->add($this->_module, $os_c_language->get('ms_success_action_performed'), 'success');
                     } else {
-                        $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
+                        $os_c_message_stack->add($this->_module, $os_c_language->get('ms_error_action_not_performed'), 'error');
                     }
-
                     osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
-
                     break;
-
                 case 'uninstall':
                     $this->_page_contents = 'uninstall.php';
-
-                    if (isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm')) {
+                    if (isset($_POST['subaction']) && $_POST['subaction'] == 'confirm') {
                         if ($this->_uninstall($_GET['module'])) {
-                            $osC_MessageStack->add($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
+                            $os_c_message_stack->add($this->_module, $os_c_language->get('ms_success_action_performed'), 'success');
                         } else {
-                            $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
+                            $os_c_message_stack->add($this->_module, $os_c_language->get('ms_error_action_not_performed'), 'error');
                         }
-
                         osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
                     }
-
                     break;
             }
         }
     }
-
     /* Private methods */
-
     public function _save($data)
     {
-        global $osC_Database;
-
+        global $os_c_database;
         $error = false;
-
-        $osC_Database->startTransaction();
-
+        $os_c_database->start_transaction();
         foreach ($data['configuration'] as $key => $value) {
-            $Qupdate = $osC_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
-            $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
-            $Qupdate->bindValue(':configuration_value', is_array($data['configuration'][$key]) ? implode(',', $data['configuration'][$key]) : $value);
-            $Qupdate->bindValue(':configuration_key', $key);
-            $Qupdate->setLogging($_SESSION['module']);
+            $Qupdate = $os_c_database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
+            $Qupdate->bind_table(':table_configuration', TABLE_CONFIGURATION);
+            $Qupdate->bind_value(':configuration_value', is_array($data['configuration'][$key]) ? implode(',', $data['configuration'][$key]) : $value);
+            $Qupdate->bind_value(':configuration_key', $key);
+            $Qupdate->set_logging($_SESSION['module']);
             $Qupdate->execute();
-
-            if ($osC_Database->isError()) {
+            if ($os_c_database->is_error()) {
                 $error = true;
                 break;
             }
         }
-
         if ($error === false) {
-            $osC_Database->commitTransaction();
-
-            osC_Cache::clear('configuration');
-
+            $os_c_database->commit_transaction();
+            Os_C_cache::clear('configuration');
             return true;
         }
-
-        $osC_Database->rollbackTransaction();
-
+        $os_c_database->rollback_transaction();
         return false;
     }
-
     public function _install($key)
     {
-        global $osC_Database, $osC_Language;
-
+        global $os_c_database, $os_c_language;
         if (file_exists('includes/modules/order_total/' . $key . '.php')) {
-            $osC_Language->injectDefinitions('modules/order_total/' . $key . '.xml');
-
-            include('includes/modules/order_total/' . $key . '.php');
-
+            $os_c_language->inject_definitions('modules/order_total/' . $key . '.xml');
+            include 'includes/modules/order_total/' . $key . '.php';
             $module = 'osC_OrderTotal_' . $key;
             $module = new $module();
-
             $module->install();
-
-            osC_Cache::clear('modules-order_total');
-            osC_Cache::clear('configuration');
-
+            Os_C_cache::clear('modules-order_total');
+            Os_C_cache::clear('configuration');
             return true;
         }
-
         return false;
     }
-
     public function _uninstall($key)
     {
-        global $osC_Database, $osC_Language;
-
+        global $os_c_database, $os_c_language;
         if (file_exists('includes/modules/order_total/' . $key . '.php')) {
-            $osC_Language->injectDefinitions('modules/order_total/' . $key . '.xml');
-
-            include('includes/modules/order_total/' . $key . '.php');
-
+            $os_c_language->inject_definitions('modules/order_total/' . $key . '.xml');
+            include 'includes/modules/order_total/' . $key . '.php';
             $module = 'osC_OrderTotal_' . $key;
             $module = new $module();
-
             $module->remove();
-
-            osC_Cache::clear('modules-order_total');
-            osC_Cache::clear('configuration');
-
+            Os_C_cache::clear('modules-order_total');
+            Os_C_cache::clear('configuration');
             return true;
         }
-
         return false;
     }
 }

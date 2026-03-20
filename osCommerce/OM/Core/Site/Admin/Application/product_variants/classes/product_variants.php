@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /*
   $Id: $
 
@@ -13,206 +13,158 @@ declare(strict_types=1);
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
-
-class osC_ProductVariants_Admin
+class Os_C_product_Variants_admin
 {
-    public static function getData($id, $language_id = null, $key = null)
+    public static function get_data($id, $language_id = null, $key = null)
     {
-        global $osC_Database, $osC_Language;
-
+        global $os_c_database, $os_c_language;
         if (empty($language_id)) {
-            $language_id = $osC_Language->getID();
+            $language_id = $os_c_language->get_id();
         }
-
-        $Qgroup = $osC_Database->query('select * from :table_products_variants_groups where id = :id and languages_id = :languages_id');
-        $Qgroup->bindTable(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
-        $Qgroup->bindInt(':id', $id);
-        $Qgroup->bindInt(':languages_id', $language_id);
+        $Qgroup = $os_c_database->query('select * from :table_products_variants_groups where id = :id and languages_id = :languages_id');
+        $Qgroup->bind_table(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
+        $Qgroup->bind_int(':id', $id);
+        $Qgroup->bind_int(':languages_id', $language_id);
         $Qgroup->execute();
-
-        $data = $Qgroup->toArray();
-
-        $Qentries = $osC_Database->query('select count(*) as total_entries from :table_products_variants_values where products_variants_groups_id = :products_variants_groups_id');
-        $Qentries->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
-        $Qentries->bindInt(':products_variants_groups_id', $id);
+        $data = $Qgroup->to_array();
+        $Qentries = $os_c_database->query('select count(*) as total_entries from :table_products_variants_values where products_variants_groups_id = :products_variants_groups_id');
+        $Qentries->bind_table(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
+        $Qentries->bind_int(':products_variants_groups_id', $id);
         $Qentries->execute();
-
-        $data['total_entries'] = $Qentries->valueInt('total_entries');
-
-        $Qproducts = $osC_Database->query('select count(*) as total_products from :table_products_variants pv, :table_products_variants_values pvv where pvv.products_variants_groups_id = :products_variants_groups_id and pvv.id = pv.products_variants_values_id');
-        $Qproducts->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
-        $Qproducts->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
-        $Qproducts->bindInt(':products_variants_groups_id', $id);
+        $data['total_entries'] = $Qentries->value_int('total_entries');
+        $Qproducts = $os_c_database->query('select count(*) as total_products from :table_products_variants pv, :table_products_variants_values pvv where pvv.products_variants_groups_id = :products_variants_groups_id and pvv.id = pv.products_variants_values_id');
+        $Qproducts->bind_table(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
+        $Qproducts->bind_table(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
+        $Qproducts->bind_int(':products_variants_groups_id', $id);
         $Qproducts->execute();
-
-        $data['total_products'] = $Qproducts->valueInt('total_products');
-
+        $data['total_products'] = $Qproducts->value_int('total_products');
         if (empty($key)) {
             return $data;
         } else {
             return $data[$key];
         }
     }
-
     public static function save($id = null, $data)
     {
-        global $osC_Database, $osC_Language;
-
+        global $os_c_database, $os_c_language;
         $error = false;
-
         if (is_numeric($id)) {
             $group_id = $id;
         } else {
-            $Qcheck = $osC_Database->query('select max(id) as id from :table_products_variants_groups');
-            $Qcheck->bindTable(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
+            $Qcheck = $os_c_database->query('select max(id) as id from :table_products_variants_groups');
+            $Qcheck->bind_table(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
             $Qcheck->execute();
-
-            $group_id = $Qcheck->valueInt('id') + 1;
+            $group_id = $Qcheck->value_int('id') + 1;
         }
-
-        $osC_Database->startTransaction();
-
-        foreach ($osC_Language->getAll() as $l) {
+        $os_c_database->start_transaction();
+        foreach ($os_c_language->get_all() as $l) {
             if (is_numeric($id)) {
-                $Qgroup = $osC_Database->query('update :table_products_variants_groups set title = :title, sort_order = :sort_order, module = :module where id = :id and languages_id = :languages_id');
+                $Qgroup = $os_c_database->query('update :table_products_variants_groups set title = :title, sort_order = :sort_order, module = :module where id = :id and languages_id = :languages_id');
             } else {
-                $Qgroup = $osC_Database->query('insert into :table_products_variants_groups (id, languages_id, title, sort_order, module) values (:id, :languages_id, :title, :sort_order, :module)');
+                $Qgroup = $os_c_database->query('insert into :table_products_variants_groups (id, languages_id, title, sort_order, module) values (:id, :languages_id, :title, :sort_order, :module)');
             }
-
-            $Qgroup->bindTable(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
-            $Qgroup->bindInt(':id', $group_id);
-            $Qgroup->bindInt(':languages_id', $l['id']);
-            $Qgroup->bindValue(':title', $data['name'][$l['id']]);
-            $Qgroup->bindInt(':sort_order', $data['sort_order']);
-            $Qgroup->bindValue(':module', $data['module']);
-            $Qgroup->setLogging($_SESSION['module'], $group_id);
+            $Qgroup->bind_table(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
+            $Qgroup->bind_int(':id', $group_id);
+            $Qgroup->bind_int(':languages_id', $l['id']);
+            $Qgroup->bind_value(':title', $data['name'][$l['id']]);
+            $Qgroup->bind_int(':sort_order', $data['sort_order']);
+            $Qgroup->bind_value(':module', $data['module']);
+            $Qgroup->set_logging($_SESSION['module'], $group_id);
             $Qgroup->execute();
-
-            if ($osC_Database->isError()) {
+            if ($os_c_database->is_error()) {
                 $error = true;
                 break;
             }
         }
-
         if ($error === false) {
-            $osC_Database->commitTransaction();
-
+            $os_c_database->commit_transaction();
             return true;
         }
-
-        $osC_Database->rollbackTransaction();
-
+        $os_c_database->rollback_transaction();
         return false;
     }
-
     public static function delete($id)
     {
-        global $osC_Database;
-
-        $Qdelete = $osC_Database->query('delete from :table_products_variants_groups where id = :id');
-        $Qdelete->bindTable(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
-        $Qdelete->bindInt(':id', $id);
-        $Qdelete->setLogging($_SESSION['module'], $id);
+        global $os_c_database;
+        $Qdelete = $os_c_database->query('delete from :table_products_variants_groups where id = :id');
+        $Qdelete->bind_table(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
+        $Qdelete->bind_int(':id', $id);
+        $Qdelete->set_logging($_SESSION['module'], $id);
         $Qdelete->execute();
-
-        return !$osC_Database->isError();
+        return !$os_c_database->is_error();
     }
-
-    public static function getEntry($id, $language_id = null)
+    public static function get_entry($id, $language_id = null)
     {
-        global $osC_Database, $osC_Language;
-
+        global $os_c_database, $os_c_language;
         if (empty($language_id)) {
-            $language_id = $osC_Language->getID();
+            $language_id = $os_c_language->get_id();
         }
-
-        $Qentry = $osC_Database->query('select * from :table_products_variants_values where id = :id and languages_id = :languages_id');
-        $Qentry->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
-        $Qentry->bindInt(':id', $id);
-        $Qentry->bindInt(':languages_id', $language_id);
+        $Qentry = $os_c_database->query('select * from :table_products_variants_values where id = :id and languages_id = :languages_id');
+        $Qentry->bind_table(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
+        $Qentry->bind_int(':id', $id);
+        $Qentry->bind_int(':languages_id', $language_id);
         $Qentry->execute();
-
-        $data = $Qentry->toArray();
-
-        $Qproducts = $osC_Database->query('select count(*) as total_products from :table_products_variants where products_variants_values_id = :products_variants_values_id');
-        $Qproducts->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
-        $Qproducts->bindInt(':products_variants_values_id', $Qentry->valueInt('id'));
+        $data = $Qentry->to_array();
+        $Qproducts = $os_c_database->query('select count(*) as total_products from :table_products_variants where products_variants_values_id = :products_variants_values_id');
+        $Qproducts->bind_table(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
+        $Qproducts->bind_int(':products_variants_values_id', $Qentry->value_int('id'));
         $Qproducts->execute();
-
-        $data['total_products'] = $Qproducts->valueInt('total_products');
-
-        $Qproducts->freeResult();
-        $Qentry->freeResult();
-
+        $data['total_products'] = $Qproducts->value_int('total_products');
+        $Qproducts->free_result();
+        $Qentry->free_result();
         return $data;
     }
-
-    public static function saveEntry($id = null, $data)
+    public static function save_entry($id = null, $data)
     {
-        global $osC_Database, $osC_Language;
-
+        global $os_c_database, $os_c_language;
         $error = false;
-
         if (is_numeric($id)) {
             $entry_id = $id;
         } else {
-            $Qcheck = $osC_Database->query('select max(id) as id from :table_products_variants_values');
-            $Qcheck->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
+            $Qcheck = $os_c_database->query('select max(id) as id from :table_products_variants_values');
+            $Qcheck->bind_table(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
             $Qcheck->execute();
-
-            $entry_id = $Qcheck->valueInt('id') + 1;
+            $entry_id = $Qcheck->value_int('id') + 1;
         }
-
-        $osC_Database->startTransaction();
-
-        foreach ($osC_Language->getAll() as $l) {
+        $os_c_database->start_transaction();
+        foreach ($os_c_language->get_all() as $l) {
             if (is_numeric($id)) {
-                $Qentry = $osC_Database->query('update :table_products_variants_values set title = :title, sort_order = :sort_order where id = :id and languages_id = :languages_id');
+                $Qentry = $os_c_database->query('update :table_products_variants_values set title = :title, sort_order = :sort_order where id = :id and languages_id = :languages_id');
             } else {
-                $Qentry = $osC_Database->query('insert into :table_products_variants_values (id, languages_id, products_variants_groups_id, title, sort_order) values (:id, :languages_id, :products_variants_groups_id, :title, :sort_order)');
-                $Qentry->bindInt(':products_variants_groups_id', $data['group_id']);
+                $Qentry = $os_c_database->query('insert into :table_products_variants_values (id, languages_id, products_variants_groups_id, title, sort_order) values (:id, :languages_id, :products_variants_groups_id, :title, :sort_order)');
+                $Qentry->bind_int(':products_variants_groups_id', $data['group_id']);
             }
-
-            $Qentry->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
-            $Qentry->bindInt(':id', $entry_id);
-            $Qentry->bindInt(':languages_id', $l['id']);
-            $Qentry->bindValue(':title', $data['name'][$l['id']]);
-            $Qentry->bindInt(':sort_order', $data['sort_order']);
-            $Qentry->setLogging($_SESSION['module'], $entry_id);
+            $Qentry->bind_table(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
+            $Qentry->bind_int(':id', $entry_id);
+            $Qentry->bind_int(':languages_id', $l['id']);
+            $Qentry->bind_value(':title', $data['name'][$l['id']]);
+            $Qentry->bind_int(':sort_order', $data['sort_order']);
+            $Qentry->set_logging($_SESSION['module'], $entry_id);
             $Qentry->execute();
-
-            if ($osC_Database->isError()) {
+            if ($os_c_database->is_error()) {
                 $error = true;
                 break;
             }
         }
-
         if ($error === false) {
-            $osC_Database->commitTransaction();
-
+            $os_c_database->commit_transaction();
             return true;
         }
-
-        $osC_Database->rollbackTransaction();
-
+        $os_c_database->rollback_transaction();
         return false;
     }
-
-    public static function deleteEntry($id, $group_id)
+    public static function delete_entry($id, $group_id)
     {
-        global $osC_Database;
-
-        $Qentry = $osC_Database->query('delete from :table_products_variants_values where id = :id and products_variants_groups_id = :products_variants_groups_id');
-        $Qentry->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
-        $Qentry->bindInt(':id', $id);
-        $Qentry->bindInt(':products_variants_groups_id', $group_id);
-        $Qentry->setLogging($_SESSION['module'], $id);
+        global $os_c_database;
+        $Qentry = $os_c_database->query('delete from :table_products_variants_values where id = :id and products_variants_groups_id = :products_variants_groups_id');
+        $Qentry->bind_table(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
+        $Qentry->bind_int(':id', $id);
+        $Qentry->bind_int(':products_variants_groups_id', $group_id);
+        $Qentry->set_logging($_SESSION['module'], $id);
         $Qentry->execute();
-
-        if (!$osC_Database->isError()) {
+        if (!$os_c_database->is_error()) {
             return true;
         }
-
         return false;
     }
 }

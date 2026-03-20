@@ -1,4 +1,5 @@
 <?php
+
 /*
   $Id: $
 
@@ -11,79 +12,124 @@
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
-
-$Qgroups = $osC_Database->query('select distinct banners_group from :table_banners order by banners_group');
-$Qgroups->bindTable(':table_banners', TABLE_BANNERS);
+$Qgroups = $os_c_database->query('select distinct banners_group from :table_banners order by banners_group');
+$Qgroups->bind_table(':table_banners', TABLE_BANNERS);
 $Qgroups->execute();
-
 $groups_array = [];
-
 while ($Qgroups->next()) {
-    $groups_array[] = ['id' => $Qgroups->value('banners_group'),
-                            'text' => $Qgroups->value('banners_group')];
+    $groups_array[] = ['id' => $Qgroups->value('banners_group'), 'text' => $Qgroups->value('banners_group')];
 }
-
-$osC_ObjectInfo = new osC_ObjectInfo(osC_BannerManager_Admin::getData($_GET['bID']));
+$os_c_object_info = new Os_C_object_Info(Os_C_banner_Manager_admin::get_data($_GET['bID']));
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php 
+echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module()), $os_c_template->get_page_title());
+?></h1>
 
-<?php
-  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
-      echo $osC_MessageStack->get($osC_Template->getModule());
-  }
+<?php 
+if ($os_c_message_stack->size($os_c_template->get_module()) > 0) {
+    echo $os_c_message_stack->get($os_c_template->get_module());
+}
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('edit.png') . ' ' . $osC_ObjectInfo->get('banners_title'); ?></div>
+<div class="infoBoxHeading"><?php 
+echo osc_icon('edit.png') . ' ' . $os_c_object_info->get('banners_title');
+?></div>
 <div class="infoBoxContent">
-  <form name="bEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&bID=' . $osC_ObjectInfo->get('banners_id') . '&action=save'); ?>" method="post" enctype="multipart/form-data">
+  <form name="bEdit" action="<?php 
+echo osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '&page=' . $_GET['page'] . '&bID=' . $os_c_object_info->get('banners_id') . '&action=save');
+?>" method="post" enctype="multipart/form-data">
 
-  <p><?php echo $osC_Language->get('introduction_edit_banner'); ?></p>
+  <p><?php 
+echo $os_c_language->get('introduction_edit_banner');
+?></p>
 
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
-      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_title') . '</b>'; ?></td>
-      <td width="60%"><?php echo osc_draw_input_field('title', $osC_ObjectInfo->get('banners_title'), 'style="width: 100%;"'); ?></td>
+      <td width="40%"><?php 
+echo '<b>' . $os_c_language->get('field_title') . '</b>';
+?></td>
+      <td width="60%"><?php 
+echo osc_draw_input_field('title', $os_c_object_info->get('banners_title'), 'style="width: 100%;"');
+?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_url') . '</b>'; ?></td>
-      <td width="60%"><?php echo osc_draw_input_field('url', $osC_ObjectInfo->get('banners_url'), 'style="width: 100%;"'); ?></td>
+      <td width="40%"><?php 
+echo '<b>' . $os_c_language->get('field_url') . '</b>';
+?></td>
+      <td width="60%"><?php 
+echo osc_draw_input_field('url', $os_c_object_info->get('banners_url'), 'style="width: 100%;"');
+?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_group') . '</b>'; ?></td>
-      <td width="60%"><?php echo osc_draw_pull_down_menu('group', $groups_array, $osC_ObjectInfo->get('banners_group')) . $osC_Language->get('field_group_new') . '<br />' . osc_draw_input_field('group_new', null, 'style="width: 100%;"'); ?></td>
+      <td width="40%"><?php 
+echo '<b>' . $os_c_language->get('field_group') . '</b>';
+?></td>
+      <td width="60%"><?php 
+echo osc_draw_pull_down_menu('group', $groups_array, $os_c_object_info->get('banners_group')) . $os_c_language->get('field_group_new') . '<br />' . osc_draw_input_field('group_new', null, 'style="width: 100%;"');
+?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_image') . '</b>'; ?></td>
-      <td width="60%"><?php echo osc_draw_file_field('image', true) . ' ' . $osC_Language->get('field_image_local') . '<br />' . realpath('../images/') . '/' . osc_draw_input_field('image_local', $osC_ObjectInfo->get('banners_image')); ?></td>
+      <td width="40%"><?php 
+echo '<b>' . $os_c_language->get('field_image') . '</b>';
+?></td>
+      <td width="60%"><?php 
+echo osc_draw_file_field('image', true) . ' ' . $os_c_language->get('field_image_local') . '<br />' . realpath('../images/') . '/' . osc_draw_input_field('image_local', $os_c_object_info->get('banners_image'));
+?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_image_target') . '</b>'; ?></td>
-      <td width="60%"><?php echo realpath('../images') . '/' . osc_draw_input_field('image_target'); ?></td>
+      <td width="40%"><?php 
+echo '<b>' . $os_c_language->get('field_image_target') . '</b>';
+?></td>
+      <td width="60%"><?php 
+echo realpath('../images') . '/' . osc_draw_input_field('image_target');
+?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_html_text') . '</b>'; ?></td>
-      <td width="60%"><?php echo osc_draw_textarea_field('html_text', $osC_ObjectInfo->get('banners_html_text')); ?></td>
+      <td width="40%"><?php 
+echo '<b>' . $os_c_language->get('field_html_text') . '</b>';
+?></td>
+      <td width="60%"><?php 
+echo osc_draw_textarea_field('html_text', $os_c_object_info->get('banners_html_text'));
+?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_scheduled_date') . '</b>'; ?></td>
-      <td width="60%"><?php echo osc_draw_input_field('date_scheduled', $osC_ObjectInfo->get('date_scheduled')); ?></td>
+      <td width="40%"><?php 
+echo '<b>' . $os_c_language->get('field_scheduled_date') . '</b>';
+?></td>
+      <td width="60%"><?php 
+echo osc_draw_input_field('date_scheduled', $os_c_object_info->get('date_scheduled'));
+?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_expiry_date') . '</b>'; ?></td>
-      <td width="60%"><?php echo osc_draw_input_field('date_expires', $osC_ObjectInfo->get('expires_date')); ?></td>
+      <td width="40%"><?php 
+echo '<b>' . $os_c_language->get('field_expiry_date') . '</b>';
+?></td>
+      <td width="60%"><?php 
+echo osc_draw_input_field('date_expires', $os_c_object_info->get('expires_date'));
+?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_maximum_impressions') . '</b>'; ?></td>
-      <td width="60%"><?php echo osc_draw_input_field('expires_impressions', null, 'maxlength="7" size="7"'); ?></td>
+      <td width="40%"><?php 
+echo '<b>' . $os_c_language->get('field_maximum_impressions') . '</b>';
+?></td>
+      <td width="60%"><?php 
+echo osc_draw_input_field('expires_impressions', null, 'maxlength="7" size="7"');
+?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_status') . '</b>'; ?></td>
-      <td width="60%"><?php echo osc_draw_checkbox_field('status', null, (($osC_ObjectInfo->get('status') == '1') ? true : false)); ?></td>
+      <td width="40%"><?php 
+echo '<b>' . $os_c_language->get('field_status') . '</b>';
+?></td>
+      <td width="60%"><?php 
+echo osc_draw_checkbox_field('status', null, $os_c_object_info->get('status') == '1' ? true : false);
+?></td>
     </tr>
   </table>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php 
+echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $os_c_language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $os_c_language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '&page=' . $_GET['page']) . '\';" class="operationButton" />';
+?></p>
 
   </form>
 </div>
@@ -104,4 +150,6 @@ $osC_ObjectInfo = new osC_ObjectInfo(osC_BannerManager_Admin::getData($_GET['bID
   });
 //--></script>
 
-<p><?php echo $osC_Language->get('info_banner_fields'); ?></p>
+<p><?php 
+echo $os_c_language->get('info_banner_fields');
+?></p>

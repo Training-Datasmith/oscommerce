@@ -1,47 +1,33 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
-
-namespace osCommerce\OM\Core\HttpRequest;
+namespace Os_Commerce\OM\Core\Http_Request;
 
 class Stream
 {
     public static function execute($parameters)
     {
-        $options = ['http' => ['method' => ($parameters['method'] == 'get' ? 'GET' : 'POST'),
-                                         'follow_location' => true,
-                                         'max_redirects' => 5,
-                                         'content' => $parameters['parameters']]];
-
+        $options = ['http' => ['method' => $parameters['method'] == 'get' ? 'GET' : 'POST', 'follow_location' => true, 'max_redirects' => 5, 'content' => $parameters['parameters']]];
         if (!isset($parameters['header'])) {
             $parameters['header'] = [];
         }
-
         $parameters['header'][] = 'Content-type: application/x-www-form-urlencoded';
-
         $options['http']['header'] = implode("\r\n", $parameters['header']);
-
         if (!empty($parameters['certificate'])) {
-            $options['ssl'] = ['local_cert' => $parameters['certificate'],
-                               'verify_peer' => true,
-                               'verify_peer_name' => true];
+            $options['ssl'] = ['local_cert' => $parameters['certificate'], 'verify_peer' => true, 'verify_peer_name' => true];
         } else {
-            $options['ssl'] = ['verify_peer' => true,
-                               'verify_peer_name' => true];
+            $options['ssl'] = ['verify_peer' => true, 'verify_peer_name' => true];
         }
-
         $context = stream_context_create($options);
-
         return file_get_contents($parameters['url'], false, $context);
     }
-
-    public static function canUse()
+    public static function can_use()
     {
         return extension_loaded('openssl');
     }

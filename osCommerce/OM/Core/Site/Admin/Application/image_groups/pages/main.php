@@ -1,4 +1,5 @@
 <?php
+
 /*
   $Id: $
 
@@ -13,28 +14,36 @@
 */
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php 
+echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module()), $os_c_template->get_page_title());
+?></h1>
 
-<?php
-  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
-      echo $osC_MessageStack->get($osC_Template->getModule());
-  }
+<?php 
+if ($os_c_message_stack->size($os_c_template->get_module()) > 0) {
+    echo $os_c_message_stack->get($os_c_template->get_module());
+}
 ?>
 
-<p align="right"><?php echo '<input type="button" value="' . $osC_Language->get('button_insert') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=save') . '\';" class="infoBoxButton" />'; ?></p>
+<p align="right"><?php 
+echo '<input type="button" value="' . $os_c_language->get('button_insert') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '&page=' . $_GET['page'] . '&action=save') . '\';" class="infoBoxButton" />';
+?></p>
 
-<?php
-  $Qgroups = $osC_Database->query('select id, title from :table_products_images_groups where language_id = :language_id order by title');
-$Qgroups->bindTable(':table_products_images_groups', TABLE_PRODUCTS_IMAGES_GROUPS);
-$Qgroups->bindInt(':language_id', $osC_Language->getID());
-$Qgroups->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
+<?php 
+$Qgroups = $os_c_database->query('select id, title from :table_products_images_groups where language_id = :language_id order by title');
+$Qgroups->bind_table(':table_products_images_groups', TABLE_PRODUCTS_IMAGES_GROUPS);
+$Qgroups->bind_int(':language_id', $os_c_language->get_id());
+$Qgroups->set_batch_limit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
 $Qgroups->execute();
 ?>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td><?php echo $Qgroups->getBatchTotalPages($osC_Language->get('batch_results_number_of_entries')); ?></td>
-    <td align="right"><?php echo $Qgroups->getBatchPageLinks('page', $osC_Template->getModule(), false); ?></td>
+    <td><?php 
+echo $Qgroups->get_batch_total_pages($os_c_language->get('batch_results_number_of_entries'));
+?></td>
+    <td align="right"><?php 
+echo $Qgroups->get_batch_page_links('page', $os_c_template->get_module(), false);
+?></td>
   </tr>
 </table>
 
@@ -43,43 +52,59 @@ $Qgroups->execute();
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
   <thead>
     <tr>
-      <th><?php echo $osC_Language->get('table_heading_image_groups'); ?></th>
-      <th width="150"><?php echo $osC_Language->get('table_heading_action'); ?></th>
-      <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
+      <th><?php 
+echo $os_c_language->get('table_heading_image_groups');
+?></th>
+      <th width="150"><?php 
+echo $os_c_language->get('table_heading_action');
+?></th>
+      <th align="center" width="20"><?php 
+echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"');
+?></th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="2"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . $osC_Language->get('icon_trash') . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchDelete') . '\';" />'; ?></th>
-      <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
+      <th align="right" colspan="2"><?php 
+echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . $os_c_language->get('icon_trash') . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '&page=' . $_GET['page'] . '&action=batchDelete') . '\';" />';
+?></th>
+      <th align="center" width="20"><?php 
+echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"');
+?></th>
     </tr>
   </tfoot>
   <tbody>
 
-<?php
-  while ($Qgroups->next()) {
-      $group_name = $Qgroups->value('title');
-
-      if ($Qgroups->valueInt('id') == DEFAULT_IMAGE_GROUP_ID) {
-          $group_name .= ' (' . $osC_Language->get('default_entry') . ')';
-      }
-      ?>
+<?php 
+while ($Qgroups->next()) {
+    $group_name = $Qgroups->value('title');
+    if ($Qgroups->value_int('id') == DEFAULT_IMAGE_GROUP_ID) {
+        $group_name .= ' (' . $os_c_language->get('default_entry') . ')';
+    }
+    ?>
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
-      <td onclick="document.getElementById('batch<?php echo $Qgroups->valueInt('id'); ?>').checked = !document.getElementById('batch<?php echo $Qgroups->valueInt('id'); ?>').checked;"><?php echo $group_name; ?></td>
+      <td onclick="document.getElementById('batch<?php 
+    echo $Qgroups->value_int('id');
+    ?>').checked = !document.getElementById('batch<?php 
+    echo $Qgroups->value_int('id');
+    ?>').checked;"><?php 
+    echo $group_name;
+    ?></td>
       <td align="right">
 
-<?php
-          echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&gID=' . $Qgroups->valueInt('id') . '&action=save'), osc_icon('edit.png')) . '&nbsp;' .
-               osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&gID=' . $Qgroups->valueInt('id') . '&action=delete'), osc_icon('trash.png'));
-      ?>
+<?php 
+    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '&page=' . $_GET['page'] . '&gID=' . $Qgroups->value_int('id') . '&action=save'), osc_icon('edit.png')) . '&nbsp;' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '&page=' . $_GET['page'] . '&gID=' . $Qgroups->value_int('id') . '&action=delete'), osc_icon('trash.png'));
+    ?>
 
       </td>
-      <td align="center"><?php echo osc_draw_checkbox_field('batch[]', $Qgroups->valueInt('id'), null, 'id="batch' . $Qgroups->valueInt('id') . '"'); ?></td>
+      <td align="center"><?php 
+    echo osc_draw_checkbox_field('batch[]', $Qgroups->value_int('id'), null, 'id="batch' . $Qgroups->value_int('id') . '"');
+    ?></td>
     </tr>
 
-<?php
-  }
+<?php 
+}
 ?>
 
   </tbody>
@@ -89,7 +114,11 @@ $Qgroups->execute();
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . $osC_Language->get('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . $osC_Language->get('icon_edit') . '&nbsp;&nbsp;' . osc_icon('trash.png') . '&nbsp;' . $osC_Language->get('icon_trash'); ?></td>
-    <td align="right"><?php echo $Qgroups->getBatchPagesPullDownMenu('page', $osC_Template->getModule()); ?></td>
+    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php 
+echo '<b>' . $os_c_language->get('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . $os_c_language->get('icon_edit') . '&nbsp;&nbsp;' . osc_icon('trash.png') . '&nbsp;' . $os_c_language->get('icon_trash');
+?></td>
+    <td align="right"><?php 
+echo $Qgroups->get_batch_pages_pull_down_menu('page', $os_c_template->get_module());
+?></td>
   </tr>
 </table>

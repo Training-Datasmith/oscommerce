@@ -1,19 +1,17 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
-
-namespace osCommerce\OM\Core;
+namespace Os_Commerce\OM\Core;
 
 /**
  * The Cache class handles the caching of dynamically generated data
  */
-
 class Cache
 {
     /**
@@ -22,18 +20,14 @@ class Cache
      * @var mixed
      * @access private
      */
-
     private $_data;
-
     /**
      * The key ID for the cached data
      *
      * @var string
      * @access private
      */
-
     private $_key;
-
     /**
      * Write the data to a cache file
      *
@@ -41,20 +35,16 @@ class Cache
      * @param string $key The key ID to save the cached data with
      * @access public
      */
-
     public function write($data, $key = null)
     {
         if (is_writable(OSCOM::BASE_DIRECTORY . 'Work/Cache/')) {
             if (empty($key)) {
                 $key = $this->_key;
             }
-
-            return (file_put_contents(OSCOM::BASE_DIRECTORY . 'Work/Cache/' . $key . '.cache', serialize($data), LOCK_EX) !== false);
+            return file_put_contents(OSCOM::BASE_DIRECTORY . 'Work/Cache/' . $key . '.cache', serialize($data), LOCK_EX) !== false;
         }
-
         return false;
     }
-
     /**
      * Read data from a cache file if it has not yet expired
      *
@@ -63,84 +53,65 @@ class Cache
      * @access public
      * @return boolean
      */
-
     public function read($key, $expire = null)
     {
         $this->_key = $key;
-
         $filename = OSCOM::BASE_DIRECTORY . 'Work/Cache/' . $key . '.cache';
-
         if (file_exists($filename)) {
             $difference = floor((time() - filemtime($filename)) / 60);
-
-            if (empty($expire) || (is_numeric($expire) && ($difference < $expire))) {
+            if (empty($expire) || is_numeric($expire) && $difference < $expire) {
                 $this->_data = unserialize(file_get_contents($filename), ['allowed_classes' => false]);
-
                 return true;
             }
         }
-
         return false;
     }
-
     /**
      * Return the cached data
      *
      * @access public
      * @return mixed
      */
-
-    public function getCache()
+    public function get_cache()
     {
         return $this->_data;
     }
-
     /**
      * Start the buffer to cache its contents
      *
      * @access public
      */
-
-    public function startBuffer()
+    public function start_buffer()
     {
         ob_start();
     }
-
     /**
      * Stop the buffer and cache its contents
      *
      * @access public
      */
-
-    public function stopBuffer()
+    public function stop_buffer()
     {
         $this->_data = ob_get_contents();
-
         ob_end_clean();
-
         $this->write($this->_data);
     }
-
     /**
      * Delete cached files by their key ID
      *
      * @param string $key The key ID of the cached files to delete
      * @access public
      */
-
     public static function clear($key)
     {
         if (is_writable(OSCOM::BASE_DIRECTORY . 'Work/Cache/')) {
             $key_length = strlen($key);
-
             $d = dir(OSCOM::BASE_DIRECTORY . 'Work/Cache/');
-
             while (($entry = $d->read()) !== false) {
-                if ((strlen($entry) >= $key_length) && (substr($entry, 0, $key_length) == $key)) {
+                if (strlen($entry) >= $key_length && substr($entry, 0, $key_length) == $key) {
                     @unlink(OSCOM::BASE_DIRECTORY . 'Work/Cache/' . $entry);
                 }
             }
-
             $d->close();
         }
     }

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /*
   $Id: $
 
@@ -13,86 +13,67 @@ declare(strict_types=1);
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
-
-class osC_Manufacturers_Admin
+class Os_C_manufacturers_admin
 {
-    public static function getData($id, $language_id = null)
+    public static function get_data($id, $language_id = null)
     {
-        global $osC_Database, $osC_Language;
-
+        global $os_c_database, $os_c_language;
         if (empty($language_id)) {
-            $language_id = $osC_Language->getID();
+            $language_id = $os_c_language->get_id();
         }
-
-        $Qmanufacturers = $osC_Database->query('select m.*, mi.* from :table_manufacturers m, :table_manufacturers_info mi where m.manufacturers_id = :manufacturers_id and m.manufacturers_id = mi.manufacturers_id and mi.languages_id = :languages_id');
-        $Qmanufacturers->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
-        $Qmanufacturers->bindTable(':table_manufacturers_info', TABLE_MANUFACTURERS_INFO);
-        $Qmanufacturers->bindInt(':manufacturers_id', $id);
-        $Qmanufacturers->bindInt(':languages_id', $language_id);
+        $Qmanufacturers = $os_c_database->query('select m.*, mi.* from :table_manufacturers m, :table_manufacturers_info mi where m.manufacturers_id = :manufacturers_id and m.manufacturers_id = mi.manufacturers_id and mi.languages_id = :languages_id');
+        $Qmanufacturers->bind_table(':table_manufacturers', TABLE_MANUFACTURERS);
+        $Qmanufacturers->bind_table(':table_manufacturers_info', TABLE_MANUFACTURERS_INFO);
+        $Qmanufacturers->bind_int(':manufacturers_id', $id);
+        $Qmanufacturers->bind_int(':languages_id', $language_id);
         $Qmanufacturers->execute();
-
-        $data = $Qmanufacturers->toArray();
-
-        $Qclicks = $osC_Database->query('select sum(url_clicked) as total from :table_manufacturers_info where manufacturers_id = :manufacturers_id');
-        $Qclicks->bindTable(':table_manufacturers_info', TABLE_MANUFACTURERS_INFO);
-        $Qclicks->bindInt(':manufacturers_id', $id);
+        $data = $Qmanufacturers->to_array();
+        $Qclicks = $os_c_database->query('select sum(url_clicked) as total from :table_manufacturers_info where manufacturers_id = :manufacturers_id');
+        $Qclicks->bind_table(':table_manufacturers_info', TABLE_MANUFACTURERS_INFO);
+        $Qclicks->bind_int(':manufacturers_id', $id);
         $Qclicks->execute();
-
-        $data['url_clicks'] = $Qclicks->valueInt('total');
-
-        $Qproducts = $osC_Database->query('select count(*) as products_count from :table_products where manufacturers_id = :manufacturers_id');
-        $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
-        $Qproducts->bindInt(':manufacturers_id', $id);
+        $data['url_clicks'] = $Qclicks->value_int('total');
+        $Qproducts = $os_c_database->query('select count(*) as products_count from :table_products where manufacturers_id = :manufacturers_id');
+        $Qproducts->bind_table(':table_products', TABLE_PRODUCTS);
+        $Qproducts->bind_int(':manufacturers_id', $id);
         $Qproducts->execute();
-
-        $data['products_count'] = $Qproducts->valueInt('products_count');
-
-        $Qclicks->freeResult();
-        $Qproducts->freeResult();
-        $Qmanufacturers->freeResult();
-
+        $data['products_count'] = $Qproducts->value_int('products_count');
+        $Qclicks->free_result();
+        $Qproducts->free_result();
+        $Qmanufacturers->free_result();
         return $data;
     }
-
     public static function save($id = null, $data)
     {
-        global $osC_Database, $osC_Language;
-
+        global $os_c_database, $os_c_language;
         $error = false;
-
-        $osC_Database->startTransaction();
-
+        $os_c_database->start_transaction();
         if (is_numeric($id)) {
-            $Qmanufacturer = $osC_Database->query('update :table_manufacturers set manufacturers_name = :manufacturers_name, last_modified = now() where manufacturers_id = :manufacturers_id');
-            $Qmanufacturer->bindInt(':manufacturers_id', $id);
+            $Qmanufacturer = $os_c_database->query('update :table_manufacturers set manufacturers_name = :manufacturers_name, last_modified = now() where manufacturers_id = :manufacturers_id');
+            $Qmanufacturer->bind_int(':manufacturers_id', $id);
         } else {
-            $Qmanufacturer = $osC_Database->query('insert into :table_manufacturers (manufacturers_name, date_added) values (:manufacturers_name, now())');
+            $Qmanufacturer = $os_c_database->query('insert into :table_manufacturers (manufacturers_name, date_added) values (:manufacturers_name, now())');
         }
-
-        $Qmanufacturer->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
-        $Qmanufacturer->bindValue(':manufacturers_name', $data['name']);
-        $Qmanufacturer->setLogging($_SESSION['module'], $id);
+        $Qmanufacturer->bind_table(':table_manufacturers', TABLE_MANUFACTURERS);
+        $Qmanufacturer->bind_value(':manufacturers_name', $data['name']);
+        $Qmanufacturer->set_logging($_SESSION['module'], $id);
         $Qmanufacturer->execute();
-
-        if (!$osC_Database->isError()) {
+        if (!$os_c_database->is_error()) {
             if (is_numeric($id)) {
                 $manufacturers_id = $id;
             } else {
-                $manufacturers_id = $osC_Database->nextID();
+                $manufacturers_id = $os_c_database->next_id();
             }
-
             $image = new upload('manufacturers_image', realpath('../' . DIR_WS_IMAGES . 'manufacturers'));
-
             if ($image->exists()) {
                 if ($image->parse() && $image->save()) {
-                    $Qimage = $osC_Database->query('update :table_manufacturers set manufacturers_image = :manufacturers_image where manufacturers_id = :manufacturers_id');
-                    $Qimage->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
-                    $Qimage->bindValue(':manufacturers_image', $image->filename);
-                    $Qimage->bindInt(':manufacturers_id', $manufacturers_id);
-                    $Qimage->setLogging($_SESSION['module'], $manufacturers_id);
+                    $Qimage = $os_c_database->query('update :table_manufacturers set manufacturers_image = :manufacturers_image where manufacturers_id = :manufacturers_id');
+                    $Qimage->bind_table(':table_manufacturers', TABLE_MANUFACTURERS);
+                    $Qimage->bind_value(':manufacturers_image', $image->filename);
+                    $Qimage->bind_int(':manufacturers_id', $manufacturers_id);
+                    $Qimage->set_logging($_SESSION['module'], $manufacturers_id);
                     $Qimage->execute();
-
-                    if ($osC_Database->isError()) {
+                    if ($os_c_database->is_error()) {
                         $error = true;
                     }
                 }
@@ -100,82 +81,65 @@ class osC_Manufacturers_Admin
         } else {
             $error = true;
         }
-
         if ($error === false) {
-            foreach ($osC_Language->getAll() as $l) {
+            foreach ($os_c_language->get_all() as $l) {
                 if (is_numeric($id)) {
-                    $Qurl = $osC_Database->query('update :table_manufacturers_info set manufacturers_url = :manufacturers_url where manufacturers_id = :manufacturers_id and languages_id = :languages_id');
+                    $Qurl = $os_c_database->query('update :table_manufacturers_info set manufacturers_url = :manufacturers_url where manufacturers_id = :manufacturers_id and languages_id = :languages_id');
                 } else {
-                    $Qurl = $osC_Database->query('insert into :table_manufacturers_info (manufacturers_id, languages_id, manufacturers_url) values (:manufacturers_id, :languages_id, :manufacturers_url)');
+                    $Qurl = $os_c_database->query('insert into :table_manufacturers_info (manufacturers_id, languages_id, manufacturers_url) values (:manufacturers_id, :languages_id, :manufacturers_url)');
                 }
-
-                $Qurl->bindTable(':table_manufacturers_info', TABLE_MANUFACTURERS_INFO);
-                $Qurl->bindInt(':manufacturers_id', $manufacturers_id);
-                $Qurl->bindInt(':languages_id', $l['id']);
-                $Qurl->bindValue(':manufacturers_url', $data['url'][$l['id']]);
-                $Qurl->setLogging($_SESSION['module'], $manufacturers_id);
+                $Qurl->bind_table(':table_manufacturers_info', TABLE_MANUFACTURERS_INFO);
+                $Qurl->bind_int(':manufacturers_id', $manufacturers_id);
+                $Qurl->bind_int(':languages_id', $l['id']);
+                $Qurl->bind_value(':manufacturers_url', $data['url'][$l['id']]);
+                $Qurl->set_logging($_SESSION['module'], $manufacturers_id);
                 $Qurl->execute();
-
-                if ($osC_Database->isError()) {
+                if ($os_c_database->is_error()) {
                     $error = true;
                     break;
                 }
             }
         }
-
         if ($error === false) {
-            $osC_Database->commitTransaction();
-
-            osC_Cache::clear('manufacturers');
-
+            $os_c_database->commit_transaction();
+            Os_C_cache::clear('manufacturers');
             return true;
         }
-
-        $osC_Database->rollbackTransaction();
-
+        $os_c_database->rollback_transaction();
         return false;
     }
-
     public static function delete($id, $delete_image = false, $delete_products = false)
     {
-        global $osC_Database;
-
+        global $os_c_database;
         if ($delete_image === true) {
-            $Qimage = $osC_Database->query('select manufacturers_image from :table_manufacturers where manufacturers_id = :manufacturers_id');
-            $Qimage->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
-            $Qimage->bindInt(':manufacturers_id', $id);
+            $Qimage = $os_c_database->query('select manufacturers_image from :table_manufacturers where manufacturers_id = :manufacturers_id');
+            $Qimage->bind_table(':table_manufacturers', TABLE_MANUFACTURERS);
+            $Qimage->bind_int(':manufacturers_id', $id);
             $Qimage->execute();
-
-            if ($Qimage->numberOfRows() && !osc_empty($Qimage->value('manufacturers_image'))) {
+            if ($Qimage->number_of_rows() && !osc_empty($Qimage->value('manufacturers_image'))) {
                 if (file_exists(realpath('../' . DIR_WS_IMAGES . 'manufacturers/' . $Qimage->value('manufacturers_image')))) {
                     @unlink(realpath('../' . DIR_WS_IMAGES . 'manufacturers/' . $Qimage->value('manufacturers_image')));
                 }
             }
         }
-
         if ($delete_products === true) {
-            $Qproducts = $osC_Database->query('select products_id from :table_products where manufacturers_id = :manufacturers_id');
-            $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
-            $Qproducts->bindInt(':manufacturers_id', $id);
+            $Qproducts = $os_c_database->query('select products_id from :table_products where manufacturers_id = :manufacturers_id');
+            $Qproducts->bind_table(':table_products', TABLE_PRODUCTS);
+            $Qproducts->bind_int(':manufacturers_id', $id);
             $Qproducts->execute();
-
             while ($Qproducts->next()) {
-                osC_Products_Admin::delete($Qproducts->valueInt('products_id'));
+                Os_C_products_admin::delete($Qproducts->value_int('products_id'));
             }
         }
-
-        $Qm = $osC_Database->query('delete from :table_manufacturers where manufacturers_id = :manufacturers_id');
-        $Qm->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
-        $Qm->bindInt(':manufacturers_id', $id);
-        $Qm->setLogging($_SESSION['module'], $id);
+        $Qm = $os_c_database->query('delete from :table_manufacturers where manufacturers_id = :manufacturers_id');
+        $Qm->bind_table(':table_manufacturers', TABLE_MANUFACTURERS);
+        $Qm->bind_int(':manufacturers_id', $id);
+        $Qm->set_logging($_SESSION['module'], $id);
         $Qm->execute();
-
-        if (!$osC_Database->isError()) {
-            osC_Cache::clear('manufacturers');
-
+        if (!$os_c_database->is_error()) {
+            Os_C_cache::clear('manufacturers');
             return true;
         }
-
         return false;
     }
 }

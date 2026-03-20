@@ -1,4 +1,5 @@
 <?php
+
 /*
   $Id: $
 
@@ -11,27 +12,38 @@
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
-
-$osC_ObjectInfo = new osC_ObjectInfo(osC_WhosOnline_Admin::getData($_GET['info']));
+$os_c_object_info = new Os_C_object_Info(Os_C_whos_Online_admin::get_data($_GET['info']));
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php 
+echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module()), $os_c_template->get_page_title());
+?></h1>
 
-<?php
-  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
-      echo $osC_MessageStack->get($osC_Template->getModule());
-  }
+<?php 
+if ($os_c_message_stack->size($os_c_template->get_module()) > 0) {
+    echo $os_c_message_stack->get($os_c_template->get_module());
+}
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('trash.png') . ' ' . $osC_ObjectInfo->get('full_name'); ?></div>
+<div class="infoBoxHeading"><?php 
+echo osc_icon('trash.png') . ' ' . $os_c_object_info->get('full_name');
+?></div>
 <div class="infoBoxContent">
-  <form name="wDelete" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&info=' . $osC_ObjectInfo->get('session_id') . '&action=delete'); ?>" method="post">
+  <form name="wDelete" action="<?php 
+echo osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '&page=' . $_GET['page'] . '&info=' . $os_c_object_info->get('session_id') . '&action=delete');
+?>" method="post">
 
-  <p><?php echo $osC_Language->get('introduction_delete_customer_session'); ?></p>
+  <p><?php 
+echo $os_c_language->get('introduction_delete_customer_session');
+?></p>
 
-  <p><?php echo '<b>' . $osC_ObjectInfo->get('full_name') . '</b>'; ?></p>
+  <p><?php 
+echo '<b>' . $os_c_object_info->get('full_name') . '</b>';
+?></p>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_delete') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php 
+echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $os_c_language->get('button_delete') . '" class="operationButton" /> <input type="button" value="' . $os_c_language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '&page=' . $_GET['page']) . '\';" class="operationButton" />';
+?></p>
 
   </form>
 </div>

@@ -1,34 +1,29 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
+namespace Os_Commerce\OM\Core\Site\Admin\Application\Zone_Groups\RPC;
 
-namespace osCommerce\OM\Core\Site\Admin\Application\ZoneGroups\RPC;
-
-use osCommerce\OM\Core\Site\Admin\Application\ZoneGroups\ZoneGroups;
-use osCommerce\OM\Core\Site\RPC\Controller as RPC;
-
-class GetAllEntries
+use Os_Commerce\OM\Core\Site\Admin\Application\Zone_Groups\Zone_Groups;
+use Os_Commerce\OM\Core\Site\RPC\Controller as RPC;
+class Get_All_Entries
 {
     public static function execute()
     {
         if (!isset($_GET['search'])) {
             $_GET['search'] = '';
         }
-
         if (!empty($_GET['search'])) {
-            $result = ZoneGroups::findEntries($_GET['search'], $_GET['id']);
+            $result = Zone_Groups::find_entries($_GET['search'], $_GET['id']);
         } else {
-            $result = ZoneGroups::getAllEntries($_GET['id']);
+            $result = Zone_Groups::get_all_entries($_GET['id']);
         }
-
         $result['rpcStatus'] = RPC::STATUS_SUCCESS;
-
         echo json_encode($result);
     }
 }

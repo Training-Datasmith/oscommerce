@@ -1,15 +1,14 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
+namespace Os_Commerce\OM\Core\Site\Setup\Application\Install;
 
-namespace osCommerce\OM\Core\Site\Setup\Application\Install;
-
-class Install extends \osCommerce\OM\Core\ApplicationModelAbstract
+class Install extends \Os_Commerce\OM\Core\Application_Model_Abstract
 {
 }

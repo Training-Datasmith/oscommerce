@@ -1,17 +1,15 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
+namespace Os_Commerce\OM\Core\Site\Admin\Application\Zone_Groups\Model;
 
-namespace osCommerce\OM\Core\Site\Admin\Application\ZoneGroups\Model;
-
-use osCommerce\OM\Core\OSCOM;
-
+use Os_Commerce\OM\Core\OSCOM;
 class save
 {
     public static function execute($id = null, $data)
@@ -19,7 +17,6 @@ class save
         if (is_numeric($id)) {
             $data['id'] = $id;
         }
-
-        return OSCOM::callDB('Admin\ZoneGroups\Save', $data);
+        return OSCOM::call_db('Admin\ZoneGroups\Save', $data);
     }
 }

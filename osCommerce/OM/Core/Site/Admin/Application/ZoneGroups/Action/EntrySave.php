@@ -1,25 +1,23 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * osCommerce Online Merchant
  *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
+namespace Os_Commerce\OM\Core\Site\Admin\Application\Zone_Groups\Action;
 
-namespace osCommerce\OM\Core\Site\Admin\Application\ZoneGroups\Action;
-
-use osCommerce\OM\Core\ApplicationAbstract;
-
-class EntrySave
+use Os_Commerce\OM\Core\Application_Abstract;
+class Entry_Save
 {
-    public static function execute(ApplicationAbstract $application)
+    public static function execute(Application_Abstract $application)
     {
         if (isset($_GET['zID']) && is_numeric($_GET['zID'])) {
-            $application->setPageContent('entries_edit.php');
+            $application->set_page_content('entries_edit.php');
         } else {
-            $application->setPageContent('entries_new.php');
+            $application->set_page_content('entries_new.php');
         }
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /*
   $Id$
 
@@ -11,50 +12,55 @@
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
-
-$osC_ObjectInfo = new osC_ObjectInfo(osC_Newsletters_Admin::getData($_GET['nID']));
-
-$osC_Language->loadIniFile('modules/newsletters/' . $osC_ObjectInfo->get('module') . '.php');
-include('includes/modules/newsletters/' . $osC_ObjectInfo->get('module') . '.php');
-
-$module_name = 'osC_Newsletter_' . $osC_ObjectInfo->get('module');
-$module = new $module_name($osC_ObjectInfo->get('title'), $osC_ObjectInfo->get('content'), $osC_ObjectInfo->get('newsletters_id'));
+$os_c_object_info = new Os_C_object_Info(Os_C_newsletters_admin::get_data($_GET['nID']));
+$os_c_language->load_ini_file('modules/newsletters/' . $os_c_object_info->get('module') . '.php');
+include 'includes/modules/newsletters/' . $os_c_object_info->get('module') . '.php';
+$module_name = 'osC_Newsletter_' . $os_c_object_info->get('module');
+$module = new $module_name($os_c_object_info->get('title'), $os_c_object_info->get('content'), $os_c_object_info->get('newsletters_id'));
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php 
+echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module()), $os_c_template->get_page_title());
+?></h1>
 
-<?php
-  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
-      echo $osC_MessageStack->get($osC_Template->getModule());
-  }
+<?php 
+if ($os_c_message_stack->size($os_c_template->get_module()) > 0) {
+    echo $os_c_message_stack->get($os_c_template->get_module());
+}
 ?>
 
-<?php
-  if (!isset($_POST['subaction'])) {
-      if ($module->hasAudienceSelection()) {
-          echo $module->showAudienceSelectionForm();
-      } else {
-          echo $module->showConfirmation();
-      }
-  } elseif ($_POST['subaction'] == 'confirm') {
-      echo $module->showConfirmation();
-  } elseif ($_POST['subaction'] == 'execute') {
-      ?>
+<?php 
+if (!isset($_POST['subaction'])) {
+    if ($module->has_audience_selection()) {
+        echo $module->show_audience_selection_form();
+    } else {
+        echo $module->show_confirmation();
+    }
+} elseif ($_POST['subaction'] == 'confirm') {
+    echo $module->show_confirmation();
+} elseif ($_POST['subaction'] == 'execute') {
+    ?>
 
-<p><?php echo osc_image('images/ani_send_email.gif'); ?></p>
+<p><?php 
+    echo osc_image('images/ani_send_email.gif');
+    ?></p>
 
-<p><?php echo '<b>' . $osC_Language->get('sending_please_wait') . '</b>'; ?></p>
+<p><?php 
+    echo '<b>' . $os_c_language->get('sending_please_wait') . '</b>';
+    ?></p>
 
-<?php
-          flush();
+<?php 
+    flush();
+    $module->send_email();
+    ?>
 
-      $module->sendEmail();
-      ?>
+<p><font color="#ff0000"><b><?php 
+    echo $os_c_language->get('sending_finalized');
+    ?></b></font></p>
 
-<p><font color="#ff0000"><b><?php echo $osC_Language->get('sending_finalized'); ?></b></font></p>
+<p align="right"><?php 
+    echo '<input type="button" value="' . $os_c_language->get('button_ok') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $os_c_template->get_module() . '&page=' . $_GET['page']) . '\';" class="operationButton" />';
+    ?></p>
 
-<p align="right"><?php echo '<input type="button" value="' . $osC_Language->get('button_ok') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
-
-<?php
-  }
-?>
+<?php 
+}
