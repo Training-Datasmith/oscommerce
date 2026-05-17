@@ -22,7 +22,7 @@ use osCommerce\OM\Core\Site\Admin\CategoryTree;
 
 class save
 {
-    public static function execute($id = null, $data)
+    public static function execute($id, $data)
     {
         if (Registry::exists('CategoryTree')) {
             $OSCOM_CategoryTree = Registry::get('CategoryTree');

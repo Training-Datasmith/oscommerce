@@ -211,7 +211,7 @@ class PDO extends \PDO
         return !$error;
     }
 
-    public static function getBatchTotalPages($text, $pageset_number = 1, $total)
+    public static function getBatchTotalPages($text, $pageset_number, $total)
     {
         $pageset_number = (is_numeric($pageset_number) ? $pageset_number : 1);
 
@@ -226,7 +226,7 @@ class PDO extends \PDO
         return sprintf($text, $from, $to, $total);
     }
 
-    public static function getBatchPageLinks($batch_keyword = 'page', $total, $parameters = '', $with_pull_down_menu = true)
+    public static function getBatchPageLinks($batch_keyword, $total, $parameters = '', $with_pull_down_menu = true)
     {
         $batch_number = (isset($_GET[$batch_keyword]) && is_numeric($_GET[$batch_keyword]) ? $_GET[$batch_keyword] : 1);
         $number_of_pages = ceil($total / MAX_DISPLAY_SEARCH_RESULTS);
@@ -246,7 +246,7 @@ class PDO extends \PDO
         return $string;
     }
 
-    public static function getBatchPagesPullDownMenu($batch_keyword = 'page', $total, $parameters = null)
+    public static function getBatchPagesPullDownMenu($batch_keyword, $total, $parameters = null)
     {
         $batch_number = (isset($_GET[$batch_keyword]) && is_numeric($_GET[$batch_keyword]) ? $_GET[$batch_keyword] : 1);
         $number_of_pages = ceil($total / MAX_DISPLAY_SEARCH_RESULTS);
@@ -301,7 +301,7 @@ class PDO extends \PDO
         return $string;
     }
 
-    public static function getBatchNextPageLink($batch_keyword = 'page', $total, $parameters = null)
+    public static function getBatchNextPageLink($batch_keyword, $total, $parameters = null)
     {
         $batch_number = (isset($_GET[$batch_keyword]) && is_numeric($_GET[$batch_keyword]) ? $_GET[$batch_keyword] : 1);
         $number_of_pages = ceil($total / MAX_DISPLAY_SEARCH_RESULTS);

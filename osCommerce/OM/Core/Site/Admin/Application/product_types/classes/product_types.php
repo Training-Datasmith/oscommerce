@@ -79,7 +79,7 @@ class osC_ProductTypes_Admin
         return $result;
     }
 
-    public static function save($id = null, $data)
+    public static function save($id, $data)
     {
         global $osC_Database;
 

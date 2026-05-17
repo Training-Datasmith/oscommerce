@@ -44,25 +44,25 @@ class Mail
         }
     }
 
-    public function addTo($name = null, $email_address)
+    public function addTo($name, $email_address)
     {
         $this->_to[] = ['name' => $name,
                              'email_address' => $email_address];
     }
 
-    public function setFrom($name = null, $email_address)
+    public function setFrom($name, $email_address)
     {
         $this->_from = ['name' => $name,
                              'email_address' => $email_address];
     }
 
-    public function addCC($name = null, $email_address)
+    public function addCC($name, $email_address)
     {
         $this->_cc[] = ['name' => $name,
                              'email_address' => $email_address];
     }
 
-    public function addBCC($name = null, $email_address)
+    public function addBCC($name, $email_address)
     {
         $this->_bcc[] = ['name' => $name,
                               'email_address' => $email_address];

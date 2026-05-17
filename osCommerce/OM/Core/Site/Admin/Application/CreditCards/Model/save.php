@@ -15,7 +15,7 @@ use osCommerce\OM\Core\OSCOM;
 
 class save
 {
-    public static function execute($id = null, $data)
+    public static function execute($id, $data)
     {
         if (is_numeric($id)) {
             $data['id'] = $id;

@@ -242,7 +242,7 @@ class osC_Products_Admin
         return $result;
     }
 
-    public static function save($id = null, $data)
+    public static function save($id, $data)
     {
         global $osC_Database, $osC_Language, $osC_Image;
 

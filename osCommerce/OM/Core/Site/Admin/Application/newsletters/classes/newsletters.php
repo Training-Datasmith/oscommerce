@@ -32,7 +32,7 @@ class osC_Newsletters_Admin
         return $data;
     }
 
-    public static function save($id = null, $data)
+    public static function save($id, $data)
     {
         global $osC_Database;
 

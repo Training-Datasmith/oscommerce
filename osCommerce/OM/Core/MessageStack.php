@@ -82,7 +82,7 @@ class MessageStack
      * @since v3.0.0
      */
 
-    public function add($group = null, $message, $type = 'error')
+    public function add($group, $message, $type = 'error')
     {
         if (!isset($group)) {
             $group = OSCOM::getSiteApplication();

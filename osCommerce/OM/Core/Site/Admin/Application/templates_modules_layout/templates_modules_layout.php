@@ -127,7 +127,7 @@ class osC_Application_Templates_modules_layout extends osC_Template_Admin
 
     /* Private methods */
 
-    public function _save($id = null, $data, $set)
+    public function _save($id, $data, $set)
     {
         global $osC_Database;
 

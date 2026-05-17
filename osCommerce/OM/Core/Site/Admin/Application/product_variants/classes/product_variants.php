@@ -54,7 +54,7 @@ class osC_ProductVariants_Admin
         }
     }
 
-    public static function save($id = null, $data)
+    public static function save($id, $data)
     {
         global $osC_Database, $osC_Language;
 
@@ -147,7 +147,7 @@ class osC_ProductVariants_Admin
         return $data;
     }
 
-    public static function saveEntry($id = null, $data)
+    public static function saveEntry($id, $data)
     {
         global $osC_Database, $osC_Language;
 

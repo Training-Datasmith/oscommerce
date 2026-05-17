@@ -33,7 +33,7 @@ class osC_WeightClasses_Admin
         return $data;
     }
 
-    public static function save($id = null, $data, $default = false)
+    public static function save($id, $data, $default = false)
     {
         global $osC_Database, $osC_Language;
 
