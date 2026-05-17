@@ -12,20 +12,20 @@ namespace osCommerce\OM\Core\Site\Shop\Module\ProductType;
 
 use osCommerce\OM\Core\Site\Shop\Product;
 
-class true
+class Require_False
 {
     public static function getTitle()
     {
-        return 'True';
+        return 'False';
     }
 
     public static function getDescription()
     {
-        return 'Pass action with true';
+        return 'Fail action with false';
     }
 
     public static function isValid(Product $OSCOM_Product)
     {
-        return true;
+        return false;
     }
 }
