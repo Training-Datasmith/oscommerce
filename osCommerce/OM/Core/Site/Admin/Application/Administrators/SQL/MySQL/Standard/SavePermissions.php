@@ -78,7 +78,6 @@ class SavePermissions
 
                     if ($Qdel->isError()) {
                         $error = true;
-                        break;
                     }
                 }
             }
