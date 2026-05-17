@@ -26,6 +26,7 @@ class PDOStatement extends \PDOStatement
     protected $_cache_data;
     protected $_cache_read = false;
 
+    #[\ReturnTypeWillChange]
     public function bindValue($parameter, $value, $data_type = PDO::PARAM_STR)
     {
         $this->_binded_params[$parameter] = ['value' => $value,
@@ -51,6 +52,7 @@ class PDOStatement extends \PDOStatement
         return $this->bindValue($parameter, null, PDO::PARAM_NULL);
     }
 
+    #[\ReturnTypeWillChange]
     public function execute($input_parameters = [])
     {
         if (isset($this->_cache_key)) {
@@ -74,6 +76,7 @@ class PDOStatement extends \PDOStatement
         }
     }
 
+    #[\ReturnTypeWillChange]
     public function fetch($fetch_style = PDO::FETCH_ASSOC, $cursor_orientation = PDO::FETCH_ORI_NEXT, $cursor_offset = 0)
     {
         if ($this->_cache_read === true) {
@@ -89,15 +92,16 @@ class PDOStatement extends \PDOStatement
         return $this->result;
     }
 
-    public function fetchAll($fetch_style = PDO::FETCH_ASSOC, $fetch_argument = null, $ctor_args = [])
+    #[\ReturnTypeWillChange]
+    public function fetchAll($fetch_style = PDO::FETCH_ASSOC, ...$args)
     {
         if ($this->_cache_read === true) {
             $this->result = $this->_cache_data;
         } else {
-            // fetchAll() fails if second argument is passed in a fetch style that does not
-            // use the optional argument
+            // fetchAll() fails if extra arguments are passed in a fetch style that
+            // does not use them
             if (in_array($fetch_style, [PDO::FETCH_COLUMN, PDO::FETCH_CLASS, PDO::FETCH_FUNC])) {
-                $this->result = parent::fetchAll($fetch_style, $fetch_argument, $ctor_args);
+                $this->result = parent::fetchAll($fetch_style, ...$args);
             } else {
                 $this->result = parent::fetchAll($fetch_style);
             }
