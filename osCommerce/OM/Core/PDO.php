@@ -68,6 +68,7 @@ class PDO extends \PDO
         return $object;
     }
 
+    #[\ReturnTypeWillChange]
     public function exec($statement)
     {
         $statement = $this->_autoPrefixTables($statement);
@@ -75,6 +76,7 @@ class PDO extends \PDO
         return parent::exec($statement);
     }
 
+    #[\ReturnTypeWillChange]
     public function prepare($statement, $driver_options = [])
     {
         $statement = $this->_autoPrefixTables($statement);
@@ -82,17 +84,16 @@ class PDO extends \PDO
         return parent::prepare($statement, $driver_options);
     }
 
-    public function query($statement)
+    #[\ReturnTypeWillChange]
+    public function query($statement, ?int $fetchMode = null, ...$fetchModeArgs)
     {
         $statement = $this->_autoPrefixTables($statement);
 
-        $args = func_get_args();
-
-        if (count($args) > 1) {
-            return call_user_func_array([$this, 'parent::query'], $args);
-        } else {
-            return parent::query($statement);
+        if ($fetchMode !== null) {
+            return parent::query($statement, $fetchMode, ...$fetchModeArgs);
         }
+
+        return parent::query($statement);
     }
 
     public function getBatchFrom($pageset, $max_results)
