@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\RunClassInSeparateProcess;
 use PHPUnit\Framework\TestCase;
 use Tests\Support\InProcessSiteRenderer;
+use Tests\Support\ShopHarnessDataSeeder;
 
 /**
  * Full oscom.php layout for high-value Shop pages (PCOV).
@@ -67,6 +68,13 @@ class ShopLayoutCoverageTest extends TestCase
             InProcessSiteRenderer::includeShopPageViaOscomLayout($application, $page);
         }
 
+        InProcessSiteRenderer::renderShop(['Checkout', 'Billing']);
+        InProcessSiteRenderer::renderShop(['Checkout', 'Shipping']);
+        InProcessSiteRenderer::renderShop(['Account', 'Orders', 'Info'], [
+            'order_id' => (string) (ShopHarnessDataSeeder::ensureBaselineData()['order_id'] ?: 1),
+        ]);
+
         $this->assertGreaterThan(10, count($pages));
     }
 }
+

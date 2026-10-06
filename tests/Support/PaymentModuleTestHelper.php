@@ -11,7 +11,7 @@ use osCommerce\OM\Core\Registry;
  */
 final class PaymentModuleTestHelper
 {
-    public static function definePayPalExpressCheckout(): void
+    public static function definePayPalExpressCheckout(bool $instantUpdate = false): void
     {
         $defaults = [
             'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_STATUS' => '1',
@@ -21,7 +21,7 @@ final class PaymentModuleTestHelper
             'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_TRANSACTION_SERVER' => 'Sandbox',
             'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_TRANSACTION_METHOD' => 'Sale',
             'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_ACCOUNT_OPTIONAL' => '0',
-            'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_INSTANT_UPDATE' => '0',
+            'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_INSTANT_UPDATE' => $instantUpdate ? '1' : '0',
             'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_API_USERNAME' => '',
             'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_API_PASSWORD' => '',
             'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_API_SIGNATURE' => '',

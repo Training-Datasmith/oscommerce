@@ -106,4 +106,27 @@ class ShopPayPalExpressCheckoutCoverageTest extends TestCase
 
         $this->addToAssertionCount(1);
     }
+
+    public function testInitializeExpressCheckoutSuccessRedirect(): void
+    {
+        InProcessSiteRenderer::renderShop(['Index']);
+        ShopCheckoutSeeder::seedGuestCheckoutCart();
+        PaymentModuleTestHelper::definePayPalExpressCheckout(true);
+
+        if (!\defined('ENABLE_SSL')) {
+            \define('ENABLE_SSL', true);
+        }
+
+        $module = new PayPalExpressCheckout();
+        $ref = new \ReflectionClass($module);
+        $init = $ref->getMethod('initializeExpressCheckout');
+        $init->setAccessible(true);
+
+        try {
+            $init->invoke($module);
+            $this->fail('Expected redirect after successful SetExpressCheckout');
+        } catch (\Throwable $e) {
+            $this->assertStringContainsString('redirect', strtolower($e->getMessage()));
+        }
+    }
 }

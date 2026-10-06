@@ -112,7 +112,7 @@ final class SiteRouteDiscovery
                 }
 
                 $action = end($parts);
-                if (in_array($action, ['Process', 'Delete'], true)) {
+                if (in_array($action, ['Process', 'Delete', 'Callback'], true)) {
                     continue;
                 }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Integration;
 
 use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunClassInSeparateProcess;
 use PHPUnit\Framework\TestCase;
 use Tests\Support\InProcessSiteRenderer;
 use Tests\Support\SiteRouteDiscovery;
@@ -15,6 +16,7 @@ use Tests\Support\SiteRouteDiscovery;
  * @group integration
  */
 #[Group('integration')]
+#[RunClassInSeparateProcess]
 class InProcessShopRouteCoverageTest extends TestCase
 {
     private int $obLevel;
@@ -31,9 +33,30 @@ class InProcessShopRouteCoverageTest extends TestCase
         }
     }
 
-    public function testRenderDiscoveredShopRoutes(): void
+    public function testRenderDiscoveredShopRoutesBatchOne(): void
     {
-        foreach (SiteRouteDiscovery::shopRoutes() as $parts) {
+        $this->renderShopRouteBatch(0, 12);
+    }
+
+    public function testRenderDiscoveredShopRoutesBatchTwo(): void
+    {
+        $this->renderShopRouteBatch(12, 12);
+    }
+
+    public function testRenderDiscoveredShopRoutesBatchThree(): void
+    {
+        $this->renderShopRouteBatch(24, 12);
+    }
+
+    public function testRenderDiscoveredShopRoutesBatchFour(): void
+    {
+        $this->renderShopRouteBatch(36, 12);
+    }
+
+    private function renderShopRouteBatch(int $offset, int $limit): void
+    {
+        $routes = SiteRouteDiscovery::shopRoutes();
+        foreach (array_slice($routes, $offset, $limit) as $parts) {
             InProcessSiteRenderer::renderShop($parts);
         }
 
