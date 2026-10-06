@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\RunClassInSeparateProcess;
 use PHPUnit\Framework\TestCase;
 use Tests\Support\InProcessSiteRenderer;
+use Tests\Support\ShopHarnessDataSeeder;
 
 /**
  * Admin OM3 routes with typical editor query parameters (PCOV).
@@ -34,9 +35,12 @@ class AdminRouteParamsCoverageTest extends TestCase
 
     public function testAdminEditorRoutes(): void
     {
+        InProcessSiteRenderer::renderAdmin(['Dashboard']);
+        $customerId = (string) (ShopHarnessDataSeeder::ensureBaselineData()['customer_id'] ?: 1);
+
         $matrix = [
-            [['Customers'], [], ['customers_id' => '1']],
-            [['Customers'], ['Edit'], ['customers_id' => '1']],
+            [['Customers'], [], ['customers_id' => $customerId]],
+            [['Customers'], ['Edit'], ['customers_id' => $customerId]],
             [['Categories'], [], ['cID' => '0']],
             [['Languages'], [], ['languages_id' => '1']],
             [['Languages'], ['Edit'], ['languages_id' => '1']],

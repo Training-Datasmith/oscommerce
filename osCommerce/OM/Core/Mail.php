@@ -151,6 +151,10 @@ class Mail
 
     public function send()
     {
+        if (\defined('OSCOM_TEST_SKIP_MAIL') && OSCOM_TEST_SKIP_MAIL) {
+            return true;
+        }
+
         if (empty($this->_body)) {
             if (!empty($this->_body_plain) && !empty($this->_body_html)) {
                 $this->_boundary = '=_____MULTIPART_MIXED_BOUNDARY____';

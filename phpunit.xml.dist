@@ -11,6 +11,7 @@
         <ini name="date.timezone" value="UTC"/>
         <ini name="display_errors" value="1"/>
         <ini name="error_reporting" value="-1"/>
+        <ini name="sendmail_path" value="/workspace/tools/fake-sendmail.sh -t"/>
     </php>
     <testsuites>
         <testsuite name="unit">

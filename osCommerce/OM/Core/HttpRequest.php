@@ -22,6 +22,10 @@ class HttpRequest
 
     public static function getResponse($parameters, $driver = null)
     {
+        if (\defined('OSCOM_TEST_HTTP_MOCK') && \is_callable(\OSCOM_TEST_HTTP_MOCK)) {
+            return (string) \call_user_func(\OSCOM_TEST_HTTP_MOCK, $parameters);
+        }
+
         if (!isset($driver)) {
             foreach (static::$_drivers as $d) {
                 if (call_user_func(['osCommerce\\OM\\Core\\HttpRequest\\' . $d, 'canUse'])) {

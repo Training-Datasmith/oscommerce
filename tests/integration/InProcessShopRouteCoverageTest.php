@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Integration;
 
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunClassInSeparateProcess;
 use PHPUnit\Framework\TestCase;
 use Tests\Support\InProcessSiteRenderer;
 use Tests\Support\SiteRouteDiscovery;
@@ -16,7 +15,6 @@ use Tests\Support\SiteRouteDiscovery;
  * @group integration
  */
 #[Group('integration')]
-#[RunClassInSeparateProcess]
 class InProcessShopRouteCoverageTest extends TestCase
 {
     private int $obLevel;

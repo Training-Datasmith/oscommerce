@@ -843,11 +843,13 @@ class ShoppingCart
         }
     }
 
-    public function setBillingMethod($billing_array)
+    public function setBillingMethod($billing_array, $calculate_total = true)
     {
         $this->_billing_method = $billing_array;
 
-        $this->_calculate();
+        if ($calculate_total === true) {
+            $this->_calculate();
+        }
     }
 
     public function getBillingMethod($key = null)

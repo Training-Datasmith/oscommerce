@@ -415,7 +415,7 @@ class Order
             $Qstatuses->execute();
 
             while ($Qstatuses->fetch()) {
-                $email_order .= DateTime::getLong($Qstatuses->value('date_added')) . "\n\t" . wordwrap(str_replace("\n", "\n\t", $Qstatuses->value('comments')), 60, "\n\t", 1) . "\n\n";
+                $email_order .= DateTime::getLong($Qstatuses->value('date_added')) . "\n\t" . wordwrap(str_replace("\n", "\n\t", $Qstatuses->value('comments')), 60, "\n\t", true) . "\n\n";
             }
 
             // HPDL

@@ -144,7 +144,7 @@ class PayPalExpressCheckout extends \osCommerce\OM\Core\Site\Shop\PaymentModuleA
         $post_string = '';
 
         foreach ($params as $key => $value) {
-            $post_string .= $key . '=' . urlencode(utf8_encode(trim($value))) . '&';
+            $post_string .= $key . '=' . urlencode(utf8_encode(trim((string) $value))) . '&';
         }
 
         $post_string = substr($post_string, 0, -1);
@@ -184,7 +184,7 @@ class PayPalExpressCheckout extends \osCommerce\OM\Core\Site\Shop\PaymentModuleA
         $post_string = '';
 
         foreach ($params as $key => $value) {
-            $post_string .= $key . '=' . urlencode(utf8_encode(trim($value))) . '&';
+            $post_string .= $key . '=' . urlencode(utf8_encode(trim((string) $value))) . '&';
         }
 
         $post_string = substr($post_string, 0, -1);
@@ -229,7 +229,7 @@ class PayPalExpressCheckout extends \osCommerce\OM\Core\Site\Shop\PaymentModuleA
         $post_string = '';
 
         foreach ($params as $key => $value) {
-            $post_string .= $key . '=' . urlencode(utf8_encode(trim($value))) . '&';
+            $post_string .= $key . '=' . urlencode(utf8_encode(trim((string) $value))) . '&';
         }
 
         $post_string = substr($post_string, 0, -1);

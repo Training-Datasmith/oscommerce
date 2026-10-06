@@ -37,6 +37,10 @@ final class ShopCheckoutSeeder
 
     public static function seedGuestCheckoutCart(bool $withShippingMethod = true): void
     {
+        if (!isset($_SESSION['currency']) && \defined('DEFAULT_CURRENCY')) {
+            $_SESSION['currency'] = DEFAULT_CURRENCY;
+        }
+
         $pdo = Registry::get('PDO');
         $productId = (int) ($pdo->query('select products_id from osc_products limit 1')->fetchColumn() ?: 0);
         if ($productId < 1) {
@@ -92,12 +96,11 @@ final class ShopCheckoutSeeder
             return;
         }
 
-        try {
-            $ref = new \ReflectionClass($cart);
-            $prop = $ref->getProperty('_billing_method');
-            $prop->setValue($cart, ['id' => 'cod_cod', 'title' => 'Cash On Delivery']);
-        } catch (\Throwable) {
-        }
+        $cart->setBillingMethod([
+            'id' => 'cod_cod',
+            'title' => 'Cash On Delivery',
+            'module' => 'Cash On Delivery',
+        ], false);
     }
 
     public static function seedLoggedInCustomerIfAvailable(): void
