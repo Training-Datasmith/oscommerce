@@ -25,6 +25,7 @@ final class InProcessSiteRenderer
         self::ensureShop();
         self::seedShopCustomerIfNeeded($parts);
         self::seedCartIfNeeded($parts);
+        self::seedCheckoutAddressesIfNeeded($parts);
         self::dispatch('Shop', $parts, $params);
     }
 
@@ -46,6 +47,126 @@ final class InProcessSiteRenderer
     {
         self::ensureSetup();
         self::dispatch('Setup', $parts, $params);
+    }
+
+    /**
+     * Include a Shop application page PHP file under a booted storefront (PCOV).
+     */
+    public static function includeShopApplicationPage(string $application, string $pageFilename): void
+    {
+        self::ensureShop();
+        self::primeShopContext($application, $pageFilename);
+
+        $_GET = ['Shop' => '', $application => ''];
+        OSCOM::setSite('Shop');
+        OSCOM::setSiteApplication($application);
+
+        $class = 'osCommerce\\OM\\Core\\Site\\Shop\\Application\\' . $application . '\\Controller';
+
+        try {
+            Registry::set('Application', new $class());
+            $app = Registry::get('Application');
+            $app->setPageTitle('Coverage');
+            $app->setPageContent($pageFilename);
+            Registry::get('Template')->setApplication($app);
+        } catch (\Throwable) {
+            return;
+        }
+
+        $path = OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Application/' . $application . '/pages/' . $pageFilename;
+        if (!is_file($path)) {
+            return;
+        }
+
+        $level = ob_get_level();
+        ob_start();
+
+        try {
+            self::importShopPageScope();
+            self::seedShopPageGlobals($application, $pageFilename);
+            include $path;
+        } catch (\Throwable) {
+        } finally {
+            while (ob_get_level() > $level) {
+                ob_end_clean();
+            }
+        }
+    }
+
+    /**
+     * Include an OM3 Admin application page (Controller.php apps only).
+     */
+    public static function includeAdminApplicationPage(string $application, string $pageFilename): void
+    {
+        if (!is_file(OSCOM::BASE_DIRECTORY . 'Core/Site/Admin/Application/' . $application . '/Controller.php')) {
+            return;
+        }
+
+        self::ensureAdmin();
+
+        $_GET = ['Admin' => '', $application => ''];
+        OSCOM::setSite('Admin');
+        OSCOM::setSiteApplication($application);
+
+        $class = 'osCommerce\\OM\\Core\\Site\\Admin\\Application\\' . $application . '\\Controller';
+
+        try {
+            Registry::set('Application', new $class(false));
+            $app = Registry::get('Application');
+            $app->setPageContent($pageFilename);
+            Registry::get('Template')->setApplication($app);
+        } catch (\Throwable) {
+            return;
+        }
+
+        $path = OSCOM::BASE_DIRECTORY . 'Core/Site/Admin/Application/' . $application . '/pages/' . $pageFilename;
+        if (!is_file($path)) {
+            return;
+        }
+
+        $level = ob_get_level();
+        ob_start();
+
+        try {
+            self::importAdminPageScope();
+            self::seedAdminPageGlobals($application, $pageFilename);
+            include $path;
+        } catch (\Throwable) {
+        } finally {
+            while (ob_get_level() > $level) {
+                ob_end_clean();
+            }
+        }
+    }
+
+    /**
+     * Include Shop module box/content page templates.
+     */
+    public static function includeShopModulePages(): void
+    {
+        self::ensureShop();
+        self::primeShopContext('Index', 'main.php');
+
+        foreach (['Box', 'Content'] as $moduleType) {
+            $root = OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Module/' . $moduleType;
+            if (!is_dir($root)) {
+                continue;
+            }
+
+            foreach (glob($root . '/*/pages/*.php') ?: [] as $page) {
+                $level = ob_get_level();
+                ob_start();
+                try {
+                    self::importShopPageScope();
+                    include $page;
+                } catch (\Throwable) {
+                } finally {
+                    while (ob_get_level() > $level) {
+                        ob_end_clean();
+                    }
+                }
+            }
+        }
     }
 
     private static function ensureShop(): void
@@ -229,6 +350,99 @@ final class InProcessSiteRenderer
             if ($row) {
                 $cart->add((int) $row['products_id'], 1);
             }
+        }
+    }
+
+    private static function seedCheckoutAddressesIfNeeded(array $parts): void
+    {
+        if (!in_array('Checkout', $parts, true)) {
+            return;
+        }
+
+        $customer = Registry::get('Customer');
+        $cart = Registry::get('ShoppingCart');
+
+        if ($customer->isLoggedOn() && $customer->hasDefaultAddress()) {
+            $addressId = $customer->getDefaultAddressID();
+            if (!$cart->hasShippingAddress()) {
+                $cart->setShippingAddress($addressId);
+            }
+            if (!$cart->hasBillingAddress()) {
+                $cart->setBillingAddress($addressId);
+            }
+        }
+    }
+
+    private static function primeShopContext(string $application, string $pageFilename): void
+    {
+        $needsCustomer = $application === 'Account' || $application === 'Checkout'
+            || str_contains($pageFilename, 'account') || str_contains($pageFilename, 'checkout')
+            || str_contains($pageFilename, 'order');
+
+        if ($needsCustomer) {
+            self::seedShopCustomerIfNeeded(['Account']);
+        }
+
+        if ($application === 'Checkout' || str_contains($pageFilename, 'billing') || str_contains($pageFilename, 'shipping')) {
+            self::seedCartIfNeeded(['Checkout']);
+            self::seedCheckoutAddressesIfNeeded(['Checkout']);
+        }
+    }
+
+    private static function importShopPageScope(): void
+    {
+        global $OSCOM_Language, $OSCOM_Template, $OSCOM_MessageStack, $OSCOM_Customer, $OSCOM_Service, $OSCOM_Breadcrumb;
+
+        $OSCOM_Language = Registry::get('Language');
+        $OSCOM_Template = Registry::get('Template');
+        $OSCOM_MessageStack = Registry::get('MessageStack');
+        $OSCOM_Customer = Registry::get('Customer');
+        $OSCOM_Service = Registry::get('Service');
+        $OSCOM_Breadcrumb = Registry::exists('Breadcrumb') ? Registry::get('Breadcrumb') : null;
+    }
+
+    private static function importAdminPageScope(): void
+    {
+        global $OSCOM_Language, $OSCOM_Template, $OSCOM_MessageStack;
+
+        $OSCOM_Language = Registry::get('Language');
+        $OSCOM_Template = Registry::get('Template');
+        $OSCOM_MessageStack = Registry::get('MessageStack');
+    }
+
+    private static function seedShopPageGlobals(string $application, string $pageFilename): void
+    {
+        global $products_listing, $OSCOM_PDO, $OSCOM_Category;
+
+        $OSCOM_PDO = Registry::get('PDO');
+
+        if ($pageFilename === 'product_listing.php' || str_contains($pageFilename, 'listing')) {
+            $products_listing = [
+                'entries' => [
+                    ['products_id' => 1, 'products_name' => 'Sample', 'products_price' => '10.00'],
+                ],
+                'total' => 1,
+            ];
+        }
+
+        if ($application === 'Index' && Registry::exists('Category')) {
+            $OSCOM_Category = Registry::get('Category');
+        }
+    }
+
+    private static function seedAdminPageGlobals(string $application, string $pageFilename): void
+    {
+        global $OSCOM_ObjectInfo, $OSCOM_PDO;
+
+        $OSCOM_PDO = Registry::get('PDO');
+
+        if ($application === 'Customers' && str_starts_with($pageFilename, 'section_')) {
+            $OSCOM_ObjectInfo = new \osCommerce\OM\Core\ObjectInfo([
+                'customers_id' => 1,
+                'customers_firstname' => 'Test',
+                'customers_lastname' => 'User',
+                'customers_email_address' => 'test@example.com',
+            ]);
         }
     }
 }

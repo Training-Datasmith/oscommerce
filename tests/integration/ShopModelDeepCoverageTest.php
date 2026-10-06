@@ -47,6 +47,10 @@ class ShopModelDeepCoverageTest extends TestCase
         $productId = (int) ($pdo->query('select products_id from osc_products order by products_id limit 1')->fetchColumn() ?: 1);
         $customerId = (int) ($pdo->query('select customers_id from osc_customers order by customers_id limit 1')->fetchColumn() ?: 1);
 
+        $customer = Registry::get('Customer');
+        $this->assertInstanceOf(Customer::class, $customer);
+        $customer->setCustomerData($customerId);
+
         $cart = Registry::get('ShoppingCart');
         $this->assertInstanceOf(ShoppingCart::class, $cart);
         $cart->reset();
@@ -59,6 +63,20 @@ class ShopModelDeepCoverageTest extends TestCase
         $cart->getTaxGroups();
         $cart->numberOfItems();
         $cart->synchronizeWithDatabase();
+        $cart->refresh();
+        $cart->getContentType();
+        $cart->generateCartID();
+        if ($customer->isLoggedOn() && $customer->hasDefaultAddress()) {
+            $addr = $customer->getDefaultAddressID();
+            $cart->setShippingAddress($addr);
+            $cart->setBillingAddress($addr);
+            $cart->hasShippingAddress();
+            $cart->hasBillingAddress();
+            $cart->getShippingAddress('city');
+            $cart->getBillingAddress('city');
+        }
+        $cart->resetShippingMethod();
+        $cart->resetBillingMethod();
         $cart->hasContents();
         $cart->getCartID();
 
@@ -70,9 +88,6 @@ class ShopModelDeepCoverageTest extends TestCase
         $product->getQuantity();
         $product->isValid();
 
-        $customer = Registry::get('Customer');
-        $this->assertInstanceOf(Customer::class, $customer);
-        $customer->setCustomerData($customerId);
         $customer->getName();
         $customer->getEmailAddress();
 

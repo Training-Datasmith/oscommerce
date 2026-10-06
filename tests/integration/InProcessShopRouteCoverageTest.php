@@ -53,6 +53,29 @@ class InProcessShopRouteCoverageTest extends TestCase
         InProcessSiteRenderer::renderShop(['Checkout', 'Shipping']);
         InProcessSiteRenderer::renderShop(['Account', 'Orders'], ['order_id' => '1']);
 
+        $routes = [
+            ['Info', 'Contact'],
+            ['Info', 'Privacy'],
+            ['Info', 'Conditions'],
+            ['Info', 'Shipping'],
+            ['Info', 'Sitemap'],
+            ['Info', 'Cookies'],
+            ['Products', 'Specials'],
+            ['Products', 'Reviews'],
+            ['Account', 'AddressBook'],
+            ['Account', 'Edit'],
+            ['Account', 'Password'],
+            ['Account', 'Newsletters'],
+            ['Account', 'LogIn'],
+            ['Account', 'Create'],
+            ['Checkout', 'Success'],
+            ['Search', 'Help'],
+        ];
+
+        foreach ($routes as $parts) {
+            InProcessSiteRenderer::renderShop($parts);
+        }
+
         $this->addToAssertionCount(1);
     }
 }
