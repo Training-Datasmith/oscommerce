@@ -12,7 +12,7 @@ Updated by the cloud agent during autonomous runs. Host resumes read this file a
 | W5 JUnit / coverage artifacts | done | `phpunit-remote-20261006.xml` at repo root |
 | W6 Run documentation | done | `tests/README.md` |
 
-**Branch tip:** _(push after this commit)_
+**Branch tip:** `56d7965f` on `remote-test-2026-10-05`
 
 **Latest metrics (PHP 8.4.26 Linux):** 92 tests, 320 assertions, **0 failures, 0 errors**. Line coverage **~43.78%** (8292/18940 statements) after documented exclusions; target M4: **100%** of included tree.
 
