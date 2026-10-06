@@ -3,9 +3,16 @@
 declare(strict_types=1);
 
 /**
- * Unit test bootstrap (stub). Load OM autoloader without full LAMP / OSCOM::initialize() where possible.
+ * Unit test bootstrap: OM autoloader + test ErrorHandler stub (no LAMP / full OSCOM::initialize()).
  *
  * @see documents/test-suite-plan.md §3.1
  */
 
-// Phase 0: register osCommerce\OM autoloader and test ErrorHandler stub path.
+if (!defined('OSCOM_TIMESTAMP_START')) {
+    define('OSCOM_TIMESTAMP_START', microtime());
+}
+
+require __DIR__ . '/support/Autoloader.php';
+
+$OSCOM_Autoloader = new Autoloader('osCommerce\OM');
+$OSCOM_Autoloader->register();

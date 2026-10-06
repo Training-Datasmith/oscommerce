@@ -1,0 +1,17 @@
+{
+    "name": "training-datasmith/oscommerce",
+    "description": "Dev-only tooling for osCommerce OM corpus tests",
+    "license": "BSD-3-Clause",
+    "require-dev": {
+        "php": "^8.4",
+        "phpunit/phpunit": "^11.5"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    }
+}

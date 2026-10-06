@@ -3,3 +3,5 @@ osCommerce/OM/Work/*
 osCommerce/OM/Config/local_settings.ini
 osCommerce/OM/Custom/*
 !osCommerce/OM/Custom/README
+/vendor/
+/build/

@@ -4,7 +4,7 @@ Updated by the cloud agent during autonomous runs. Host resumes read this file a
 
 | Step | Status | SHA / notes |
 |------|--------|-------------|
-| W0 LAMP install | | |
+| W0 LAMP install | done | 862d6209 — install.sh exit 0, PHP 8.4 + Apache + MySQL |
 | W1 Phase 0 unit | | |
 | W2 Unit coverage → 100% | | |
 | W3 Setup harness + sample data | | |

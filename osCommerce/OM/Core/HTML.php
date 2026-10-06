@@ -27,7 +27,7 @@ class HTML
             $translate = ['"' => '&quot;'];
         }
 
-        return strtr(trim($string), $translate);
+        return strtr(trim((string)$string), $translate);
     }
 
     /**
@@ -296,6 +296,8 @@ class HTML
             $type = 'text';
         }
 
+        $parameters = (string)($parameters ?? '');
+
         $field = '<input type="' . static::output($type) . '" name="' . static::output($name) . '"';
 
         if (strpos($parameters, 'id=') === false) {
@@ -364,6 +366,8 @@ class HTML
             $width = 5;
         }
 
+        $parameters = (string)($parameters ?? '');
+
         $field = '<textarea name="' . static::output($name) . '" cols="' . (int)$width . '" rows="' . (int)$height . '"';
 
         if (strpos($parameters, 'id=') === false) {
@@ -392,6 +396,7 @@ class HTML
 
     public static function selectMenu($name, $values, $default = null, $parameters = null)
     {
+        $parameters = (string)($parameters ?? '');
         $group = false;
 
         if (isset($_GET[$name])) {
@@ -460,6 +465,8 @@ class HTML
 
     protected static function selectionField($name, $type, $values, $default = null, $parameters = null, $separator = '&nbsp;&nbsp;')
     {
+        $parameters = (string)($parameters ?? '');
+
         if (!is_array($values)) {
             $values = [$values];
         }
@@ -604,11 +611,17 @@ class HTML
 
     public static function hiddenSessionIDField()
     {
+        if (!Registry::exists('Session')) {
+            return '';
+        }
+
         $OSCOM_Session = Registry::get('Session');
 
         if ($OSCOM_Session->hasStarted() && (strlen(SID) > 0)) {
             return static::hiddenField($OSCOM_Session->getName(), $OSCOM_Session->getID());
         }
+
+        return '';
     }
 
     /**

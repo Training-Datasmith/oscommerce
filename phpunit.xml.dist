@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="tests/bootstrap.php"
+         colors="true"
+         cacheDirectory="build/.phpunit.cache"
+         executionOrder="depends,defects"
+         failOnWarning="true"
+         failOnRisky="true">
+    <php>
+        <ini name="date.timezone" value="UTC"/>
+        <ini name="display_errors" value="1"/>
+        <ini name="error_reporting" value="-1"/>
+    </php>
+    <testsuites>
+        <testsuite name="unit">
+            <directory>tests/unit</directory>
+        </testsuite>
+        <testsuite name="integration">
+            <directory>tests/integration</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory suffix=".php">osCommerce/OM</directory>
+        </include>
+        <exclude>
+            <directory>osCommerce/OM/Tests</directory>
+            <directory>osCommerce/OM/External</directory>
+            <directory>osCommerce/OM/Work</directory>
+        </exclude>
+    </source>
+</phpunit>
