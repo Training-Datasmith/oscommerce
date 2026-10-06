@@ -29,6 +29,12 @@ class SetupPagesCoverageTest extends TestCase
             InProcessSiteRenderer::renderSetup(['Install'], $params);
         }
 
+        $setupAppBase = \osCommerce\OM\Core\OSCOM::BASE_DIRECTORY . 'Core/Site/Setup/Application';
+        foreach (glob($setupAppBase . '/*/pages/*.php') ?: [] as $page) {
+            $application = basename(dirname(dirname($page)));
+            InProcessSiteRenderer::includeSetupApplicationPage($application, basename($page));
+        }
+
         $langDir = \osCommerce\OM\Core\OSCOM::BASE_DIRECTORY . 'Core/Site/Setup/Languages';
         $count = 0;
         foreach (glob($langDir . '/**/*.php') ?: [] as $file) {

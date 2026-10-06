@@ -72,7 +72,16 @@ class InProcessShopRouteCoverageTest extends TestCase
             ['Search', 'Help'],
         ];
 
-        foreach ($routes as $parts) {
+        $checkoutRoutes = [
+            ['Checkout'],
+            ['Checkout', 'Shipping'],
+            ['Checkout', 'Shipping', 'Address'],
+            ['Checkout', 'Billing'],
+            ['Checkout', 'Billing', 'Address'],
+            ['Checkout', 'Success'],
+        ];
+
+        foreach (array_merge($routes, $checkoutRoutes) as $parts) {
             InProcessSiteRenderer::renderShop($parts);
         }
 

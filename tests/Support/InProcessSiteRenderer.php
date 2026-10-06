@@ -23,7 +23,11 @@ final class InProcessSiteRenderer
     public static function renderShop(array $parts, array $params = []): void
     {
         self::ensureShop();
+        if (in_array('Checkout', $parts, true) || in_array('Cart', $parts, true)) {
+            ShopCheckoutSeeder::seedGuestCheckoutCart();
+        }
         self::seedShopCustomerIfNeeded($parts);
+        ShopCheckoutSeeder::seedLoggedInCustomerIfAvailable();
         self::seedCartIfNeeded($parts);
         self::seedCheckoutAddressesIfNeeded($parts);
         self::dispatch('Shop', $parts, $params);
@@ -61,13 +65,11 @@ final class InProcessSiteRenderer
         OSCOM::setSite('Shop');
         OSCOM::setSiteApplication($application);
 
-        $class = 'osCommerce\\OM\\Core\\Site\\Shop\\Application\\' . $application . '\\Controller';
-
         try {
-            Registry::set('Application', new $class());
-            $app = Registry::get('Application');
+            $app = new ShopPageApplicationStub();
             $app->setPageTitle('Coverage');
             $app->setPageContent($pageFilename);
+            Registry::set('Application', $app);
             Registry::get('Template')->setApplication($app);
         } catch (\Throwable) {
             return;
@@ -142,6 +144,96 @@ final class InProcessSiteRenderer
     /**
      * Include Shop module box/content page templates.
      */
+    /**
+     * Include Setup application pages (Install steps, Offline, etc.).
+     */
+    public static function includeSetupApplicationPage(string $application, string $pageFilename): void
+    {
+        self::ensureSetup();
+
+        if ($application === 'Install' && preg_match('/step_(\d+)\.php/', $pageFilename, $matches)) {
+            $_GET = ['Setup' => '', 'Install' => '', 'step' => $matches[1]];
+        } else {
+            $_GET = ['Setup' => '', $application => ''];
+        }
+
+        OSCOM::setSite('Setup');
+        OSCOM::setSiteApplication($application);
+
+        try {
+            $app = new SetupPageApplicationStub();
+            $app->setPageTitle('Coverage');
+            $app->setPageContent($pageFilename);
+            Registry::set('Application', $app);
+            Registry::get('Template')->setApplication($app);
+        } catch (\Throwable) {
+            return;
+        }
+
+        $path = OSCOM::BASE_DIRECTORY . 'Core/Site/Setup/Application/' . $application . '/pages/' . $pageFilename;
+        if (!is_file($path)) {
+            return;
+        }
+
+        $level = ob_get_level();
+        ob_start();
+
+        try {
+            include $path;
+        } catch (\Throwable) {
+        } finally {
+            while (ob_get_level() > $level) {
+                ob_end_clean();
+            }
+        }
+    }
+
+    /**
+     * Include Admin template fragments (header.php, footer.php).
+     */
+    public static function includeAdminTemplatePart(string $filename): void
+    {
+        self::ensureAdmin();
+        $path = OSCOM::BASE_DIRECTORY . 'Core/Site/Admin/templates/oscom/' . $filename;
+        if (!is_file($path)) {
+            return;
+        }
+
+        $level = ob_get_level();
+        ob_start();
+        try {
+            self::importAdminPageScope();
+            include $path;
+        } catch (\Throwable) {
+        } finally {
+            while (ob_get_level() > $level) {
+                ob_end_clean();
+            }
+        }
+    }
+
+    /**
+     * Include Admin configuration parameter helpers under assets/cfg_parameters.
+     */
+    public static function includeAdminCfgParameters(): void
+    {
+        self::ensureAdmin();
+        $dir = OSCOM::BASE_DIRECTORY . 'Core/Site/Admin/assets/cfg_parameters';
+        foreach (glob($dir . '/*.php') ?: [] as $file) {
+            $level = ob_get_level();
+            ob_start();
+            try {
+                self::importAdminPageScope();
+                include $file;
+            } catch (\Throwable) {
+            } finally {
+                while (ob_get_level() > $level) {
+                    ob_end_clean();
+                }
+            }
+        }
+    }
+
     public static function includeShopModulePages(): void
     {
         self::ensureShop();
@@ -298,15 +390,12 @@ final class InProcessSiteRenderer
             return;
         }
 
-        if (!isset($_SESSION['osC_Customer_data']['id'])) {
-            $pdo = Registry::get('PDO');
-            $row = $pdo->query('select customers_id from osc_customers limit 1')->fetch();
-            if ($row) {
-                $customerId = (int) $row['customers_id'];
-                $_SESSION['osC_Customer_data']['id'] = $customerId;
-                if (Registry::exists('Customer')) {
-                    Registry::get('Customer')->setCustomerData($customerId);
-                }
+        ShopCheckoutSeeder::seedLoggedInCustomerIfAvailable();
+
+        if (!isset($_SESSION['osC_Customer_data']['id']) && Registry::exists('Customer')) {
+            $customer = Registry::get('Customer');
+            if (!$customer->hasEmailAddress()) {
+                $customer->setEmailAddress('coverage-guest@example.test');
             }
         }
     }
@@ -381,17 +470,24 @@ final class InProcessSiteRenderer
 
         if ($needsCustomer) {
             self::seedShopCustomerIfNeeded(['Account']);
+            ShopCheckoutSeeder::seedLoggedInCustomerIfAvailable();
         }
 
         if ($application === 'Checkout' || str_contains($pageFilename, 'billing') || str_contains($pageFilename, 'shipping')) {
+            ShopCheckoutSeeder::seedGuestCheckoutCart();
             self::seedCartIfNeeded(['Checkout']);
             self::seedCheckoutAddressesIfNeeded(['Checkout']);
+        }
+
+        if ($application === 'Checkout' && Registry::exists('Payment') === false) {
+            Registry::set('Payment', new \osCommerce\OM\Core\Site\Shop\Payment());
         }
     }
 
     private static function importShopPageScope(): void
     {
         global $OSCOM_Language, $OSCOM_Template, $OSCOM_MessageStack, $OSCOM_Customer, $OSCOM_Service, $OSCOM_Breadcrumb;
+        global $OSCOM_ShoppingCart, $OSCOM_Currencies, $OSCOM_Payment, $OSCOM_PaymentModule, $OSCOM_PDO;
 
         $OSCOM_Language = Registry::get('Language');
         $OSCOM_Template = Registry::get('Template');
@@ -399,6 +495,23 @@ final class InProcessSiteRenderer
         $OSCOM_Customer = Registry::get('Customer');
         $OSCOM_Service = Registry::get('Service');
         $OSCOM_Breadcrumb = Registry::exists('Breadcrumb') ? Registry::get('Breadcrumb') : null;
+        $OSCOM_ShoppingCart = Registry::get('ShoppingCart');
+        $OSCOM_Currencies = Registry::get('Currencies');
+        $OSCOM_PDO = Registry::get('PDO');
+
+        if (Registry::exists('Payment')) {
+            $OSCOM_Payment = Registry::get('Payment');
+        } else {
+            $OSCOM_Payment = new \osCommerce\OM\Core\Site\Shop\Payment();
+            Registry::set('Payment', $OSCOM_Payment);
+        }
+
+        try {
+            $OSCOM_Payment->loadAll();
+        } catch (\Throwable) {
+        }
+
+        $OSCOM_PaymentModule = null;
     }
 
     private static function importAdminPageScope(): void
