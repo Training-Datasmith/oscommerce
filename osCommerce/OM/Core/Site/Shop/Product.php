@@ -146,7 +146,7 @@ class Product
                     $Qavg->bindInt(':languages_id', $OSCOM_Language->getID());
                     $Qavg->execute();
 
-                    $this->_data['reviews_average_rating'] = round($Qavg->value('rating'));
+                    $this->_data['reviews_average_rating'] = round((float)($Qavg->value('rating') ?? 0));
                 }
             }
         }

@@ -92,11 +92,15 @@ class Language extends \osCommerce\OM\Core\Site\Admin\Language
                 return [];
             }
         } else {
-            if (substr(realpath(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Languages/' . $language_code . '/' . $filename), 0, strlen(realpath(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Languages/' . $language_code))) != realpath(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Languages/' . $language_code)) {
+            $language_directory = OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Languages/' . $language_code;
+            $language_realpath = realpath($language_directory);
+            $file_realpath = realpath($language_directory . '/' . $filename);
+
+            if ($language_realpath === false || $file_realpath === false || strncmp($file_realpath, $language_realpath, strlen($language_realpath)) !== 0) {
                 return [];
             }
 
-            if (!file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Languages/' . $language_code . '/' . $filename)) {
+            if (!file_exists($language_directory . '/' . $filename)) {
                 return [];
             }
 

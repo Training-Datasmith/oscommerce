@@ -29,7 +29,7 @@ class WhosOnline implements \osCommerce\OM\Core\Site\Shop\ServiceInterface
             $wo_full_name = 'Guest';
 
             if (SERVICE_WHOS_ONLINE_SPIDER_DETECTION == '1') {
-                $user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+                $user_agent = strtolower((string)($_SERVER['HTTP_USER_AGENT'] ?? ''));
 
                 if (!empty($user_agent)) {
                     $spiders = file(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/assets/spiders.txt');
@@ -48,7 +48,7 @@ class WhosOnline implements \osCommerce\OM\Core\Site\Shop\ServiceInterface
 
         $wo_session_id = session_id();
         $wo_ip_address = OSCOM::getIPAddress();
-        $wo_last_page_url = HTML::outputProtected(substr($_SERVER['REQUEST_URI'], 0, 255));
+        $wo_last_page_url = HTML::outputProtected(substr((string)($_SERVER['REQUEST_URI'] ?? '/'), 0, 255));
 
         $current_time = time();
         $xx_mins_ago = ($current_time - 900);

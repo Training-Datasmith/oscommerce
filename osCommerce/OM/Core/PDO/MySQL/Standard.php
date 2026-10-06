@@ -33,10 +33,10 @@ class Standard extends \osCommerce\OM\Core\PDO
 
         $this->_driver_options[self::MYSQL_ATTR_INIT_COMMAND] = 'set names utf8';
 
-        return $this->connect();
+        return $this->connectDatabase();
     }
 
-    public function connect()
+    public function connectDatabase()
     {
         $dsn_array = [];
 

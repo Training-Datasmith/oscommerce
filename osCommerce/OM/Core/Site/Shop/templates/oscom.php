@@ -57,7 +57,14 @@ if ($OSCOM_Template->hasJavascript()) {
 
 if ($OSCOM_Template->hasPageContentModules()) {
     foreach ($OSCOM_Service->getCallBeforePageContent() as $service) {
-        Registry::get($service[0])->$service[1]();
+        if (Registry::exists($service[0])) {
+            $service_object = Registry::get($service[0]);
+            $service_method = $service[1];
+
+            if (is_object($service_object) && is_callable([$service_object, $service_method])) {
+                $service_object->$service_method();
+            }
+        }
     }
 
     foreach ($OSCOM_Template->getContentModules('before') as $content_module) {
@@ -96,7 +103,14 @@ if ($OSCOM_Template->getCode() == DEFAULT_TEMPLATE) {
 <?php
   if ($OSCOM_Template->hasPageContentModules()) {
       foreach ($OSCOM_Service->getCallAfterPageContent() as $service) {
-          Registry::get($service[0])->$service[1]();
+          if (Registry::exists($service[0])) {
+              $service_object = Registry::get($service[0]);
+              $service_method = $service[1];
+
+              if (is_object($service_object) && is_callable([$service_object, $service_method])) {
+                  $service_object->$service_method();
+              }
+          }
       }
 
       foreach ($OSCOM_Template->getContentModules('after') as $content_module) {

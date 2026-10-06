@@ -56,7 +56,7 @@ class HTML
         $patterns =  ['/ +/', '/[<>]/'];
         $replace =  [' ', '_'];
 
-        return preg_replace($patterns, $replace, trim($string));
+        return preg_replace($patterns, $replace, trim((string)($string ?? '')));
     }
 
     /**

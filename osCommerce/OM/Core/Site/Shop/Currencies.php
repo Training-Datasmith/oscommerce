@@ -64,7 +64,7 @@ class Currencies
 
     public function addTaxRateToPrice($price, $tax_rate, $quantity = 1)
     {
-        $price = round($price, $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
+        $price = round((float)($price ?? 0), $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
 
         if ((DISPLAY_PRICE_WITH_TAX == '1') && ($tax_rate > 0)) {
             $price += round($price * ($tax_rate / 100), $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
@@ -77,7 +77,7 @@ class Currencies
     {
         $OSCOM_Tax = Registry::get('Tax');
 
-        $price = round($price, $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
+        $price = round((float)($price ?? 0), $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
 
         if ((DISPLAY_PRICE_WITH_TAX == '1') && ($tax_class_id > 0)) {
             $price += round($price * ($OSCOM_Tax->getTaxRate($tax_class_id) / 100), $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
@@ -98,7 +98,7 @@ class Currencies
             $currency_value = $this->currencies[DEFAULT_CURRENCY]['value'];
         }
 
-        $price = round($price, $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
+        $price = round((float)($price ?? 0), $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
 
         if ((DISPLAY_PRICE_WITH_TAX == '1') && ($tax_class_id > 0)) {
             $price += round($price * ($OSCOM_Tax->getTaxRate($tax_class_id) / 100), $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
@@ -109,7 +109,7 @@ class Currencies
 
     public function displayPriceWithTaxRate($price, $tax_rate, $quantity = 1, $force = false, $currency_code = null, $currency_value = null)
     {
-        $price = round($price, $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
+        $price = round((float)($price ?? 0), $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
 
         if ((($force === true) || (DISPLAY_PRICE_WITH_TAX == '1')) && ($tax_rate > 0)) {
             $price += round($price * ($tax_rate / 100), $this->currencies[DEFAULT_CURRENCY]['decimal_places']);

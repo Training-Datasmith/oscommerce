@@ -22,11 +22,11 @@ class SqlServer extends \osCommerce\OM\Core\PDO
         $this->_driver_options = $driver_options;
 
         if ($this->_connected === false) {
-            $this->connect();
+            $this->connectDatabase();
         }
     }
 
-    public function connect()
+    public function connectDatabase()
     {
         $dsn = 'sqlsrv:Server=' . $this->_server;
 

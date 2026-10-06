@@ -21,10 +21,10 @@ class SQLite3 extends \osCommerce\OM\Core\PDO
         $this->_port = $port;
         $this->_driver_options = $driver_options;
 
-        return $this->connect();
+        return $this->connectDatabase();
     }
 
-    public function connect()
+    public function connectDatabase()
     {
         $dsn = 'sqlite:' . $this->_server;
 

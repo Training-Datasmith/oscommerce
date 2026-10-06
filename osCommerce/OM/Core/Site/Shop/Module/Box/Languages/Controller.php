@@ -41,7 +41,7 @@ class Controller extends \osCommerce\OM\Core\Modules
             }
         }
 
-        $get_params = implode($get_params, '&');
+        $get_params = implode('&', $get_params);
 
         if (!empty($get_params)) {
             $get_params .= '&';

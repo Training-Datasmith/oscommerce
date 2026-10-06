@@ -58,6 +58,7 @@ class PDOStatement extends \PDOStatement
         if (isset($this->_cache_key)) {
             if (Registry::get('Cache')->read($this->_cache_key, $this->_cache_expire)) {
                 $this->_cache_data = Registry::get('Cache')->getCache();
+                reset($this->_cache_data);
 
                 $this->_cache_read = true;
             }
@@ -80,7 +81,14 @@ class PDOStatement extends \PDOStatement
     public function fetch($fetch_style = PDO::FETCH_ASSOC, $cursor_orientation = PDO::FETCH_ORI_NEXT, $cursor_offset = 0)
     {
         if ($this->_cache_read === true) {
-            list(, $this->result) = each($this->_cache_data);
+            $cache_key = key($this->_cache_data);
+
+            if ($cache_key === null) {
+                $this->result = false;
+            } else {
+                $this->result = $this->_cache_data[$cache_key];
+                next($this->_cache_data);
+            }
         } else {
             $this->result = parent::fetch($fetch_style, $cursor_orientation, $cursor_offset);
 

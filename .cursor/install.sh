@@ -54,6 +54,10 @@ EOF
   sudo service apache2 reload
 fi
 
+# Installer writes merged config via Setup step 3 (www-data).
+sudo chown -R www-data:www-data "${repo_root}/osCommerce/OM/Config" "${repo_root}/osCommerce/OM/Work" 2>/dev/null || true
+sudo chmod -R u+rwX,g+rwX "${repo_root}/osCommerce/OM/Config" "${repo_root}/osCommerce/OM/Work" 2>/dev/null || true
+
 cd "${repo_root}"
 if [[ -f composer.json ]]; then
   composer install --no-interaction

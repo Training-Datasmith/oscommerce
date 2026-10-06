@@ -118,7 +118,11 @@ class OSCOM
                 $requested_application = HTML::sanitize(basename(key(array_slice($_GET, 0, 1, true))));
 
                 if ($requested_application == static::getSite()) {
-                    $requested_application = HTML::sanitize(basename(key(array_slice($_GET, 1, 1, true))));
+                    $next_get_key = key(array_slice($_GET, 1, 1, true));
+
+                    if ($next_get_key !== null) {
+                        $requested_application = HTML::sanitize(basename($next_get_key));
+                    }
                 }
 
                 if (!empty($requested_application) && static::siteApplicationExists($requested_application)) {
@@ -481,10 +485,10 @@ class OSCOM
         } elseif (isset($_SERVER['HTTP_CLIENT_IP'])) {
             $ip = $_SERVER['HTTP_CLIENT_IP'];
         } else {
-            $ip = $_SERVER['REMOTE_ADDR'];
+            $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
         }
 
-        return $ip;
+        return (string) $ip;
     }
 
     /**
