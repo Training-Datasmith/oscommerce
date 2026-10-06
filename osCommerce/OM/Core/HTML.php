@@ -40,7 +40,7 @@ class HTML
 
     public static function outputProtected($string)
     {
-        return htmlspecialchars(trim($string));
+        return htmlspecialchars(trim((string) $string));
     }
 
     /**

@@ -45,11 +45,21 @@ class Language extends \osCommerce\OM\Core\Language
                 return [];
             }
         } else {
-            if (substr(realpath(OSCOM::BASE_DIRECTORY . 'Custom/Site/' . OSCOM::getSite() . '/languages/' . $language_code . '/' . $filename), 0, strlen(realpath(OSCOM::BASE_DIRECTORY . 'Custom/Site/' . OSCOM::getSiteApplication() . '/languages/' . $language_code))) != realpath(OSCOM::BASE_DIRECTORY . 'Custom/Site/' . OSCOM::getSiteApplication() . '/languages/' . $language_code)) {
+            $custom_app_lang = OSCOM::BASE_DIRECTORY . 'Custom/Site/' . OSCOM::getSiteApplication() . '/languages/' . $language_code;
+            $custom_file = OSCOM::BASE_DIRECTORY . 'Custom/Site/' . OSCOM::getSite() . '/languages/' . $language_code . '/' . $filename;
+            $core_app_lang = OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSiteApplication() . '/languages/' . $language_code;
+            $core_file = OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/languages/' . $language_code . '/' . $filename;
+
+            $custom_app_real = realpath($custom_app_lang);
+            $custom_file_real = realpath($custom_file);
+            $core_app_real = realpath($core_app_lang);
+            $core_file_real = realpath($core_file);
+
+            if ($custom_app_real !== false && $custom_file_real !== false && strncmp($custom_file_real, $custom_app_real, strlen($custom_app_real)) !== 0) {
                 return [];
             }
 
-            if (substr(realpath(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/languages/' . $language_code . '/' . $filename), 0, strlen(realpath(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSiteApplication() . '/languages/' . $language_code))) != realpath(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSiteApplication() . '/languages/' . $language_code)) {
+            if ($core_app_real !== false && $core_file_real !== false && strncmp($core_file_real, $core_app_real, strlen($core_app_real)) !== 0) {
                 return [];
             }
 

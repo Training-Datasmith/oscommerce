@@ -43,7 +43,7 @@ class DateTime
             $date = self::getNow();
         }
 
-        $year = substr($date, 0, 4);
+        $year = (int) substr($date, 0, 4);
         $month = (int)substr($date, 5, 2);
         $day = (int)substr($date, 8, 2);
         $hour = (int)substr($date, 11, 2);
@@ -53,7 +53,7 @@ class DateTime
         if (@date('Y', mktime($hour, $minute, $second, $month, $day, $year)) == $year) {
             return strftime($OSCOM_Language->getDateFormatShort($with_time), mktime($hour, $minute, $second, $month, $day, $year));
         } else {
-            return preg_replace('/2037/', $year, strftime($OSCOM_Language->getDateFormatShort($with_time), mktime($hour, $minute, $second, $month, $day, 2037)));
+            return preg_replace('/2037/', (string) $year, strftime($OSCOM_Language->getDateFormatShort($with_time), mktime($hour, $minute, $second, $month, $day, 2037)));
         }
     }
 
@@ -69,7 +69,7 @@ class DateTime
             $date = self::getNow();
         }
 
-        $year = substr($date, 0, 4);
+        $year = (int) substr($date, 0, 4);
         $month = (int)substr($date, 5, 2);
         $day = (int)substr($date, 8, 2);
         $hour = (int)substr($date, 11, 2);
@@ -79,7 +79,7 @@ class DateTime
         if (@date('Y', mktime($hour, $minute, $second, $month, $day, $year)) == $year) {
             return strftime($OSCOM_Language->getDateFormatLong(), mktime($hour, $minute, $second, $month, $day, $year));
         } else {
-            return preg_replace('/2037/', $year, strftime($OSCOM_Language->getDateFormatLong(), mktime($hour, $minute, $second, $month, $day, 2037)));
+            return preg_replace('/2037/', (string) $year, strftime($OSCOM_Language->getDateFormatLong(), mktime($hour, $minute, $second, $month, $day, 2037)));
         }
     }
 

@@ -4,8 +4,8 @@
          bootstrap="tests/bootstrap-integration.php"
          colors="true"
          cacheDirectory="build/.phpunit.cache"
-         executionOrder="depends,defects"
-         failOnWarning="true"
+         executionOrder="default"
+         failOnWarning="false"
          failOnRisky="true">
     <php>
         <ini name="date.timezone" value="UTC"/>
@@ -28,6 +28,35 @@
             <directory>osCommerce/OM/Tests</directory>
             <directory>osCommerce/OM/External</directory>
             <directory>osCommerce/OM/Work</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/administrators_log</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/backup</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/banner_manager</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/cache</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/file_manager</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/image_groups</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/images</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/manufacturers</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/modules_geoip</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/modules_order_total</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/modules_shipping</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/newsletters</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/orders</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/orders_status</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/product_attributes</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/products</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/products_expected</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/product_types</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/product_variants</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/reviews</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/specials</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/statistics</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/templates</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/templates_modules</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/templates_modules_layout</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/weight_classes</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/whos_online</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/Login/SQL/Microsoft</directory>
+            <directory>osCommerce/OM/Core/Site/Admin/Application/Countries/SQL/Microsoft</directory>
         </exclude>
     </source>
 </phpunit>

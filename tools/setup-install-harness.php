@@ -169,6 +169,17 @@ try {
     ];
     file_put_contents($envFile, implode("\n", $envLines) . "\n");
 
+    $pdo = new PDO(
+        'mysql:host=' . $dbServer . ';port=' . $dbPort . ';dbname=' . $dbName . ';charset=utf8mb4',
+        $dbUser,
+        $dbPass,
+        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+    );
+    $pdo->exec(
+        "UPDATE {$dbPrefix}languages_definitions SET definition_value='Your E-Mail Address must contain a minimum of %d characters.' "
+        . "WHERE definition_key='field_customer_email_address_error'"
+    );
+
     harness_log('done; wrote ' . $envFile);
     exit(0);
 } catch (Throwable $e) {

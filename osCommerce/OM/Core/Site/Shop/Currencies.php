@@ -46,7 +46,7 @@ class Currencies
             $currency_value = $this->currencies[$currency_code]['value'];
         }
 
-        return $this->currencies[$currency_code]['symbol_left'] . number_format(round($number * $currency_value, $this->currencies[$currency_code]['decimal_places']), $this->currencies[$currency_code]['decimal_places'], $OSCOM_Language->getNumericDecimalSeparator(), $OSCOM_Language->getNumericThousandsSeparator()) . $this->currencies[$currency_code]['symbol_right'];
+        return $this->currencies[$currency_code]['symbol_left'] . number_format((float) round((float) $number * (float) $currency_value, (int) $this->currencies[$currency_code]['decimal_places']), (int) $this->currencies[$currency_code]['decimal_places'], $OSCOM_Language->getNumericDecimalSeparator(), $OSCOM_Language->getNumericThousandsSeparator()) . $this->currencies[$currency_code]['symbol_right'];
     }
 
     public function formatRaw($number, $currency_code = null, $currency_value = null)
@@ -59,7 +59,7 @@ class Currencies
             $currency_value = $this->currencies[$currency_code]['value'];
         }
 
-        return number_format(round($number * $currency_value, $this->currencies[$currency_code]['decimal_places']), $this->currencies[$currency_code]['decimal_places'], '.', '');
+        return number_format((float) round((float) $number * (float) $currency_value, (int) $this->currencies[$currency_code]['decimal_places']), (int) $this->currencies[$currency_code]['decimal_places'], '.', '');
     }
 
     public function addTaxRateToPrice($price, $tax_rate, $quantity = 1)

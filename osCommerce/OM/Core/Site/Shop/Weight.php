@@ -65,20 +65,20 @@ class Weight
 
     public function convert($value, $unit_from, $unit_to)
     {
-        $OSCOM_Language = Registry::get('Language');
+        $value = (float) $value;
 
         if ($unit_from == $unit_to) {
-            return number_format($value, $this->precision, $OSCOM_Language->getNumericDecimalSeparator(), $OSCOM_Language->getNumericThousandsSeparator());
-        } else {
-            return number_format($value * $this->weight_classes[(int)$unit_from][(int)$unit_to], $this->precision, $OSCOM_Language->getNumericDecimalSeparator(), $OSCOM_Language->getNumericThousandsSeparator());
+            return round($value, $this->precision);
         }
+
+        return round($value * $this->weight_classes[(int) $unit_from][(int) $unit_to], $this->precision);
     }
 
     public function display($value, $class)
     {
         $OSCOM_Language = Registry::get('Language');
 
-        return number_format($value, $this->precision, $OSCOM_Language->getNumericDecimalSeparator(), $OSCOM_Language->getNumericThousandsSeparator()) . $this->weight_classes[$class]['key'];
+        return number_format((float) $value, $this->precision, $OSCOM_Language->getNumericDecimalSeparator(), $OSCOM_Language->getNumericThousandsSeparator()) . $this->weight_classes[$class]['key'];
     }
 
     public function getClasses()

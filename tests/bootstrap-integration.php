@@ -7,3 +7,7 @@ declare(strict_types=1);
  */
 
 require __DIR__ . '/bootstrap.php';
+
+if (!\defined('OSCOM_TEST_REDIRECT_THROW')) {
+    \define('OSCOM_TEST_REDIRECT_THROW', true);
+}

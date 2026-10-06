@@ -368,6 +368,10 @@ class OSCOM
             $url = str_replace('&amp;', '&', $url);
         }
 
+        if (\defined('OSCOM_TEST_REDIRECT_THROW') && OSCOM_TEST_REDIRECT_THROW) {
+            throw new \RuntimeException('OSCOM redirect: ' . $url);
+        }
+
         header('Location: ' . $url);
 
         exit;
@@ -468,6 +472,9 @@ class OSCOM
         if (!isset($domain)) {
             $domain = (static::getRequestType() == 'NONSSL') ? static::getConfig('http_cookie_domain') : static::getConfig('https_cookie_domain');
         }
+
+        $path = (string) ($path ?? '/');
+        $domain = (string) ($domain ?? '');
 
         return setcookie($name, $value, $expires, $path, $domain, $secure, $httpOnly);
     }

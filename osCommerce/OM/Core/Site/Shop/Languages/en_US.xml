@@ -1922,7 +1922,7 @@ Your friend, %s, thought that you would be interested in %s from %s.]]></value>
     </definition>
     <definition>
       <key>field_customer_email_address_error</key>
-      <value><![CDATA[Your E-Mail Address must contain a minimum of %S characters.]]></value>
+      <value><![CDATA[Your E-Mail Address must contain a minimum of %d characters.]]></value>
       <group>general</group>
     </definition>
     <definition>
