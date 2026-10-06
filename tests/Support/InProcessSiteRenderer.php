@@ -550,6 +550,21 @@ final class InProcessSiteRenderer
         }
 
         $OSCOM_PaymentModule = null;
+        $cart = Registry::get('ShoppingCart');
+        if ($cart->hasBillingMethod()) {
+            $billingId = (string) $cart->getBillingMethod('id');
+            $moduleCode = explode('_', $billingId)[0] ?? '';
+            if ($moduleCode !== '') {
+                $moduleCode = strtoupper($moduleCode);
+                try {
+                    $OSCOM_Payment->load($moduleCode);
+                    if (Registry::exists('PaymentModule')) {
+                        $OSCOM_PaymentModule = Registry::get('PaymentModule');
+                    }
+                } catch (\Throwable) {
+                }
+            }
+        }
     }
 
     private static function importAdminPageScope(): void

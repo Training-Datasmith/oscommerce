@@ -46,7 +46,7 @@ class Order
         }
     }
 
-    public function getStatusID($id)
+    public static function getStatusID($id)
     {
         $OSCOM_PDO = Registry::get('PDO');
 
@@ -61,7 +61,7 @@ class Order
         return false;
     }
 
-    public function remove($id)
+    public static function remove($id)
     {
         $OSCOM_PDO = Registry::get('PDO');
 
