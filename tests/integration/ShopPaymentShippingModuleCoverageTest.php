@@ -49,8 +49,8 @@ class ShopPaymentShippingModuleCoverageTest extends TestCase
         $payment->getJavascriptBlocks();
 
         $payRoot = \osCommerce\OM\Core\OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Module/Payment';
-        foreach (glob($payRoot . '/*/Controller.php') ?: [] as $controller) {
-            $code = basename(dirname($controller));
+        foreach (glob($payRoot . '/*.php') ?: [] as $controller) {
+            $code = basename($controller, '.php');
             $class = 'osCommerce\\OM\\Core\\Site\\Shop\\Module\\Payment\\' . $code;
             if (!class_exists($class)) {
                 continue;
@@ -71,6 +71,26 @@ class ShopPaymentShippingModuleCoverageTest extends TestCase
                         $obj->processButton();
                     } finally {
                         ob_end_clean();
+                    }
+                }
+                if (method_exists($obj, 'preConfirmationCheck')) {
+                    $_GET['ppx'] = 'cancel';
+                    try {
+                        $obj->preConfirmationCheck();
+                    } catch (\Throwable) {
+                    }
+                    unset($_GET['ppx']);
+                }
+                if (method_exists($obj, 'process')) {
+                    try {
+                        $obj->process();
+                    } catch (\Throwable) {
+                    }
+                }
+                if (method_exists($obj, 'getGatewayURL')) {
+                    try {
+                        $obj->getGatewayURL();
+                    } catch (\Throwable) {
                     }
                 }
             } catch (\Throwable) {

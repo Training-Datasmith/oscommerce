@@ -101,7 +101,8 @@ class ShopModelDeepCoverageTest extends TestCase
         $orderId = (int) ($pdo->query('select orders_id from osc_orders order by orders_id limit 1')->fetchColumn() ?: 0);
         if ($orderId > 0) {
             $order = new Order($orderId);
-            $order->getTotal();
+            $order->getStatusListing($orderId);
+            $order->info;
         }
 
         $this->addToAssertionCount(1);

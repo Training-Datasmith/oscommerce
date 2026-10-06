@@ -41,6 +41,9 @@ class ShopAllPagesCoverageTest extends TestCase
             $application = basename(dirname(dirname($page)));
             $filename = basename($page);
             InProcessSiteRenderer::includeShopApplicationPage($application, $filename);
+            if ($application === 'Checkout' || $application === 'Account' || $application === 'Cart') {
+                InProcessSiteRenderer::includeShopPageViaOscomLayout($application, $filename);
+            }
             ++$count;
         }
 

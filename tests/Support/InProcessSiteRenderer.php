@@ -234,6 +234,43 @@ final class InProcessSiteRenderer
         }
     }
 
+    /**
+     * Render the full oscom.php layout for a given application page (PCOV).
+     */
+    public static function includeShopPageViaOscomLayout(string $application, string $pageFilename): void
+    {
+        self::ensureShop();
+        self::primeShopContext($application, $pageFilename);
+
+        $_GET = ['Shop' => '', $application => ''];
+        OSCOM::setSite('Shop');
+        OSCOM::setSiteApplication($application);
+
+        try {
+            $app = new ShopPageApplicationStub();
+            $app->setPageTitle('Coverage');
+            $app->setPageContent($pageFilename);
+            Registry::set('Application', $app);
+            Registry::get('Template')->setApplication($app);
+        } catch (\Throwable) {
+            return;
+        }
+
+        $level = ob_get_level();
+        ob_start();
+
+        try {
+            self::importShopPageScope();
+            self::seedShopPageGlobals($application, $pageFilename);
+            include Registry::get('Template')->getTemplateFile();
+        } catch (\Throwable) {
+        } finally {
+            while (ob_get_level() > $level) {
+                ob_end_clean();
+            }
+        }
+    }
+
     public static function includeShopModulePages(): void
     {
         self::ensureShop();
@@ -274,6 +311,7 @@ final class InProcessSiteRenderer
         ini_set('session.save_path', sys_get_temp_dir());
         LampSiteBootstrap::boot('Shop', 'Index');
         $_SESSION = [];
+        ShopHarnessDataSeeder::ensureBaselineData();
         self::$shopReady = true;
     }
 
@@ -538,6 +576,13 @@ final class InProcessSiteRenderer
             ];
         }
 
+        if ($application === 'Account' && str_contains($pageFilename, 'orders')) {
+            $ids = ShopHarnessDataSeeder::ensureBaselineData();
+            if ($ids['order_id'] > 0) {
+                $_GET['order_id'] = (string) $ids['order_id'];
+            }
+        }
+
         if ($application === 'Index' && Registry::exists('Category')) {
             $OSCOM_Category = Registry::get('Category');
         }
@@ -549,12 +594,14 @@ final class InProcessSiteRenderer
 
         $OSCOM_PDO = Registry::get('PDO');
 
+        $ids = ShopHarnessDataSeeder::ensureBaselineData();
+
         if ($application === 'Customers' && str_starts_with($pageFilename, 'section_')) {
             $OSCOM_ObjectInfo = new \osCommerce\OM\Core\ObjectInfo([
-                'customers_id' => 1,
+                'customers_id' => $ids['customer_id'] ?: 1,
                 'customers_firstname' => 'Test',
                 'customers_lastname' => 'User',
-                'customers_email_address' => 'test@example.com',
+                'customers_email_address' => 'coverage-customer@example.test',
             ]);
         }
     }

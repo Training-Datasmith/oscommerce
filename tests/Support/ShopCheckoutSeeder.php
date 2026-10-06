@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Tests\Support;
 
 use osCommerce\OM\Core\Registry;
+use osCommerce\OM\Core\Site\Shop\Payment;
+use osCommerce\OM\Core\Site\Shop\ShoppingCart;
 
 /**
  * Seed a guest cart/customer state suitable for Checkout routes (no customers in sample DB).
@@ -67,12 +69,41 @@ final class ShopCheckoutSeeder
                 'cost' => '5.00',
             ], false);
         }
+
+        self::seedPaymentModules();
+        self::seedBillingMethodWithoutRecalculate($cart);
+    }
+
+    public static function seedPaymentModules(): void
+    {
+        if (!Registry::exists('Payment')) {
+            Registry::set('Payment', new Payment());
+        }
+
+        try {
+            Registry::get('Payment')->loadAll();
+        } catch (\Throwable) {
+        }
+    }
+
+    public static function seedBillingMethodWithoutRecalculate(ShoppingCart $cart): void
+    {
+        if ($cart->hasBillingMethod()) {
+            return;
+        }
+
+        try {
+            $ref = new \ReflectionClass($cart);
+            $prop = $ref->getProperty('_billing_method');
+            $prop->setValue($cart, ['id' => 'cod_cod', 'title' => 'Cash On Delivery']);
+        } catch (\Throwable) {
+        }
     }
 
     public static function seedLoggedInCustomerIfAvailable(): void
     {
-        $pdo = Registry::get('PDO');
-        $customerId = (int) ($pdo->query('select customers_id from osc_customers limit 1')->fetchColumn() ?: 0);
+        $ids = ShopHarnessDataSeeder::ensureBaselineData();
+        $customerId = $ids['customer_id'];
         if ($customerId < 1) {
             return;
         }

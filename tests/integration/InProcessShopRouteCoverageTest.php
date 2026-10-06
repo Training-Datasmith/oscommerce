@@ -51,7 +51,9 @@ class InProcessShopRouteCoverageTest extends TestCase
         InProcessSiteRenderer::renderShop(['Checkout']);
         InProcessSiteRenderer::renderShop(['Checkout', 'Billing']);
         InProcessSiteRenderer::renderShop(['Checkout', 'Shipping']);
-        InProcessSiteRenderer::renderShop(['Account', 'Orders'], ['order_id' => '1']);
+        $orderId = \Tests\Support\ShopHarnessDataSeeder::ensureBaselineData()['order_id'] ?? 1;
+        InProcessSiteRenderer::renderShop(['Account', 'Orders'], ['order_id' => (string) $orderId]);
+        InProcessSiteRenderer::renderShop(['Account', 'Orders', 'Info'], ['order_id' => (string) $orderId]);
 
         $routes = [
             ['Info', 'Contact'],
