@@ -684,7 +684,12 @@ final class InProcessSiteRenderer
         $OSCOM_Banner = Registry::exists('Banner') ? Registry::get('Banner') : null;
 
         if ($pageFilename === 'product_listing.php' || str_contains($pageFilename, 'listing')) {
-            $ids = $OSCOM_PDO->query('select products_id from osc_products order by products_id limit 3')->fetchAll(\PDO::FETCH_COLUMN);
+            $ids = $OSCOM_PDO->query(
+                'select products_id from osc_products where manufacturers_id > 0 order by products_id limit 3'
+            )->fetchAll(\PDO::FETCH_COLUMN);
+            if ($ids === []) {
+                $ids = $OSCOM_PDO->query('select products_id from osc_products order by products_id limit 3')->fetchAll(\PDO::FETCH_COLUMN);
+            }
             if ($ids === []) {
                 $ids = [1];
             }

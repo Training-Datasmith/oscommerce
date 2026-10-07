@@ -79,7 +79,7 @@ class AdminCustomersSaveProcessDeepCoverageTest extends TestCase
                     'country_id' => '223',
                     'telephone' => '555-0200',
                     'fax' => '555-0201',
-                    'changed' => 'true',
+                    'changed' => true,
                 ],
             ],
             'ab_default_id' => (string) $addressId,
@@ -106,6 +106,44 @@ class AdminCustomersSaveProcessDeepCoverageTest extends TestCase
             Process::execute(Registry::get('Application'));
         } catch (\Throwable) {
         }
+
+        $_GET['id'] = (string) $customerId;
+        $_POST = [
+            'gender' => 'm',
+            'firstname' => $savedFirst,
+            'lastname' => $savedLast,
+            'email_address' => $savedEmail,
+            'password' => '',
+            'confirmation' => '',
+            'newsletter' => 'on',
+            'status' => 'on',
+            'new_address' => [
+                [
+                    'gender' => 'm',
+                    'firstname' => 'Extra',
+                    'lastname' => 'Address',
+                    'company' => 'Cov LLC',
+                    'street_address' => '100 Side St',
+                    'suburb' => '',
+                    'city' => 'Testville',
+                    'postcode' => '90213',
+                    'state' => 'CA',
+                    'zone_id' => '1',
+                    'country_id' => '223',
+                    'telephone' => '555-0400',
+                    'fax' => '',
+                    'default' => 'false',
+                ],
+            ],
+        ];
+        try {
+            Process::execute(Registry::get('Application'));
+        } catch (\Throwable) {
+        }
+
+        $extraAddressId = (int) ($pdo->query(
+            'select address_book_id from osc_address_book where customers_id = ' . $customerId . ' order by address_book_id desc limit 1'
+        )->fetchColumn() ?: 0);
 
         $_GET = [];
         $_POST = [
@@ -155,21 +193,23 @@ class AdminCustomersSaveProcessDeepCoverageTest extends TestCase
         } catch (\Throwable) {
         }
 
-        $_GET['id'] = (string) $customerId;
-        $_POST = [
-            'gender' => 'm',
-            'firstname' => 'Coverage',
-            'lastname' => 'Customer',
-            'email_address' => 'coverage-process@example.test',
-            'password' => '',
-            'confirmation' => '',
-            'newsletter' => 'on',
-            'status' => 'on',
-            'deleteAB' => [(string) $addressId],
-        ];
-        try {
-            Process::execute(Registry::get('Application'));
-        } catch (\Throwable) {
+        if ($extraAddressId > 0 && $extraAddressId !== $addressId) {
+            $_GET['id'] = (string) $customerId;
+            $_POST = [
+                'gender' => 'm',
+                'firstname' => $savedFirst,
+                'lastname' => $savedLast,
+                'email_address' => $savedEmail,
+                'password' => '',
+                'confirmation' => '',
+                'newsletter' => 'on',
+                'status' => 'on',
+                'deleteAB' => [(string) $extraAddressId],
+            ];
+            try {
+                Process::execute(Registry::get('Application'));
+            } catch (\Throwable) {
+            }
         }
 
         $this->addToAssertionCount(1);
