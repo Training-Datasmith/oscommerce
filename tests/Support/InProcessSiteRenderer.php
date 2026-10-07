@@ -526,6 +526,7 @@ final class InProcessSiteRenderer
     {
         global $OSCOM_Language, $OSCOM_Template, $OSCOM_MessageStack, $OSCOM_Customer, $OSCOM_Service, $OSCOM_Breadcrumb;
         global $OSCOM_ShoppingCart, $OSCOM_Currencies, $OSCOM_Payment, $OSCOM_PaymentModule, $OSCOM_PDO;
+        global $OSCOM_Image, $OSCOM_Category;
 
         $OSCOM_Language = Registry::get('Language');
         $OSCOM_Template = Registry::get('Template');
@@ -536,6 +537,20 @@ final class InProcessSiteRenderer
         $OSCOM_ShoppingCart = Registry::get('ShoppingCart');
         $OSCOM_Currencies = Registry::get('Currencies');
         $OSCOM_PDO = Registry::get('PDO');
+
+        if (Registry::exists('Image')) {
+            $OSCOM_Image = Registry::get('Image');
+        } else {
+            $OSCOM_Image = new \osCommerce\OM\Core\Image();
+            Registry::set('Image', $OSCOM_Image);
+        }
+
+        if (Registry::exists('Category')) {
+            $OSCOM_Category = Registry::get('Category');
+        } else {
+            $OSCOM_Category = new \osCommerce\OM\Core\Site\Shop\Category();
+            Registry::set('Category', $OSCOM_Category);
+        }
 
         if (Registry::exists('Payment')) {
             $OSCOM_Payment = Registry::get('Payment');
@@ -583,24 +598,19 @@ final class InProcessSiteRenderer
         $OSCOM_PDO = Registry::get('PDO');
 
         if ($pageFilename === 'product_listing.php' || str_contains($pageFilename, 'listing')) {
+            $productId = (int) ($OSCOM_PDO->query('select products_id from osc_products order by products_id limit 1')->fetchColumn() ?: 1);
             $products_listing = [
                 'entries' => [
-                    [
-                        'products_id' => 1,
-                        'products_name' => 'Sample',
-                        'products_price' => '10.00',
-                        'products_model' => 'MODEL',
-                        'products_quantity' => 10,
-                        'products_weight' => 1.0,
-                        'products_tax_class_id' => 0,
-                        'products_image' => '',
-                        'products_status' => 1,
-                    ],
+                    ['products_id' => $productId],
+                    ['products_id' => $productId],
                 ],
-                'total' => 1,
+                'total' => 2,
                 'pages' => 1,
                 'page' => 1,
             ];
+            if (!isset($_GET['manufacturers'])) {
+                $_GET['manufacturers'] = '1';
+            }
         }
 
         if ($application === 'Account' && str_contains($pageFilename, 'orders')) {

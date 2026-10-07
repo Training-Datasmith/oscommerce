@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Unit test bootstrap: OM autoloader + test ErrorHandler stub (no LAMP / full OSCOM::initialize()).
+ * Unit test bootstrap: OM autoloader (no LAMP / full OSCOM::initialize()).
  *
  * @see documents/test-suite-plan.md §3.1
  */

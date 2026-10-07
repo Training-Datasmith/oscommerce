@@ -21,10 +21,10 @@ ensure_ondrej
 sudo apt-get install -y --no-install-recommends \
   "php${php_ver}" "php${php_ver}-cli" "php${php_ver}-mysql" "php${php_ver}-mbstring" \
   "php${php_ver}-xml" "php${php_ver}-gd" "php${php_ver}-curl" "php${php_ver}-zip" \
-  "php${php_ver}-pcov" \
+  "php${php_ver}-sqlite3" "php${php_ver}-pcov" \
   mysql-server apache2 libapache2-mod-php"${php_ver}" composer
 
-for ext in pdo_mysql mbstring xml gd curl; do
+for ext in pdo_mysql pdo_sqlite mbstring xml gd curl; do
   php -m | grep -qi "^${ext}$"
 done
 
@@ -56,7 +56,7 @@ fi
 
 # Installer writes merged config via Setup step 3 (www-data).
 sudo chown -R www-data:www-data "${repo_root}/osCommerce/OM/Config" "${repo_root}/osCommerce/OM/Work" 2>/dev/null || true
-sudo chmod -R u+rwX,g+rwX "${repo_root}/osCommerce/OM/Config" "${repo_root}/osCommerce/OM/Work" 2>/dev/null || true
+sudo chmod -R u+rwX,g+rwX,o+rwX "${repo_root}/osCommerce/OM/Config" "${repo_root}/osCommerce/OM/Work" 2>/dev/null || true
 
 cd "${repo_root}"
 if [[ -f composer.json ]]; then

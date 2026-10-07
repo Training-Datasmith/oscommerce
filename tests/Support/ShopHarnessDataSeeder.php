@@ -67,6 +67,30 @@ final class ShopHarnessDataSeeder
                 ->execute([':aid' => $addressId, ':cid' => $customerId]);
         } else {
             $addressId = (int) ($pdo->query('select customers_default_address_id from osc_customers where customers_id = ' . $customerId)->fetchColumn() ?: 0);
+            $bookCount = (int) $pdo->query('select count(*) from osc_address_book where customers_id = ' . $customerId)->fetchColumn();
+            if ($bookCount < 1) {
+                $pdo->prepare(
+                    'insert into osc_address_book (customers_id, entry_gender, entry_firstname, entry_lastname, entry_street_address, entry_city, entry_postcode, entry_state, entry_country_id, entry_zone_id, entry_telephone, entry_fax) values (:cid, :gender, :firstname, :lastname, :street, :city, :postcode, :state, :country_id, :zone_id, :telephone, :fax)'
+                )->execute([
+                    ':cid' => $customerId,
+                    ':gender' => 'f',
+                    ':firstname' => 'Coverage',
+                    ':lastname' => 'Address',
+                    ':street' => '456 Oak Ave',
+                    ':city' => 'Testville',
+                    ':postcode' => '90211',
+                    ':state' => 'CA',
+                    ':country_id' => 223,
+                    ':zone_id' => 1,
+                    ':telephone' => '555-0200',
+                    ':fax' => '555-0201',
+                ]);
+                $addressId = (int) $pdo->lastInsertId();
+                if ($addressId > 0) {
+                    $pdo->prepare('update osc_customers set customers_default_address_id = :aid where customers_id = :cid and customers_default_address_id < 1')
+                        ->execute([':aid' => $addressId, ':cid' => $customerId]);
+                }
+            }
         }
 
         if ($orderId < 1 && $customerId > 0) {
