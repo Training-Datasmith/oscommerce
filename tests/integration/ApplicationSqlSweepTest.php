@@ -7,6 +7,7 @@ namespace Tests\Integration;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\RunClassInSeparateProcess;
 use PHPUnit\Framework\TestCase;
+use Tests\Support\LanguageImportPayload;
 use Tests\Support\LampSiteBootstrap;
 
 /**
@@ -77,7 +78,7 @@ class ApplicationSqlSweepTest extends TestCase
      */
     private function defaultPayload(): array
     {
-        return [
+        return array_merge(LanguageImportPayload::newLanguageImport(), [
             'id' => 1,
             'language_id' => 1,
             'languages_id' => 1,
@@ -95,6 +96,6 @@ class ApplicationSqlSweepTest extends TestCase
             'cfgValue' => 'Test Shop',
             'zone_id' => 1,
             'country_id' => 1,
-        ];
+        ]);
     }
 }

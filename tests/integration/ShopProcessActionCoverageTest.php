@@ -7,6 +7,7 @@ namespace Tests\Integration;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\RunClassInSeparateProcess;
 use PHPUnit\Framework\TestCase;
+use Tests\Support\CheckoutProcessPost;
 use Tests\Support\InProcessSiteRenderer;
 use Tests\Support\ShopCheckoutSeeder;
 use Tests\Support\ShopHarnessDataSeeder;
@@ -41,12 +42,7 @@ class ShopProcessActionCoverageTest extends TestCase
         InProcessSiteRenderer::renderShop(['Checkout']);
         ShopCheckoutSeeder::seedGuestCheckoutCart();
 
-        $post = array_merge(ShopCheckoutSeeder::sampleAddress(), [
-            'gender' => 'm',
-            'zone_id' => '1',
-            'country_id' => '223',
-        ]);
-        $_POST = $post;
+        $_POST = CheckoutProcessPost::validAddress();
 
         $stub = new ShopPageApplicationStub();
         $classes = [
@@ -75,11 +71,7 @@ class ShopProcessActionCoverageTest extends TestCase
         ShopCheckoutSeeder::seedLoggedInCustomerIfAvailable();
         ShopCheckoutSeeder::seedGuestCheckoutCart();
 
-        $_POST = array_merge(ShopCheckoutSeeder::sampleAddress(), [
-            'gender' => 'm',
-            'zone_id' => '1',
-            'country_id' => '223',
-        ]);
+        $_POST = CheckoutProcessPost::validAddress();
 
         $stub = new ShopPageApplicationStub();
         foreach (
@@ -141,7 +133,7 @@ class ShopProcessActionCoverageTest extends TestCase
                 if ($application === 'Checkout' || $application === 'Account') {
                     ShopCheckoutSeeder::seedGuestCheckoutCart();
                     ShopCheckoutSeeder::seedLoggedInCustomerIfAvailable();
-                    $_POST = array_merge(ShopCheckoutSeeder::sampleAddress(), ['gender' => 'm', 'zone_id' => '1', 'country_id' => '223']);
+                    $_POST = CheckoutProcessPost::validAddress();
                 }
 
                 try {

@@ -585,9 +585,21 @@ final class InProcessSiteRenderer
         if ($pageFilename === 'product_listing.php' || str_contains($pageFilename, 'listing')) {
             $products_listing = [
                 'entries' => [
-                    ['products_id' => 1, 'products_name' => 'Sample', 'products_price' => '10.00'],
+                    [
+                        'products_id' => 1,
+                        'products_name' => 'Sample',
+                        'products_price' => '10.00',
+                        'products_model' => 'MODEL',
+                        'products_quantity' => 10,
+                        'products_weight' => 1.0,
+                        'products_tax_class_id' => 0,
+                        'products_image' => '',
+                        'products_status' => 1,
+                    ],
                 ],
                 'total' => 1,
+                'pages' => 1,
+                'page' => 1,
             ];
         }
 
@@ -612,11 +624,28 @@ final class InProcessSiteRenderer
         $ids = ShopHarnessDataSeeder::ensureBaselineData();
 
         if ($application === 'Customers' && str_starts_with($pageFilename, 'section_')) {
+            $_GET['id'] = (string) ($ids['customer_id'] ?: 1);
+            global $new_customer;
+            $new_customer = false;
+
             $OSCOM_ObjectInfo = new \osCommerce\OM\Core\ObjectInfo([
                 'customers_id' => $ids['customer_id'] ?: 1,
                 'customers_firstname' => 'Test',
                 'customers_lastname' => 'User',
                 'customers_email_address' => 'coverage-customer@example.test',
+                'customers_name' => 'Test User',
+                'customers_telephone' => '555-0100',
+                'customers_fax' => '',
+                'customers_newsletter' => '1',
+                'address_book_id' => 1,
+                'entry_firstname' => 'Test',
+                'entry_lastname' => 'User',
+                'entry_street_address' => '123 Main St',
+                'entry_city' => 'Testville',
+                'entry_postcode' => '90210',
+                'entry_state' => 'CA',
+                'entry_country_id' => 223,
+                'entry_zone_id' => 1,
             ]);
         }
     }

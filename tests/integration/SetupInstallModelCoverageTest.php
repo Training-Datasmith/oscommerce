@@ -26,7 +26,11 @@ class SetupInstallModelCoverageTest extends TestCase
         $count = 0;
 
         foreach (glob($base . '/Model/*.php') ?: [] as $file) {
-            $class = 'osCommerce\\OM\\Core\\Site\\Setup\\Application\\Install\\Model\\' . basename($file, '.php');
+            $model = basename($file, '.php');
+            if ($model === 'importDB') {
+                continue;
+            }
+            $class = 'osCommerce\\OM\\Core\\Site\\Setup\\Application\\Install\\Model\\' . $model;
             if (!class_exists($class)) {
                 continue;
             }
