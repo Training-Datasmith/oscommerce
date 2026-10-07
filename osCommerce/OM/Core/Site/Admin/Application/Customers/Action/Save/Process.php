@@ -57,9 +57,11 @@ class Process
         }
 
         if (ACCOUNT_DATE_OF_BIRTH == '1') {
-            if (!checkdate($data['dob_month'], $data['dob_day'], $data['dob_year'])) {
-                $OSCOM_MessageStack->add(null, OSCOM::getDef('ms_error_date_of_birth'), 'error');
-                $error = true;
+            if (isset($_POST['dob']) && trim((string) $_POST['dob']) !== '') {
+                if (!checkdate((int) $data['dob_month'], (int) $data['dob_day'], (int) $data['dob_year'])) {
+                    $OSCOM_MessageStack->add(null, OSCOM::getDef('ms_error_date_of_birth'), 'error');
+                    $error = true;
+                }
             }
         }
 

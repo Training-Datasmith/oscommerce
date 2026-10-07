@@ -58,6 +58,8 @@ class CoreMailDeepCoverageTest extends TestCase
         $mail->setBodyHTML('<p>HTML with <img src="inline.png" /></p>');
         if ($tmp !== false) {
             $mail->addAttachment($tmp);
+            $mail->addImage($tmp);
+            $mail->addAttachment('/nonexistent/file.bin');
             $mail->_build_image([
                 'id' => 'img1',
                 'filename' => 'inline.png',
