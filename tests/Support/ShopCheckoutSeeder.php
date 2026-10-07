@@ -188,6 +188,67 @@ final class ShopCheckoutSeeder
         Registry::set('Shipping', new Shipping(), true);
     }
 
+    /**
+     * Rich cart for checkout main/billing templates (variants, totals, comments, payment module).
+     */
+    public static function seedCheckoutConfirmationCoverage(): void
+    {
+        self::ensureShippingWithQuotes(true);
+        self::seedPaymentModules();
+
+        $pdo = Registry::get('PDO');
+        $cart = Registry::get('ShoppingCart');
+        $cart->reset();
+
+        $variantId = (int) ($pdo->query(
+            'select products_id from osc_products where products_status = 1 and parent_id > 0 limit 1'
+        )->fetchColumn() ?: 0);
+        $simpleId = (int) ($pdo->query(
+            'select products_id from osc_products where products_status = 1 and parent_id = 0 order by products_id limit 1'
+        )->fetchColumn() ?: 0);
+
+        if ($variantId > 0) {
+            try {
+                $cart->add($variantId, 1);
+            } catch (\Throwable) {
+            }
+        }
+        if ($simpleId > 0 && !$cart->hasContents()) {
+            try {
+                $cart->add($simpleId, 1);
+            } catch (\Throwable) {
+            }
+        }
+
+        if (!$cart->hasContents()) {
+            self::seedGuestCheckoutCart(false);
+        }
+
+        $cart->addTaxGroup('Coverage VAT', 1.25);
+        $cart->addTaxGroup('Coverage GST', 0.75);
+
+        self::seedBillingMethodWithoutRecalculate($cart);
+
+        try {
+            Registry::get('Payment')->load('COD');
+        } catch (\Throwable) {
+        }
+
+        $_SESSION['comments'] = "Coverage order comment\nSecond line";
+
+        try {
+            Registry::get('MessageStack')->add('CheckoutPayment', 'Coverage checkout payment stack');
+        } catch (\Throwable) {
+        }
+
+        try {
+            $cart->getTotal();
+            $cart->getOrderTotals();
+        } catch (\Throwable) {
+        }
+        $cart->numberOfTaxGroups();
+    }
+
     public static function seedLoggedInCustomerIfAvailable(): void
     {
         $ids = ShopHarnessDataSeeder::ensureBaselineData();

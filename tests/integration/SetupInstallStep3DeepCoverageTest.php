@@ -74,6 +74,11 @@ class SetupInstallStep3DeepCoverageTest extends TestCase
 
     public function testInstallStep3WritableConfiguration(): void
     {
+        $cacheDir = OSCOM::BASE_DIRECTORY . 'Work/Cache';
+        if (is_dir($cacheDir)) {
+            file_put_contents($cacheDir . '/step3-writable.cache', 'x');
+        }
+
         $_POST = $this->sampleInstallPost();
         $_POST['HTTP_WWW_ADDRESS'] = 'http://shop.example.com:8080/store/';
         InProcessSiteRenderer::includeSetupApplicationPage('Install', 'step_3.php');
@@ -88,6 +93,11 @@ class SetupInstallStep3DeepCoverageTest extends TestCase
             $this->markTestSkipped('settings.ini missing');
 
             return;
+        }
+
+        $cacheDir = OSCOM::BASE_DIRECTORY . 'Work/Cache';
+        if (is_dir($cacheDir)) {
+            file_put_contents($cacheDir . '/step3-readonly.cache', 'x');
         }
 
         @chmod($this->settingsPath, 0444);

@@ -612,6 +612,10 @@ final class InProcessSiteRenderer
         if ($application === 'Checkout' || str_contains($pageFilename, 'shipping')) {
             ShopCheckoutSeeder::ensureShippingWithQuotes();
         }
+
+        if ($application === 'Checkout' && in_array($pageFilename, ['main.php', 'billing.php'], true)) {
+            ShopCheckoutSeeder::seedCheckoutConfirmationCoverage();
+        }
     }
 
     /**
@@ -826,7 +830,21 @@ final class InProcessSiteRenderer
 
         if ($application === 'Categories') {
             $OSCOM_CategoryTree = new \osCommerce\OM\Core\Site\Admin\CategoryTree();
-            $_GET['cid'] = $_GET['cid'] ?? '0';
+            $childId = (int) ($OSCOM_PDO->query(
+                'select categories_id from osc_categories where parent_id > 0 order by categories_id limit 1'
+            )->fetchColumn() ?: 0);
+            if ($childId > 0) {
+                $_GET['cid'] = (string) $childId;
+                if (str_contains($pageFilename, 'edit')) {
+                    $_GET['id'] = (string) $childId;
+                }
+            } else {
+                $_GET['cid'] = $_GET['cid'] ?? '0';
+            }
+        }
+
+        if ($application === 'PaymentModules' && !isset($_GET['code'])) {
+            $_GET['code'] = 'COD';
         }
 
         $ids = ShopHarnessDataSeeder::ensureBaselineData();
