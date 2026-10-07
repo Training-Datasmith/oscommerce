@@ -116,6 +116,36 @@ class AdminCustomersSaveProcessDeepCoverageTest extends TestCase
         } catch (\Throwable) {
         }
 
+        $_POST = [
+            'gender' => 'x',
+            'firstname' => 'x',
+            'lastname' => 'x',
+            'email_address' => 'not-an-email',
+            'password' => 'x',
+            'confirmation' => 'y',
+        ];
+        try {
+            Process::execute(Registry::get('Application'));
+        } catch (\Throwable) {
+        }
+
+        $_GET['id'] = (string) $customerId;
+        $_POST = [
+            'gender' => 'm',
+            'firstname' => 'Coverage',
+            'lastname' => 'Customer',
+            'email_address' => 'coverage-process@example.test',
+            'password' => '',
+            'confirmation' => '',
+            'newsletter' => 'on',
+            'status' => 'on',
+            'deleteAB' => [(string) $addressId],
+        ];
+        try {
+            Process::execute(Registry::get('Application'));
+        } catch (\Throwable) {
+        }
+
         $this->addToAssertionCount(1);
     }
 }

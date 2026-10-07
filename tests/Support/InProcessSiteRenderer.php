@@ -249,7 +249,13 @@ final class InProcessSiteRenderer
             $app->setPageTitle('Coverage');
             $app->setPageContent($pageFilename);
             Registry::set('Application', $app);
-            Registry::get('Template')->setApplication($app);
+            $template = Registry::get('Template');
+            $template->setApplication($app);
+            $template->setHasHeader(true);
+            $template->setHasFooter(true);
+            $template->setHasBoxModules(true);
+            $template->setHasContentModules(true);
+            $template->addPageTags('coverage', 'grind');
         } catch (\Throwable) {
             return;
         }
@@ -406,6 +412,15 @@ final class InProcessSiteRenderer
         ob_start();
 
         try {
+            $applicationName = OSCOM::getSiteApplication();
+            $pageFilename = Registry::get('Application')->getPageContent();
+
+            if ($site === 'Shop') {
+                extract(self::buildShopScopeVariables($applicationName, $pageFilename), EXTR_OVERWRITE);
+            } elseif ($site === 'Admin') {
+                extract(self::buildAdminScopeVariables($applicationName, $pageFilename), EXTR_OVERWRITE);
+            }
+
             require Registry::get('Template')->getTemplateFile();
         } catch (\Throwable) {
             // Legacy templates may throw; coverage still accumulates.
@@ -579,22 +594,6 @@ final class InProcessSiteRenderer
 
         $products_listing = null;
 
-        if ($pageFilename === 'product_listing.php' || str_contains($pageFilename, 'listing')) {
-            $productId = (int) ($OSCOM_PDO->query('select products_id from osc_products order by products_id limit 1')->fetchColumn() ?: 1);
-            $products_listing = [
-                'entries' => [
-                    ['products_id' => $productId],
-                    ['products_id' => $productId],
-                ],
-                'total' => 2,
-                'pages' => 1,
-                'page' => 1,
-            ];
-            if (!isset($_GET['manufacturers'])) {
-                $_GET['manufacturers'] = '1';
-            }
-        }
-
         if ($application === 'Account' && str_contains($pageFilename, 'orders')) {
             $ids = ShopHarnessDataSeeder::ensureBaselineData();
             if ($ids['order_id'] > 0) {
@@ -604,6 +603,29 @@ final class InProcessSiteRenderer
 
         if ($application === 'Index' && Registry::exists('Category')) {
             $OSCOM_Category = Registry::get('Category');
+        }
+
+        $OSCOM_Banner = Registry::exists('Banner') ? Registry::get('Banner') : null;
+
+        if ($pageFilename === 'product_listing.php' || str_contains($pageFilename, 'listing')) {
+            $ids = $OSCOM_PDO->query('select products_id from osc_products order by products_id limit 3')->fetchAll(\PDO::FETCH_COLUMN);
+            if ($ids === []) {
+                $ids = [1];
+            }
+            $entries = [];
+            foreach ($ids as $pid) {
+                $entries[] = ['products_id' => (int) $pid];
+            }
+            $products_listing = [
+                'entries' => $entries,
+                'total' => max(count($entries), 2),
+                'pages' => 1,
+                'page' => 1,
+            ];
+            $_GET['page'] = '1';
+            if (!isset($_GET['manufacturers'])) {
+                $_GET['manufacturers'] = '1';
+            }
         }
 
         return compact(
@@ -620,8 +642,38 @@ final class InProcessSiteRenderer
             'OSCOM_PDO',
             'OSCOM_Image',
             'OSCOM_Category',
+            'OSCOM_Banner',
             'products_listing',
         );
+    }
+
+    /**
+     * Re-render the oscom layout for the current dispatched Shop application (PCOV).
+     */
+    public static function includeRenderedShopOscomLayout(): void
+    {
+        self::ensureShop();
+        $application = OSCOM::getSiteApplication();
+        $pageFilename = Registry::get('Application')->getPageContent();
+        self::primeShopContext($application, $pageFilename);
+
+        $template = Registry::get('Template');
+        $template->setHasHeader(true);
+        $template->setHasFooter(true);
+        $template->setHasBoxModules(true);
+        $template->setHasContentModules(true);
+
+        $level = ob_get_level();
+        ob_start();
+        try {
+            extract(self::buildShopScopeVariables($application, $pageFilename), EXTR_OVERWRITE);
+            include $template->getTemplateFile();
+        } catch (\Throwable) {
+        } finally {
+            while (ob_get_level() > $level) {
+                ob_end_clean();
+            }
+        }
     }
 
     /**

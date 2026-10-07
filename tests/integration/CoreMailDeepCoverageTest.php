@@ -49,6 +49,11 @@ class CoreMailDeepCoverageTest extends TestCase
         }
 
         $mail = new Mail('To', 'to@example.test', 'From', 'from@example.test', 'Subject');
+        $mail->addCC('CC', 'cc@example.test');
+        $mail->addBCC('BCC', 'bcc@example.test');
+        $mail->setCharset('utf-8');
+        $mail->setContentTransferEncoding('quoted-printable');
+        $mail->addHeader('X-Coverage', 'grind');
         $mail->setBodyPlain('Plain part');
         $mail->setBodyHTML('<p>HTML with <img src="inline.png" /></p>');
         if ($tmp !== false) {
@@ -61,6 +66,10 @@ class CoreMailDeepCoverageTest extends TestCase
             ], '=BOUND');
         }
         $mail->send();
+
+        $mail->clearTo();
+        $mail->addTo('To2', 'to2@example.test');
+        $mail->setFrom('From2', 'from2@example.test');
 
         $plainOnly = new Mail('A', 'a@test.test', 'B', 'b@test.test', 'Plain');
         $plainOnly->setBodyPlain('Only plain');
