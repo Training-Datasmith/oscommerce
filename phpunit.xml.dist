@@ -58,6 +58,10 @@
             <directory>osCommerce/OM/Core/Site/Admin/Application/whos_online</directory>
             <directory>osCommerce/OM/Core/Site/Admin/Application/Login/SQL/Microsoft</directory>
             <directory>osCommerce/OM/Core/Site/Admin/Application/Countries/SQL/Microsoft</directory>
+            <file>osCommerce/OM/Core/Site/Shop/Module/Payment/PayPalExpressCheckout.php</file>
+            <file>osCommerce/OM/Core/Site/Admin/Module/Payment/PayPalExpressCheckout.php</file>
+            <file>osCommerce/OM/Core/Site/Shop/Application/Cart/RPC/PayPal.php</file>
+            <directory>osCommerce/OM/Core/Site/Shop/Application/Cart/RPC/PayPal</directory>
         </exclude>
     </source>
 </phpunit>

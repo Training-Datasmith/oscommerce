@@ -8,3 +8,7 @@ Document any `osCommerce/OM` paths excluded from the 100% line-coverage goal (wi
 | `osCommerce/OM/Core/Site/Admin/Application/Login/SQL/Microsoft/` | Microsoft SQL Server driver; CI/harness uses MySQL only. |
 | `osCommerce/OM/Core/Site/Admin/Application/Countries/SQL/Microsoft/` | Microsoft SQL Server driver; CI/harness uses MySQL only. |
 | `osCommerce/OM/Tests`, `osCommerce/OM/External`, `osCommerce/OM/Work` | Test harness, vendored external, runtime work dirs (see `phpunit.xml.dist`). |
+| `osCommerce/OM/Core/Site/Shop/Module/Payment/PayPalExpressCheckout.php` | Owner exemption: live PayPal NVP / redirect flow not grindable in harness (external API). |
+| `osCommerce/OM/Core/Site/Admin/Module/Payment/PayPalExpressCheckout.php` | Admin PayPal module mirror of exempt Shop payment integration. |
+| `osCommerce/OM/Core/Site/Shop/Application/Cart/RPC/PayPal.php` | Cart RPC router for exempt PayPal instant-update callback. |
+| `osCommerce/OM/Core/Site/Shop/Application/Cart/RPC/PayPal/` | PayPal Express Checkout RPC handlers (exempt with Shop payment module). |
