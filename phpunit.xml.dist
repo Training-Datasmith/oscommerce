@@ -12,6 +12,7 @@
         <ini name="display_errors" value="1"/>
         <ini name="error_reporting" value="-1"/>
         <ini name="sendmail_path" value="/workspace/tools/fake-sendmail.sh -t"/>
+        <ini name="phar.readonly" value="0"/>
     </php>
     <testsuites>
         <testsuite name="unit">

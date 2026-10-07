@@ -75,6 +75,7 @@ class SetupInstallStep3DeepCoverageTest extends TestCase
     public function testInstallStep3WritableConfiguration(): void
     {
         $_POST = $this->sampleInstallPost();
+        $_POST['HTTP_WWW_ADDRESS'] = 'http://shop.example.com:8080/store/';
         InProcessSiteRenderer::includeSetupApplicationPage('Install', 'step_3.php');
 
         $this->assertFileIsReadable($this->settingsPath);
@@ -97,6 +98,14 @@ class SetupInstallStep3DeepCoverageTest extends TestCase
 
         file_put_contents($this->settingsPath, $this->settingsBackup);
         @chmod($this->settingsPath, 0664);
+
+        $this->addToAssertionCount(1);
+    }
+
+    public function testSetupIndexMainPage(): void
+    {
+        InProcessSiteRenderer::renderSetup(['Index']);
+        InProcessSiteRenderer::includeSetupApplicationPage('Index', 'main.php');
 
         $this->addToAssertionCount(1);
     }

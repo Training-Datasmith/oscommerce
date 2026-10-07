@@ -154,6 +154,40 @@ final class ShopCheckoutSeeder
         $_SESSION['comments'] = 'Coverage checkout comment';
     }
 
+    /**
+     * Two shipping methods in session so checkout shipping.php hits multi-quote UI branches.
+     */
+    public static function ensureMultiMethodShippingQuotes(): void
+    {
+        self::ensureShopShippingModules();
+        self::seedGuestCheckoutCart(false);
+
+        $cart = Registry::get('ShoppingCart');
+        if (!$cart->hasShippingAddress()) {
+            $cart->setShippingAddress(self::sampleAddress());
+        }
+
+        $_SESSION['osC_ShoppingCart_data']['shipping_quotes'] = [
+            [
+                'id' => 'flat',
+                'module' => 'Flat Rate (Coverage)',
+                'methods' => [
+                    ['id' => 'flat', 'title' => 'Standard', 'cost' => '5.0000'],
+                    ['id' => 'express', 'title' => 'Express', 'cost' => '12.0000'],
+                ],
+                'tax_class_id' => defined('MODULE_SHIPPING_FLAT_TAX_CLASS') ? MODULE_SHIPPING_FLAT_TAX_CLASS : 0,
+            ],
+        ];
+
+        $cart->setShippingMethod([
+            'id' => 'flat_flat',
+            'title' => 'Flat Rate (Coverage) (Standard)',
+            'cost' => '5.0000',
+        ], false);
+
+        Registry::set('Shipping', new Shipping(), true);
+    }
+
     public static function seedLoggedInCustomerIfAvailable(): void
     {
         $ids = ShopHarnessDataSeeder::ensureBaselineData();

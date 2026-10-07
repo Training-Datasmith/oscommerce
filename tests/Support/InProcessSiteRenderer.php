@@ -821,8 +821,20 @@ final class InProcessSiteRenderer
         $OSCOM_PDO = Registry::get('PDO');
         $OSCOM_ObjectInfo = null;
         $new_customer = false;
+        $OSCOM_Application = Registry::get('Application');
+        $OSCOM_CategoryTree = null;
+
+        if ($application === 'Categories') {
+            $OSCOM_CategoryTree = new \osCommerce\OM\Core\Site\Admin\CategoryTree();
+            $_GET['cid'] = $_GET['cid'] ?? '0';
+        }
 
         $ids = ShopHarnessDataSeeder::ensureBaselineData();
+
+        AdminBatchPostSeeder::seedForPage($application, $pageFilename);
+        if ($OSCOM_MessageStack->exists() === false) {
+            $OSCOM_MessageStack->add($application, 'Coverage batch preview');
+        }
 
         if ($application === 'Customers' && str_starts_with($pageFilename, 'section_')) {
             $_GET['id'] = (string) ($ids['customer_id'] ?: 1);
@@ -854,6 +866,8 @@ final class InProcessSiteRenderer
             'OSCOM_MessageStack',
             'OSCOM_ObjectInfo',
             'OSCOM_PDO',
+            'OSCOM_Application',
+            'OSCOM_CategoryTree',
             'new_customer',
         );
     }
