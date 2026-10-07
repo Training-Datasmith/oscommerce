@@ -60,7 +60,7 @@ final class AdminBatchPostSeeder
                 $ids = $pdo->query('select languages_id from osc_languages order by languages_id limit 2')->fetchAll(\PDO::FETCH_COLUMN);
                 break;
             case 'CreditCards':
-                $ids = $pdo->query('select credit_cards_id from osc_credit_cards order by credit_cards_id limit 2')->fetchAll(\PDO::FETCH_COLUMN);
+                $ids = $pdo->query('select id from osc_credit_cards order by id limit 2')->fetchAll(\PDO::FETCH_COLUMN);
                 break;
             case 'Configuration':
                 $groupId = (int) ($pdo->query('select configuration_group_id from osc_configuration group by configuration_group_id order by configuration_group_id limit 1')->fetchColumn() ?: 0);

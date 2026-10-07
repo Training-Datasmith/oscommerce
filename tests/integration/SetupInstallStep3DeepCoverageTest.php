@@ -8,6 +8,7 @@ use osCommerce\OM\Core\OSCOM;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\RunClassInSeparateProcess;
 use PHPUnit\Framework\TestCase;
+use Tests\Support\HarnessSettingsFixture;
 use Tests\Support\InProcessSiteRenderer;
 
 /**
@@ -41,11 +42,7 @@ class SetupInstallStep3DeepCoverageTest extends TestCase
         while (ob_get_level() > $this->obLevel) {
             ob_end_clean();
         }
-        if ($this->settingsBackup !== null) {
-            @chmod($this->settingsPath, 0666);
-            file_put_contents($this->settingsPath, $this->settingsBackup);
-            @chmod($this->settingsPath, 0664);
-        }
+        HarnessSettingsFixture::restoreToConfigFile();
         unset($_POST);
     }
 

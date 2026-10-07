@@ -173,10 +173,15 @@ final class InProcessSiteRenderer
             return;
         }
 
+        if ($pageFilename === 'step_3.php' && !isset($_POST['HTTP_WWW_ADDRESS'])) {
+            return;
+        }
+
         $level = ob_get_level();
         ob_start();
 
         try {
+            extract(self::buildSetupScopeVariables($application, $pageFilename), EXTR_OVERWRITE);
             include $path;
         } catch (\Throwable) {
         } finally {
@@ -377,12 +382,20 @@ final class InProcessSiteRenderer
         }
     }
 
+    private static function ensurePublicBaseDirectory(): void
+    {
+        if (!\defined('OSCOM_PUBLIC_BASE_DIRECTORY')) {
+            \define('OSCOM_PUBLIC_BASE_DIRECTORY', dirname(__DIR__, 2) . '/');
+        }
+    }
+
     private static function ensureShop(): void
     {
         if (self::$shopReady) {
             return;
         }
 
+        self::ensurePublicBaseDirectory();
         self::$adminReady = false;
         RegistryTestHelper::reset();
         LampSiteBootstrap::forgetAll();
@@ -400,6 +413,7 @@ final class InProcessSiteRenderer
             return;
         }
 
+        self::ensurePublicBaseDirectory();
         self::$shopReady = false;
         RegistryTestHelper::reset();
         LampSiteBootstrap::forgetAll();
@@ -439,6 +453,7 @@ final class InProcessSiteRenderer
             return;
         }
 
+        self::ensurePublicBaseDirectory();
         RegistryTestHelper::reset();
 
         $_SERVER['SERVER_NAME'] = $_SERVER['SERVER_NAME'] ?? 'localhost';
@@ -613,8 +628,16 @@ final class InProcessSiteRenderer
             ShopCheckoutSeeder::ensureShippingWithQuotes();
         }
 
-        if ($application === 'Checkout' && in_array($pageFilename, ['main.php', 'billing.php'], true)) {
+        if ($application === 'Checkout' && $pageFilename === 'main.php') {
             ShopCheckoutSeeder::seedCheckoutConfirmationCoverage();
+        } elseif ($application === 'Checkout' && $pageFilename === 'billing.php') {
+            ShopCheckoutSeeder::ensureShippingWithQuotes(true);
+            ShopCheckoutSeeder::seedPaymentModules();
+            $billingCart = Registry::get('ShoppingCart');
+            if (!$billingCart->hasBillingMethod()) {
+                ShopCheckoutSeeder::seedBillingMethodWithoutRecalculate($billingCart);
+            }
+            $_SESSION['comments'] = 'Coverage billing comment';
         }
     }
 
@@ -665,15 +688,21 @@ final class InProcessSiteRenderer
             $billingId = (string) $cart->getBillingMethod('id');
             $moduleCode = explode('_', $billingId)[0] ?? '';
             if ($moduleCode !== '') {
-                $moduleCode = strtoupper($moduleCode);
                 try {
                     $OSCOM_Payment->load($moduleCode);
+                    if (!Registry::exists('PaymentModule')) {
+                        $OSCOM_Payment->load(strtoupper($moduleCode));
+                    }
                     if (Registry::exists('PaymentModule')) {
                         $OSCOM_PaymentModule = Registry::get('PaymentModule');
                     }
                 } catch (\Throwable) {
                 }
             }
+        }
+
+        if ($OSCOM_PaymentModule === null && Registry::exists('PaymentModule')) {
+            $OSCOM_PaymentModule = Registry::get('PaymentModule');
         }
 
         $products_listing = null;
@@ -694,10 +723,15 @@ final class InProcessSiteRenderer
 
         if ($pageFilename === 'product_listing.php' || str_contains($pageFilename, 'listing')) {
             $ids = $OSCOM_PDO->query(
-                'select products_id from osc_products where manufacturers_id > 0 order by products_id limit 3'
+                'select p.products_id from osc_products p
+                 inner join osc_products_images i on i.products_id = p.products_id
+                 where p.products_status = 1 and p.manufacturers_id > 0
+                 order by p.products_id limit 4'
             )->fetchAll(\PDO::FETCH_COLUMN);
             if ($ids === []) {
-                $ids = $OSCOM_PDO->query('select products_id from osc_products order by products_id limit 3')->fetchAll(\PDO::FETCH_COLUMN);
+                $ids = $OSCOM_PDO->query(
+                    'select products_id from osc_products where products_status = 1 order by products_id limit 4'
+                )->fetchAll(\PDO::FETCH_COLUMN);
             }
             if ($ids === []) {
                 $ids = [1];
@@ -708,13 +742,24 @@ final class InProcessSiteRenderer
             }
             $products_listing = [
                 'entries' => $entries,
-                'total' => max(count($entries), 2),
-                'pages' => 1,
-                'page' => 1,
+                'total' => max(count($entries) * 8, 24),
+                'pages' => 3,
+                'page' => 2,
             ];
-            $_GET['page'] = '1';
+            $_GET['page'] = '2';
             if (!isset($_GET['manufacturers'])) {
                 $_GET['manufacturers'] = '1';
+            }
+            $catId = (int) ($OSCOM_PDO->query(
+                'select categories_id from osc_categories order by categories_id limit 1'
+            )->fetchColumn() ?: 0);
+            if ($catId > 0) {
+                $_GET['cPath'] = (string) $catId;
+                try {
+                    $OSCOM_Category = new \osCommerce\OM\Core\Site\Shop\Category($catId);
+                    Registry::set('Category', $OSCOM_Category);
+                } catch (\Throwable) {
+                }
             }
         }
 
@@ -736,6 +781,9 @@ final class InProcessSiteRenderer
         if ($application === 'Search') {
             $OSCOM_CategoryTree = new \osCommerce\OM\Core\Site\Shop\CategoryTree();
             $OSCOM_CategoryTree->setSpacerString('&nbsp;', 2);
+            if (!Registry::exists('CategoryTree')) {
+                Registry::set('CategoryTree', $OSCOM_CategoryTree);
+            }
             $OSCOM_Search = new \osCommerce\OM\Core\Site\Shop\Search();
             try {
                 $OSCOM_Search->setKeywords('the');
@@ -910,6 +958,33 @@ final class InProcessSiteRenderer
             'OSCOM_Application',
             'OSCOM_CategoryTree',
             'new_customer',
+        );
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private static function buildSetupScopeVariables(string $application, string $pageFilename): array
+    {
+        $OSCOM_Language = Registry::get('Language');
+        $OSCOM_Template = Registry::get('Template');
+        $OSCOM_MessageStack = Registry::get('MessageStack');
+        $OSCOM_PDO = Registry::get('PDO');
+        $OSCOM_Application = Registry::get('Application');
+
+        if ($application === 'Index' && isset($_GET['language']) && is_string($_GET['language'])) {
+            try {
+                $OSCOM_Language->set($_GET['language']);
+            } catch (\Throwable) {
+            }
+        }
+
+        return compact(
+            'OSCOM_Language',
+            'OSCOM_Template',
+            'OSCOM_MessageStack',
+            'OSCOM_PDO',
+            'OSCOM_Application',
         );
     }
 }

@@ -81,13 +81,41 @@ final class ShopCheckoutSeeder
 
     public static function seedPaymentModules(): void
     {
+        self::ensurePaymentModulesInstalled();
+
         if (!Registry::exists('Payment')) {
             Registry::set('Payment', new Payment());
+        } else {
+            Registry::set('Payment', new Payment(), true);
         }
 
         try {
             Registry::get('Payment')->loadAll();
         } catch (\Throwable) {
+        }
+    }
+
+    public static function ensurePaymentModulesInstalled(): void
+    {
+        $pdo = Registry::get('PDO');
+        foreach (['COD', 'CoverageConfirmation'] as $code) {
+            $check = $pdo->prepare(
+                'select 1 from osc_modules where modules_group = :group and code = :code limit 1'
+            );
+            $check->execute([':group' => 'Payment', ':code' => $code]);
+            if ($check->fetchColumn()) {
+                continue;
+            }
+
+            $pdo->prepare(
+                'insert into osc_modules (title, code, author_name, author_www, modules_group) values (:title, :code, :author_name, :author_www, :group)'
+            )->execute([
+                ':title' => $code === 'COD' ? 'Cash On Delivery' : 'Coverage Confirmation',
+                ':code' => $code,
+                ':author_name' => 'Coverage',
+                ':author_www' => 'http://example.test',
+                ':group' => 'Payment',
+            ]);
         }
     }
 
@@ -227,12 +255,8 @@ final class ShopCheckoutSeeder
         $cart->addTaxGroup('Coverage VAT', 1.25);
         $cart->addTaxGroup('Coverage GST', 0.75);
 
-        self::seedBillingMethodWithoutRecalculate($cart);
-
-        try {
-            Registry::get('Payment')->load('COD');
-        } catch (\Throwable) {
-        }
+        self::seedPaymentModules();
+        CheckoutConfirmationPaymentStub::primePaymentModuleWithConfirmation();
 
         $_SESSION['comments'] = "Coverage order comment\nSecond line";
 
@@ -247,6 +271,17 @@ final class ShopCheckoutSeeder
         } catch (\Throwable) {
         }
         $cart->numberOfTaxGroups();
+
+        if (\defined('STOCK_CHECK') && STOCK_CHECK === '1') {
+            foreach ($cart->getProducts() as $productRow) {
+                $itemId = (int) ($productRow['item_id'] ?? 0);
+                if ($itemId > 0) {
+                    $pdo->prepare('update osc_products set products_quantity = 0 where products_id = :id')
+                        ->execute([':id' => $itemId]);
+                    break;
+                }
+            }
+        }
     }
 
     public static function seedLoggedInCustomerIfAvailable(): void
