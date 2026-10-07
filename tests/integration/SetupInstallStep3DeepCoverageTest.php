@@ -103,6 +103,7 @@ class SetupInstallStep3DeepCoverageTest extends TestCase
         @chmod($this->settingsPath, 0444);
         $_POST = $this->sampleInstallPost();
         $_POST['extra_field'] = 'preserve';
+        $_POST['multi_field'] = ['one', 'two'];
 
         InProcessSiteRenderer::includeSetupApplicationPage('Install', 'step_3.php');
 
