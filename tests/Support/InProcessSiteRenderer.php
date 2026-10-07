@@ -677,6 +677,7 @@ final class InProcessSiteRenderer
         if ($application === 'Account' && str_contains($pageFilename, 'orders')) {
             $ids = ShopHarnessDataSeeder::ensureBaselineData();
             if ($ids['order_id'] > 0) {
+                $_GET['Orders'] = (string) $ids['order_id'];
                 $_GET['order_id'] = (string) $ids['order_id'];
             }
         }
@@ -726,6 +727,39 @@ final class InProcessSiteRenderer
             }
         }
 
+        $OSCOM_Product = null;
+        if ($application === 'Products') {
+            $productId = 0;
+            if (isset($_GET['products_id']) && is_numeric($_GET['products_id'])) {
+                $productId = (int) $_GET['products_id'];
+            } else {
+                $productId = (int) ($OSCOM_PDO->query(
+                    'select p.products_id from osc_products p
+                     inner join osc_products_images i on i.products_id = p.products_id
+                     where p.products_status = 1
+                     order by p.products_id limit 1'
+                )->fetchColumn() ?: 0);
+                if ($productId < 1) {
+                    $productId = (int) ($OSCOM_PDO->query(
+                        'select products_id from osc_products where products_status = 1 order by products_id limit 1'
+                    )->fetchColumn() ?: 0);
+                }
+            }
+
+            if ($productId > 0) {
+                $OSCOM_Product = new \osCommerce\OM\Core\Site\Shop\Product($productId);
+                if ($OSCOM_Product->isValid()) {
+                    Registry::set('Product', $OSCOM_Product);
+                    $keyword = (string) $OSCOM_Product->getKeyword();
+                    if ($keyword !== '') {
+                        $_GET['Products'] = $keyword;
+                    }
+                } else {
+                    $OSCOM_Product = null;
+                }
+            }
+        }
+
         return compact(
             'OSCOM_Language',
             'OSCOM_Template',
@@ -742,6 +776,7 @@ final class InProcessSiteRenderer
             'OSCOM_Category',
             'OSCOM_Banner',
             'OSCOM_Shipping',
+            'OSCOM_Product',
             'products_listing',
         );
     }
