@@ -6,6 +6,7 @@ namespace Tests\Support;
 
 use osCommerce\OM\Core\Registry;
 use osCommerce\OM\Core\Site\Shop\Payment;
+use osCommerce\OM\Core\Site\Shop\Shipping;
 use osCommerce\OM\Core\Site\Shop\ShoppingCart;
 
 /**
@@ -101,6 +102,56 @@ final class ShopCheckoutSeeder
             'title' => 'Cash On Delivery',
             'module' => 'Cash On Delivery',
         ], false);
+    }
+
+    /**
+     * Register Shipping in Registry with quotes for checkout templates (PCOV).
+     */
+    public static function ensureShopShippingModules(): void
+    {
+        $pdo = Registry::get('PDO');
+        $count = (int) $pdo->query("select count(*) from osc_modules where modules_group = 'Shipping'")->fetchColumn();
+        if ($count > 0) {
+            return;
+        }
+
+        $pdo->prepare(
+            'insert into osc_modules (title, code, author_name, author_www, modules_group) values (:title, :code, :author_name, :author_www, :group)'
+        )->execute([
+            ':title' => 'Flat Rate',
+            ':code' => 'Flat',
+            ':author_name' => 'osCommerce',
+            ':author_www' => 'http://www.oscommerce.com',
+            ':group' => 'Shipping',
+        ]);
+    }
+
+    public static function ensureShippingWithQuotes(bool $presetCartMethod = true): void
+    {
+        self::ensureShopShippingModules();
+        self::seedGuestCheckoutCart(false);
+        self::seedPaymentModules();
+
+        $cart = Registry::get('ShoppingCart');
+        if (!$cart->hasShippingAddress()) {
+            $cart->setShippingAddress(self::sampleAddress());
+        }
+
+        if (isset($_SESSION['osC_ShoppingCart_data']['shipping_quotes'])) {
+            unset($_SESSION['osC_ShoppingCart_data']['shipping_quotes']);
+        }
+
+        $shipping = new Shipping();
+        Registry::set('Shipping', $shipping, true);
+
+        if ($presetCartMethod && $shipping->hasQuotes()) {
+            $cheapest = $shipping->getCheapestQuote();
+            if (!empty($cheapest['id'])) {
+                $cart->setShippingMethod($cheapest, false);
+            }
+        }
+
+        $_SESSION['comments'] = 'Coverage checkout comment';
     }
 
     public static function seedLoggedInCustomerIfAvailable(): void

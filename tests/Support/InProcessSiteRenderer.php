@@ -608,6 +608,10 @@ final class InProcessSiteRenderer
         if ($application === 'Checkout' && Registry::exists('Payment') === false) {
             Registry::set('Payment', new \osCommerce\OM\Core\Site\Shop\Payment());
         }
+
+        if ($application === 'Checkout' || str_contains($pageFilename, 'shipping')) {
+            ShopCheckoutSeeder::ensureShippingWithQuotes();
+        }
     }
 
     /**
@@ -709,6 +713,19 @@ final class InProcessSiteRenderer
             }
         }
 
+        $OSCOM_Shipping = null;
+        if ($application === 'Checkout' || str_contains($pageFilename, 'shipping') || str_contains($pageFilename, 'billing')) {
+            try {
+                if (Registry::exists('Shipping')) {
+                    $OSCOM_Shipping = Registry::get('Shipping');
+                } else {
+                    ShopCheckoutSeeder::ensureShippingWithQuotes();
+                    $OSCOM_Shipping = Registry::get('Shipping');
+                }
+            } catch (\Throwable) {
+            }
+        }
+
         return compact(
             'OSCOM_Language',
             'OSCOM_Template',
@@ -724,6 +741,7 @@ final class InProcessSiteRenderer
             'OSCOM_Image',
             'OSCOM_Category',
             'OSCOM_Banner',
+            'OSCOM_Shipping',
             'products_listing',
         );
     }

@@ -38,9 +38,13 @@ class ShopCheckoutShippingDeepCoverageTest extends TestCase
     public function testCheckoutShippingFlowPages(): void
     {
         InProcessSiteRenderer::renderShop(['Checkout', 'Shipping']);
-        ShopCheckoutSeeder::seedGuestCheckoutCart();
+        ShopCheckoutSeeder::ensureShippingWithQuotes();
         PaymentModuleTestHelper::definePayPalExpressCheckout();
         ShopCheckoutSeeder::seedBillingMethodWithoutRecalculate(Registry::get('ShoppingCart'));
+
+        $cart = Registry::get('ShoppingCart');
+        $cart->resetShippingMethod();
+        ShopCheckoutSeeder::ensureShippingWithQuotes(true);
 
         Registry::get('MessageStack')->add('CheckoutShipping', 'Coverage shipping message');
 
