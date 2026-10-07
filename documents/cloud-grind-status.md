@@ -12,7 +12,7 @@ Updated by the cloud agent during autonomous runs. Host resumes read this file a
 | W5 JUnit / coverage artifacts | done | `phpunit-remote-20261006.xml` at repo root |
 | W6 Run documentation | done | `tests/README.md` |
 
-**Branch tip:** `pending` on `remote-test-2026-10-05`
+**Branch tip:** `4cae7200` on `remote-test-2026-10-05`
 
 **Latest metrics (PHP 8.4.26 Linux, DB 127.0.0.1):** 153 tests, 402 assertions, **0 failures, 0 errors**. Line coverage **~65.61%** (**12138/18501** statements) on included tree (`coverage-exclusions.md`; PayPal exempt).
 
