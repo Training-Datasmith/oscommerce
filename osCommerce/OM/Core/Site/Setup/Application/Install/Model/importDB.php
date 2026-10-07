@@ -26,12 +26,32 @@ class importDB
 
         OSCOM::callDB('Setup\Install\ImportSQL', ['table_prefix' => $data['table_prefix']]);
 
-        // Import language definitions
+        self::executeHarnessSafePostImport($data['table_prefix']);
 
-        OSCOM::setConfig('db_table_prefix', $data['table_prefix'], 'Admin');
-        OSCOM::setConfig('db_table_prefix', $data['table_prefix'], 'Shop');
-        OSCOM::setConfig('db_table_prefix', $data['table_prefix'], 'Setup');
+        // Import Foreign Keys
 
+        OSCOM::callDB('Setup\Install\ImportFK', ['table_prefix' => $data['table_prefix']]);
+    }
+
+    /**
+     * Language + module installation after schema exists (no ImportSQL / ImportFK).
+     */
+    public static function executeHarnessSafePostImport(string $table_prefix): void
+    {
+        self::applyTablePrefixConfig($table_prefix);
+        self::importLanguageDefinitions();
+        self::installServiceAndPaymentStack();
+    }
+
+    public static function applyTablePrefixConfig(string $table_prefix): void
+    {
+        OSCOM::setConfig('db_table_prefix', $table_prefix, 'Admin');
+        OSCOM::setConfig('db_table_prefix', $table_prefix, 'Shop');
+        OSCOM::setConfig('db_table_prefix', $table_prefix, 'Setup');
+    }
+
+    public static function importLanguageDefinitions(): void
+    {
         foreach (Language::extractDefinitions('en_US.xml') as $def) {
             $def['id'] = 1;
 
@@ -51,9 +71,10 @@ class importDB
                 OSCOM::callDB('Admin\InsertLanguageDefinition', $def, 'Site');
             }
         }
+    }
 
-        // Import Service modules
-
+    public static function installServiceAndPaymentStack(): void
+    {
         $services = ['OutputCompression',
                           'Session',
                           'Language',
@@ -137,7 +158,9 @@ class importDB
 
         // Import Payment modules
 
-        define('DEFAULT_ORDERS_STATUS_ID', 1);
+        if (!\defined('DEFAULT_ORDERS_STATUS_ID')) {
+            \define('DEFAULT_ORDERS_STATUS_ID', 1);
+        }
 
         $module = new \osCommerce\OM\Core\Site\Admin\Module\Payment\COD();
         $module->install();
@@ -165,9 +188,5 @@ class importDB
 
         $module = new \osCommerce\OM\Core\Site\Admin\Module\OrderTotal\Total();
         $module->install();
-
-        // Import Foreign Keys
-
-        OSCOM::callDB('Setup\Install\ImportFK', ['table_prefix' => $data['table_prefix']]);
     }
 }

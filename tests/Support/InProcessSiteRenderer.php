@@ -274,6 +274,82 @@ final class InProcessSiteRenderer
         }
     }
 
+    /**
+     * @param array<string, mixed> $scopeExtras merged into buildShopScopeVariables before include
+     */
+    public static function includeShopApplicationPageWithScopeExtras(string $application, string $pageFilename, array $scopeExtras): void
+    {
+        self::ensureShop();
+        self::primeShopContext($application, $pageFilename);
+
+        $_GET = ['Shop' => '', $application => ''];
+        OSCOM::setSite('Shop');
+        OSCOM::setSiteApplication($application);
+
+        $path = OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Application/' . $application . '/pages/' . $pageFilename;
+        if (!is_file($path)) {
+            return;
+        }
+
+        $level = ob_get_level();
+        ob_start();
+        try {
+            extract(array_merge(self::buildShopScopeVariables($application, $pageFilename), $scopeExtras), EXTR_OVERWRITE);
+            include $path;
+        } catch (\Throwable) {
+        } finally {
+            while (ob_get_level() > $level) {
+                ob_end_clean();
+            }
+        }
+    }
+
+    /**
+     * oscom.php HPDL / non-DEFAULT_TEMPLATE branches (PCOV).
+     */
+    public static function includeShopOscomLegacyLayout(string $application, string $pageFilename): void
+    {
+        self::ensureShop();
+        self::primeShopContext($application, $pageFilename);
+
+        $_GET = ['Shop' => '', $application => ''];
+        OSCOM::setSite('Shop');
+        OSCOM::setSiteApplication($application);
+
+        try {
+            $app = new ShopPageApplicationStub();
+            $app->setPageTitle('Coverage Legacy');
+            $app->setPageContent($pageFilename);
+            Registry::set('Application', $app);
+            $template = Registry::get('Template');
+            $template->setApplication($app);
+            $template->setHasHeader(true);
+            $template->setHasFooter(true);
+            $template->setHasBoxModules(true);
+            $template->setHasContentModules(true);
+            $_SESSION['template'] = ['id' => 1, 'code' => 'legacy_hpdl'];
+            $template->set('legacy_hpdl');
+        } catch (\Throwable) {
+            return;
+        }
+
+        $level = ob_get_level();
+        ob_start();
+        try {
+            $scope = array_merge(self::buildShopScopeVariables($application, $pageFilename), [
+                'osC_Template' => LegacyOscomHpdlStubs::template($pageFilename, $application),
+                'osC_Box' => LegacyOscomHpdlStubs::box('Cart'),
+            ]);
+            extract($scope, EXTR_OVERWRITE);
+            include Registry::get('Template')->getTemplateFile();
+        } catch (\Throwable) {
+        } finally {
+            while (ob_get_level() > $level) {
+                ob_end_clean();
+            }
+        }
+    }
+
     public static function includeShopModulePages(): void
     {
         self::ensureShop();

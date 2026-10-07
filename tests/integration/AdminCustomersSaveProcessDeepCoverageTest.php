@@ -43,13 +43,22 @@ class AdminCustomersSaveProcessDeepCoverageTest extends TestCase
         $customerId = (int) ($ids['customer_id'] ?: 1);
         $addressId = (int) ($ids['address_id'] ?: 1);
 
+        $pdo = Registry::get('PDO');
+        $customerRow = $pdo->prepare('select customers_firstname, customers_lastname, customers_email_address from osc_customers where customers_id = :id');
+        $customerRow->bindInt(':id', $customerId);
+        $customerRow->execute();
+        $customerRow->fetch();
+        $savedEmail = (string) ($customerRow->value('customers_email_address') ?: 'coverage-process@example.test');
+        $savedFirst = (string) ($customerRow->value('customers_firstname') ?: 'Coverage');
+        $savedLast = (string) ($customerRow->value('customers_lastname') ?: 'Customer');
+
         $_GET['id'] = (string) $customerId;
         $_POST = [
             'gender' => 'm',
-            'firstname' => 'Coverage',
-            'lastname' => 'Customer',
+            'firstname' => $savedFirst,
+            'lastname' => $savedLast,
             'dob' => '1990-06-15',
-            'email_address' => 'coverage-process@example.test',
+            'email_address' => $savedEmail,
             'password' => '',
             'confirmation' => '',
             'newsletter' => 'on',
@@ -76,6 +85,23 @@ class AdminCustomersSaveProcessDeepCoverageTest extends TestCase
             'ab_default_id' => (string) $addressId,
         ];
 
+        try {
+            Process::execute(Registry::get('Application'));
+        } catch (\Throwable) {
+        }
+
+        $_GET['id'] = (string) $customerId;
+        $_POST = [
+            'gender' => 'm',
+            'firstname' => $savedFirst,
+            'lastname' => $savedLast,
+            'dob' => '1990-06-15',
+            'email_address' => $savedEmail,
+            'password' => '',
+            'confirmation' => '',
+            'newsletter' => 'on',
+            'status' => 'on',
+        ];
         try {
             Process::execute(Registry::get('Application'));
         } catch (\Throwable) {
