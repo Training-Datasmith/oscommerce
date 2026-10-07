@@ -6,7 +6,7 @@ Updated by the cloud agent during autonomous runs. Host resumes read this file a
 |------|--------|-------------|
 | W0 LAMP install | done | install.sh exit 0; PHP 8.4 + pcov + composer + Apache + MySQL |
 | W1 Phase 0 unit | done | HTMLTest ported; `vendor/bin/phpunit --testsuite unit` 0F/0E |
-| W2 Unit coverage → 100% | in progress | M4 denominator **~18501** lines (PayPal exempt); **~65.8%** covered |
+| W2 Unit coverage → 100% | in progress | M4 denominator **~18501** lines (PayPal exempt); **~66.3%** covered |
 | W3 Setup harness + sample data | done | `php tools/setup-install-harness.php` exit 0; `build/install.env` |
 | W4 Integration 0F/0E | done | HTTP + in-process integration; **155 tests, 0 failures, 0 errors** |
 | W5 JUnit / coverage artifacts | done | `phpunit-remote-20261006.xml` at repo root |
@@ -14,7 +14,7 @@ Updated by the cloud agent during autonomous runs. Host resumes read this file a
 
 **Branch tip:** `pending` on `remote-test-2026-10-05`
 
-**Latest metrics (PHP 8.4.26 Linux, DB 127.0.0.1):** 155 tests, 403+ assertions, **0 failures, 0 errors** (1 skip if no shipping quotes). Line coverage **~65.80%** (**12173/18501**).
+**Latest metrics (PHP 8.4.26 Linux, DB 127.0.0.1):** 155 tests, 404 assertions, **0 failures, 0 errors**. Line coverage **~66.25%** (**12257/18501**).
 
 **Recent W2 work:** `OSCOM_Shipping` in shop scope extract; `ensureShippingWithQuotes()` seeder; checkout shipping Process test; Language/DateTime/Search sweep.
 
