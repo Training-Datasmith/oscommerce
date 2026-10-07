@@ -143,7 +143,7 @@ class Mail
             return false;
         }
 
-        $this->_images[] = ['id' => md5(uniqid(time())),
+        $this->_images[] = ['id' => md5(uniqid((string) time())),
                                  'filename' => $filename,
                                  'mimetype' => $mimetype,
                                  'data' => chunk_split(base64_encode($data))];
@@ -151,7 +151,8 @@ class Mail
 
     public function send()
     {
-        if (\defined('OSCOM_TEST_SKIP_MAIL') && OSCOM_TEST_SKIP_MAIL) {
+        if (\defined('OSCOM_TEST_SKIP_MAIL') && OSCOM_TEST_SKIP_MAIL
+            && (!\defined('OSCOM_TEST_MAIL_BUILD_COVERAGE') || OSCOM_TEST_MAIL_BUILD_COVERAGE !== true)) {
             return true;
         }
 
@@ -344,6 +345,10 @@ class Mail
 
         if (empty($this->_from['email_address']) || empty($to_email_addresses)) {
             return false;
+        }
+
+        if (\defined('OSCOM_TEST_MAIL_BUILD_COVERAGE') && OSCOM_TEST_MAIL_BUILD_COVERAGE === true) {
+            return true;
         }
 
         if (empty($this->_from['name'])) {

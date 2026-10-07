@@ -129,7 +129,11 @@ class Shipping
             $module = $this->_selected_module;
         }
 
-        list($module_id, $method_id) = explode('_', $module);
+        if ($module === null || $module === '') {
+            return [];
+        }
+
+        list($module_id, $method_id) = explode('_', (string) $module);
 
         $rate = [];
 

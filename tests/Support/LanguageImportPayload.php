@@ -14,10 +14,10 @@ final class LanguageImportPayload
      */
     public static function newLanguageImport(): array
     {
-        $code = 'zz_' . substr(md5((string) microtime(true)), 0, 4);
+        $code = 'z' . substr(md5((string) microtime(true)), 0, 4);
 
         return [
-            'name' => 'Coverage Lang ' . $code,
+            'name' => 'Cov ' . $code,
             'code' => $code,
             'locale' => 'en_US',
             'charset' => 'UTF-8',

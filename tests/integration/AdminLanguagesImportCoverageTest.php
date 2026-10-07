@@ -25,19 +25,24 @@ class AdminLanguagesImportCoverageTest extends TestCase
     {
         InProcessSiteRenderer::renderAdmin(['Languages']);
 
-        try {
-            Import::execute(LanguageImportPayload::newLanguageImport());
-        } catch (\Throwable) {
-        }
+        $payload = LanguageImportPayload::newLanguageImport();
+        $result = Import::execute($payload);
+        $this->assertTrue($result);
 
         $pdo = Registry::get('PDO');
-        $langId = (int) ($pdo->query("select languages_id from osc_languages where code like 'zz_%' order by languages_id desc limit 1")->fetchColumn() ?: 0);
+        $langId = (int) ($pdo->query('select languages_id from osc_languages where code = ' . $pdo->quote($payload['code']))->fetchColumn() ?: 0);
 
         if ($langId > 0) {
-            try {
-                Import::execute(LanguageImportPayload::updateLanguageImport($langId));
-            } catch (\Throwable) {
-            }
+            $update = LanguageImportPayload::updateLanguageImport($langId);
+            $update['code'] = $payload['code'];
+            Import::execute($update);
+
+            $addPayload = LanguageImportPayload::newLanguageImport();
+            $addPayload['import_type'] = 'add';
+            $addPayload['definitions'][] = ['key' => 'NEW_KEY', 'group' => 'index', 'value' => 'New'];
+            Import::execute($addPayload);
+            $pdo->exec('delete from osc_languages_definitions where languages_id in (select languages_id from osc_languages where code = ' . $pdo->quote($addPayload['code']) . ')');
+            $pdo->exec('delete from osc_languages where code = ' . $pdo->quote($addPayload['code']));
 
             $pdo->exec('delete from osc_languages_definitions where languages_id = ' . $langId);
             $pdo->exec('delete from osc_languages where languages_id = ' . $langId);
