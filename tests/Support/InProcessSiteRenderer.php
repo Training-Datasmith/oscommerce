@@ -84,8 +84,7 @@ final class InProcessSiteRenderer
         ob_start();
 
         try {
-            self::importShopPageScope();
-            self::seedShopPageGlobals($application, $pageFilename);
+            extract(self::buildShopScopeVariables($application, $pageFilename), EXTR_OVERWRITE);
             include $path;
         } catch (\Throwable) {
         } finally {
@@ -130,8 +129,7 @@ final class InProcessSiteRenderer
         ob_start();
 
         try {
-            self::importAdminPageScope();
-            self::seedAdminPageGlobals($application, $pageFilename);
+            extract(self::buildAdminScopeVariables($application, $pageFilename), EXTR_OVERWRITE);
             include $path;
         } catch (\Throwable) {
         } finally {
@@ -202,7 +200,7 @@ final class InProcessSiteRenderer
         $level = ob_get_level();
         ob_start();
         try {
-            self::importAdminPageScope();
+            extract(self::buildAdminScopeVariables('Dashboard', 'main.php'), EXTR_OVERWRITE);
             include $path;
         } catch (\Throwable) {
         } finally {
@@ -223,7 +221,7 @@ final class InProcessSiteRenderer
             $level = ob_get_level();
             ob_start();
             try {
-                self::importAdminPageScope();
+                extract(self::buildAdminScopeVariables('Dashboard', 'main.php'), EXTR_OVERWRITE);
                 include $file;
             } catch (\Throwable) {
             } finally {
@@ -260,8 +258,7 @@ final class InProcessSiteRenderer
         ob_start();
 
         try {
-            self::importShopPageScope();
-            self::seedShopPageGlobals($application, $pageFilename);
+            extract(self::buildShopScopeVariables($application, $pageFilename), EXTR_OVERWRITE);
             include Registry::get('Template')->getTemplateFile();
         } catch (\Throwable) {
         } finally {
@@ -286,7 +283,7 @@ final class InProcessSiteRenderer
                 $level = ob_get_level();
                 ob_start();
                 try {
-                    self::importShopPageScope();
+                    extract(self::buildShopScopeVariables('Index', 'main.php'), EXTR_OVERWRITE);
                     include $page;
                 } catch (\Throwable) {
                 } finally {
@@ -522,12 +519,11 @@ final class InProcessSiteRenderer
         }
     }
 
-    private static function importShopPageScope(): void
+    /**
+     * @return array<string, mixed>
+     */
+    private static function buildShopScopeVariables(string $application, string $pageFilename): array
     {
-        global $OSCOM_Language, $OSCOM_Template, $OSCOM_MessageStack, $OSCOM_Customer, $OSCOM_Service, $OSCOM_Breadcrumb;
-        global $OSCOM_ShoppingCart, $OSCOM_Currencies, $OSCOM_Payment, $OSCOM_PaymentModule, $OSCOM_PDO;
-        global $OSCOM_Image, $OSCOM_Category;
-
         $OSCOM_Language = Registry::get('Language');
         $OSCOM_Template = Registry::get('Template');
         $OSCOM_MessageStack = Registry::get('MessageStack');
@@ -580,22 +576,8 @@ final class InProcessSiteRenderer
                 }
             }
         }
-    }
 
-    private static function importAdminPageScope(): void
-    {
-        global $OSCOM_Language, $OSCOM_Template, $OSCOM_MessageStack;
-
-        $OSCOM_Language = Registry::get('Language');
-        $OSCOM_Template = Registry::get('Template');
-        $OSCOM_MessageStack = Registry::get('MessageStack');
-    }
-
-    private static function seedShopPageGlobals(string $application, string $pageFilename): void
-    {
-        global $products_listing, $OSCOM_PDO, $OSCOM_Category;
-
-        $OSCOM_PDO = Registry::get('PDO');
+        $products_listing = null;
 
         if ($pageFilename === 'product_listing.php' || str_contains($pageFilename, 'listing')) {
             $productId = (int) ($OSCOM_PDO->query('select products_id from osc_products order by products_id limit 1')->fetchColumn() ?: 1);
@@ -623,20 +605,41 @@ final class InProcessSiteRenderer
         if ($application === 'Index' && Registry::exists('Category')) {
             $OSCOM_Category = Registry::get('Category');
         }
+
+        return compact(
+            'OSCOM_Language',
+            'OSCOM_Template',
+            'OSCOM_MessageStack',
+            'OSCOM_Customer',
+            'OSCOM_Service',
+            'OSCOM_Breadcrumb',
+            'OSCOM_ShoppingCart',
+            'OSCOM_Currencies',
+            'OSCOM_Payment',
+            'OSCOM_PaymentModule',
+            'OSCOM_PDO',
+            'OSCOM_Image',
+            'OSCOM_Category',
+            'products_listing',
+        );
     }
 
-    private static function seedAdminPageGlobals(string $application, string $pageFilename): void
+    /**
+     * @return array<string, mixed>
+     */
+    private static function buildAdminScopeVariables(string $application, string $pageFilename): array
     {
-        global $OSCOM_ObjectInfo, $OSCOM_PDO;
-
+        $OSCOM_Language = Registry::get('Language');
+        $OSCOM_Template = Registry::get('Template');
+        $OSCOM_MessageStack = Registry::get('MessageStack');
         $OSCOM_PDO = Registry::get('PDO');
+        $OSCOM_ObjectInfo = null;
+        $new_customer = false;
 
         $ids = ShopHarnessDataSeeder::ensureBaselineData();
 
         if ($application === 'Customers' && str_starts_with($pageFilename, 'section_')) {
             $_GET['id'] = (string) ($ids['customer_id'] ?: 1);
-            global $new_customer;
-            $new_customer = false;
 
             $OSCOM_ObjectInfo = new \osCommerce\OM\Core\ObjectInfo([
                 'customers_id' => $ids['customer_id'] ?: 1,
@@ -658,5 +661,14 @@ final class InProcessSiteRenderer
                 'entry_zone_id' => 1,
             ]);
         }
+
+        return compact(
+            'OSCOM_Language',
+            'OSCOM_Template',
+            'OSCOM_MessageStack',
+            'OSCOM_ObjectInfo',
+            'OSCOM_PDO',
+            'new_customer',
+        );
     }
 }
