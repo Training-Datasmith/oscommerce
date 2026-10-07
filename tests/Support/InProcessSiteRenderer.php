@@ -731,6 +731,23 @@ final class InProcessSiteRenderer
             }
         }
 
+        $OSCOM_CategoryTree = null;
+        $OSCOM_Search = null;
+        if ($application === 'Search') {
+            $OSCOM_CategoryTree = new \osCommerce\OM\Core\Site\Shop\CategoryTree();
+            $OSCOM_CategoryTree->setSpacerString('&nbsp;', 2);
+            $OSCOM_Search = new \osCommerce\OM\Core\Site\Shop\Search();
+            try {
+                $OSCOM_Search->setKeywords('the');
+                $OSCOM_Search->execute();
+            } catch (\Throwable) {
+            }
+            if (!isset($_GET['Q'])) {
+                $_GET['Q'] = 'the';
+            }
+            Registry::get('MessageStack')->add('Search', 'Coverage search criteria');
+        }
+
         $OSCOM_Product = null;
         if ($application === 'Products') {
             $productId = 0;
@@ -781,6 +798,8 @@ final class InProcessSiteRenderer
             'OSCOM_Banner',
             'OSCOM_Shipping',
             'OSCOM_Product',
+            'OSCOM_CategoryTree',
+            'OSCOM_Search',
             'products_listing',
         );
     }
@@ -845,6 +864,10 @@ final class InProcessSiteRenderer
 
         if ($application === 'PaymentModules' && !isset($_GET['code'])) {
             $_GET['code'] = 'COD';
+        }
+
+        if ($application === 'Services' && !isset($_GET['code'])) {
+            $_GET['code'] = 'Breadcrumb';
         }
 
         $ids = ShopHarnessDataSeeder::ensureBaselineData();
